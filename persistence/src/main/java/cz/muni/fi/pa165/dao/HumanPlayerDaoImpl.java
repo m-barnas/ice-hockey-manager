@@ -13,41 +13,41 @@ import java.util.List;
 @Repository
 public class HumanPlayerDaoImpl implements HumanPlayerDao {
 
-  @Autowired
-  private HumanPlayerRepository humanPlayerRepository;
+    @Autowired
+    private HumanPlayerRepository humanPlayerRepository;
 
-  @Override
-  public void create(HumanPlayer humanPlayer) {
-    humanPlayerRepository.save(humanPlayer);
-  }
+    @Override
+    public void create(HumanPlayer humanPlayer) {
+        humanPlayerRepository.save(humanPlayer);
+    }
 
-  @Override
-  public HumanPlayer update(HumanPlayer humanPlayer) {
-    return humanPlayerRepository.save(humanPlayer);
-  }
+    @Override
+    public HumanPlayer update(HumanPlayer humanPlayer) {
+        return humanPlayerRepository.save(humanPlayer);
+    }
 
-  @Override
-  public void delete(HumanPlayer humanPlayer) {
-    humanPlayerRepository.delete(humanPlayer);
-  }
+    @Override
+    public void delete(HumanPlayer humanPlayer) {
+        humanPlayerRepository.delete(humanPlayer);
+    }
 
-  @Override
-  public HumanPlayer findById(Long id) {
-    return humanPlayerRepository.findById(id);
-  }
+    @Override
+    public HumanPlayer findById(Long id) {
+        return humanPlayerRepository.findById(id);
+    }
 
-  @Override
-  public HumanPlayer findByEmail(String email) {
-    return humanPlayerRepository.findByEmail(email);
-  }
+    @Override
+    public HumanPlayer findByEmail(String email) {
+        return humanPlayerRepository.findByEmail(email);
+    }
 
-  @Override
-  public HumanPlayer findByUsername(String username) {
-    return humanPlayerRepository.findByUsernameIgnoreCase(username);
-  }
+    @Override
+    public HumanPlayer findByUsername(String username) {
+        return humanPlayerRepository.findByUsernameIgnoreCase(username);
+    }
 
-  @Override
-  public List<HumanPlayer> findAll() {
-    return humanPlayerRepository.findAll();
-  }
+    @Override
+    public List<HumanPlayer> findAll() {
+        return humanPlayerRepository.findAll();
+    }
 }
