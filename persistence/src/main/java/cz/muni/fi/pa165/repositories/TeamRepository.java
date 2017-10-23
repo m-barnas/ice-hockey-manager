@@ -10,6 +10,6 @@ public interface TeamRepository extends CrudRepository<Team,Long> {
     Team findById(Long id);
     Team findByName(String name);
     List<Team> findByCompetitionCountry(CompetitionCountry competitionCountry);
-    List<Team> finAll();
+    List<Team> findAll();
 
 }

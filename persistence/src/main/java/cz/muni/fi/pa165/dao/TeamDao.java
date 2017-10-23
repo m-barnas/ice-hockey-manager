@@ -54,6 +54,6 @@ public interface TeamDao {
      *
      * @return all team
      */
-    List<Team> finAll();
+    List<Team> findAll();
 
 }

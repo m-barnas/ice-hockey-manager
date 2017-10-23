@@ -45,7 +45,7 @@ public class TeamDaoImpl implements TeamDao {
     }
 
     @Override
-    public List<Team> finAll() {
-        return teamRepository.finAll();
+    public List<Team> findAll() {
+        return teamRepository.findAll();
     }
 }
