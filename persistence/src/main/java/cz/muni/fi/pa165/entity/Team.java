@@ -25,7 +25,8 @@ public class Team {
     private CompetitionCountry competitionCountry;
 
     @NotNull
-    @OneToOne(mappedBy = "team")
+    @OneToOne
+    @JoinColumn(name = "HUMAN_PLAYER_ID")
     private HumanPlayer humanPlayer;
 
     @ManyToMany(mappedBy = "team")

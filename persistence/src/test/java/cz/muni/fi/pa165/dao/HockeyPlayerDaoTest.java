@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(classes = PersistenceConfiguration.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
-public class HockeyPlayerTest extends AbstractTestNGSpringContextTests {
+public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
 }
