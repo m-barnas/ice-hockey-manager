@@ -3,13 +3,7 @@ package cz.muni.fi.pa165.entity;
 import cz.muni.fi.pa165.enums.Role;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -42,6 +36,10 @@ public class HumanPlayer {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private Role role;
+
+  @ManyToOne
+  @JoinColumn(name= "teamID")
+  private Team team;
 
   public Long getId() {
     return id;
