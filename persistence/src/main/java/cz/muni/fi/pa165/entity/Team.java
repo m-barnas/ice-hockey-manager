@@ -24,12 +24,11 @@ public class Team {
     @Enumerated(EnumType.STRING)
     private CompetitionCountry competitionCountry;
 
-    @NotNull
     @OneToOne
-    @JoinColumn(name = "HUMAN_PLAYER_ID")
+    @JoinColumn(name = "humanPlayerId")
     private HumanPlayer humanPlayer;
 
-    @ManyToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team")
     private Set<HockeyPlayer> hockeyPlayers = new HashSet<HockeyPlayer>();
 
     public Long getId() {
