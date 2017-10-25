@@ -53,6 +53,11 @@ public class HockeyPlayer {
 	@ManyToOne
 	private Team team = null;
 
+	@NotNull
+	@Column(nullable = false)
+	@Min(0)
+	private Long price;
+
 	/**
 	 * Getters
 	 */
@@ -80,6 +85,10 @@ public class HockeyPlayer {
 		return team;
 	}
 
+	public Long getPrice() {
+		return price;
+	}
+
 	/**
 	 * Setters
 	 */
@@ -93,6 +102,10 @@ public class HockeyPlayer {
 
 	public void setPost(Position post) {
 		this.post = post;
+	}
+
+	public void setPrice(Long price) {
+		this.price = price;
 	}
 
 	/**
@@ -155,6 +168,7 @@ public class HockeyPlayer {
 				", attack skill=" + attackSkill +
 				", defense skill=" + defenseSkill +
 				", team=" + team +
+				", price=" + price +
 				"}";
 	}
 }

@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.entity;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
@@ -31,6 +32,13 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private Set<HockeyPlayer> hockeyPlayers = new HashSet<HockeyPlayer>();
 
+    @NotNull
+    @Column(nullable = false)
+    @Min(0)
+    private Long budget;
+
+    @NotNull
+    @Column(nullable = false)
     public Long getId() {
         return id;
     }
@@ -61,6 +69,14 @@ public class Team {
 
     public void setHumanPlayer(HumanPlayer humanPlayer) {
         this.humanPlayer = humanPlayer;
+    }
+
+    public Long getBudget() {
+        return budget;
+    }
+
+    public void setBudget(Long budget) {
+        this.budget = budget;
     }
 
     public Set<HockeyPlayer> getHockeyPlayers() {

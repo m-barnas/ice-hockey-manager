@@ -20,5 +20,7 @@ public interface HockeyPlayerRepository extends CrudRepository<HockeyPlayer, Lon
 
 	List<HockeyPlayer> findByTeam(Team team);
 
+	List<HockeyPlayer> findByPriceIsLessThanEqual(Long price);
+
 	List<HockeyPlayer> findAll();
 }
