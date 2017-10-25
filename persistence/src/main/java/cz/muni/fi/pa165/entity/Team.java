@@ -109,6 +109,7 @@ public class Team {
                 ", name='" + name + '\'' +
                 ", competitionCountry=" + competitionCountry +
                 ", humanPlayer=" + humanPlayer +
+                ", budget=" + budget +
                 '}';
     }
 }
