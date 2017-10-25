@@ -51,7 +51,7 @@ public class HockeyPlayer {
 	private int defenseSkill;
 
 	@ManyToOne
-	private Team team = null;
+	private Team team;
 
 	/**
 	 * Getters
