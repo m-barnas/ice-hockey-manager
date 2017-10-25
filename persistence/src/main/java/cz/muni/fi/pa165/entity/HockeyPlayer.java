@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.entity;
 
-
 import cz.muni.fi.pa165.enums.Position;
 
 import javax.persistence.*;
@@ -8,6 +7,7 @@ import javax.validation.ValidationException;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import java.util.Objects;
 
 
