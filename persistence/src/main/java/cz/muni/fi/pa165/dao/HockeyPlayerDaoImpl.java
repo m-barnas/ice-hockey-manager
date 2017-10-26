@@ -52,6 +52,11 @@ public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 	}
 
 	@Override
+	public List<HockeyPlayer> findByPriceIsLessThan(Long price) {
+		return repository.findByPriceIsLessThanEqual(price);
+	}
+
+	@Override
 	public List<HockeyPlayer> findAll() {
 		return repository.findAll();
 	}
