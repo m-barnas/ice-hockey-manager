@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.config;
 
+import cz.muni.fi.pa165.entity.HockeyPlayer;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+import cz.muni.fi.pa165.dao.*;
 /**
  * @author Martin Barnas 433523@mail.muni.cz
  */
@@ -77,8 +79,13 @@ public class PersistenceConfiguration {
     driver.setDriverClassName(env.getProperty("jdbc.driver"));
     driver.setUsername(env.getProperty("db.username"));
     driver.setPassword(env.getProperty("db.password"));
-    driver.setUrl(env.getProperty("db.url"));
+    driver.setUrl(env.getProperty("jdbc.url"));
     return driver;
+  }
+
+  @Bean
+  public HockeyPlayerDao hockeyPlayerDao(){
+    return new HockeyPlayerDaoImpl();
   }
 
   private Properties hibernateProperties() {
