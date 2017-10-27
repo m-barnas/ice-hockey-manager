@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 /**
+ * Class for representing a hockey game.
  *
  * @author Marketa Elederova
  */
