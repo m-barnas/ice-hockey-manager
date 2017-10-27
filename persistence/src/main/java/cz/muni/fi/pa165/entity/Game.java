@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -26,12 +27,12 @@ public class Game {
     private Long id;
 
     @NotNull
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private Team firstTeam;
 
     @NotNull
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private Team secondTeam;
 
