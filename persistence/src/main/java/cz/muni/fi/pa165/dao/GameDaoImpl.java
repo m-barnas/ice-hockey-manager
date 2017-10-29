@@ -6,12 +6,14 @@ import cz.muni.fi.pa165.repositories.GameRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Implementation of GameDao class.
  *
  * @author Marketa Elederova
  */
+@Repository
 public class GameDaoImpl implements GameDao {
 
     @Autowired
