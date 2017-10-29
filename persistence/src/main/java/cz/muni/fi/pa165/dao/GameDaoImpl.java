@@ -18,12 +18,7 @@ public class GameDaoImpl implements GameDao {
     private GameRepository gameRepository;
 
     @Override
-    public void create(Game game) {
-        gameRepository.save(game);
-    }
-
-    @Override
-    public Game update(Game game) {
+    public Game save(Game game) {
         return gameRepository.save(game);
     }
 
