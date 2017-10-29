@@ -12,19 +12,12 @@ import java.util.List;
 public interface HockeyPlayerDao {
 
 	/**
-	 * Create {@link HockeyPlayer}.
+	 * Save {@link HockeyPlayer}.
 	 *
-	 * @param hockeyPlayer to be created
+	 * @param hockeyPlayer to be saved
+	 * @return saved hockey player
 	 */
-	void create(HockeyPlayer hockeyPlayer);
-
-	/**
-	 * Update {@link HockeyPlayer}.
-	 *
-	 * @param hockeyPlayer to be updated
-	 * @return updated hockey player
-	 */
-	HockeyPlayer update(HockeyPlayer hockeyPlayer);
+	HockeyPlayer save(HockeyPlayer hockeyPlayer);
 
 	/**
 	 * Delete {@link HockeyPlayer}.

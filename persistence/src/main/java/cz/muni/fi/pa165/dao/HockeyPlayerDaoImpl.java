@@ -17,12 +17,7 @@ public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 	private HockeyPlayerRepository repository;
 
 	@Override
-	public void create(HockeyPlayer hockeyPlayer) {
-		repository.save(hockeyPlayer);
-	}
-
-	@Override
-	public HockeyPlayer update(HockeyPlayer hockeyPlayer) {
+	public HockeyPlayer save(HockeyPlayer hockeyPlayer) {
 		return repository.save(hockeyPlayer);
 	}
 
