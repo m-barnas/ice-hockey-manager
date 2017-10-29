@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.*;
 public class HumanPlayerDaoTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    HumanPlayerDao humanPlayerDao;
+    private HumanPlayerDao humanPlayerDao;
 
-    HumanPlayer humanPlayer;
+    private HumanPlayer humanPlayer;
 
     @BeforeClass
     public void setUp() {
