@@ -61,6 +61,14 @@ public interface HockeyPlayerDao {
 	List<HockeyPlayer> findByTeam(Team team);
 
 	/**
+	 * Find {@link HockeyPlayer}s by price.
+	 *
+	 * @param price maximum price to find (not including the border).
+	 * @return list of hockey players with price less than the given price.
+	 */
+	List<HockeyPlayer> findByPriceIsLessThan(Long price);
+
+	/**
 	 * Find all {@link HockeyPlayer}s.
 	 *
 	 * @return all hockey players
