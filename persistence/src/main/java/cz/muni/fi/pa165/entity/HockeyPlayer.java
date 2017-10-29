@@ -51,6 +51,7 @@ public class HockeyPlayer {
 	private int defenseSkill;
 
 	@ManyToOne
+	@JoinColumn(name = "teamId")
 	private Team team;
 
 	/**

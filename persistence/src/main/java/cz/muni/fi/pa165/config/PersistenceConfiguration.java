@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.config;
 
-import cz.muni.fi.pa165.entity.HockeyPlayer;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -88,12 +87,14 @@ public class PersistenceConfiguration {
     return new HockeyPlayerDaoImpl();
   }
 
+
   private Properties hibernateProperties() {
     Properties properties = new Properties();
     properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
     properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
     properties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
     properties.setProperty("hibernate.cache.provider_class", env.getProperty("hibernate.cache.provider_class"));
+    properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
     return properties;
   }
 }
