@@ -12,19 +12,12 @@ import java.util.List;
 public interface HockeyPlayerDao {
 
 	/**
-	 * Create {@link HockeyPlayer}.
+	 * Save {@link HockeyPlayer}.
 	 *
-	 * @param hockeyPlayer to be created
+	 * @param hockeyPlayer to be saved
+	 * @return saved hockey player
 	 */
-	void create(HockeyPlayer hockeyPlayer);
-
-	/**
-	 * Update {@link HockeyPlayer}.
-	 *
-	 * @param hockeyPlayer to be updated
-	 * @return updated hockey player
-	 */
-	HockeyPlayer update(HockeyPlayer hockeyPlayer);
+	HockeyPlayer save(HockeyPlayer hockeyPlayer);
 
 	/**
 	 * Delete {@link HockeyPlayer}.
@@ -66,6 +59,14 @@ public interface HockeyPlayerDao {
 	 * @return list of hockey players of the given team.
 	 */
 	List<HockeyPlayer> findByTeam(Team team);
+
+	/**
+	 * Find {@link HockeyPlayer}s by price.
+	 *
+	 * @param price maximum price to find (not including the border).
+	 * @return list of hockey players with price less than the given price.
+	 */
+	List<HockeyPlayer> findByPriceIsLessThan(Long price);
 
 	/**
 	 * Find all {@link HockeyPlayer}s.

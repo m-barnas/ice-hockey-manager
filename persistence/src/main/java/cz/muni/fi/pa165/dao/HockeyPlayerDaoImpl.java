@@ -5,24 +5,21 @@ import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.repositories.HockeyPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author Jakub Hruska jhruska@mail.muni.cz
  */
+@Repository
 public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 
 	@Autowired
 	private HockeyPlayerRepository repository;
 
 	@Override
-	public void create(HockeyPlayer hockeyPlayer) {
-		repository.save(hockeyPlayer);
-	}
-
-	@Override
-	public HockeyPlayer update(HockeyPlayer hockeyPlayer) {
+	public HockeyPlayer save(HockeyPlayer hockeyPlayer) {
 		return repository.save(hockeyPlayer);
 	}
 
@@ -49,6 +46,11 @@ public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 	@Override
 	public List<HockeyPlayer> findByTeam(Team team) {
 		return repository.findByTeam(team);
+	}
+
+	@Override
+	public List<HockeyPlayer> findByPriceIsLessThan(Long price) {
+		return repository.findByPriceIsLessThanEqual(price);
 	}
 
 	@Override

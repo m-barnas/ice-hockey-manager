@@ -8,10 +8,9 @@ import java.util.List;
 public interface TeamDao {
 
     /**
-     * Update
+     *  Save
      *
      * @param team to save
-     * @return updated team
      */
     Team save(Team team);
 
