@@ -5,12 +5,14 @@ import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.repositories.HockeyPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author Jakub Hruska jhruska@mail.muni.cz
  */
+@Repository
 public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 
 	@Autowired
