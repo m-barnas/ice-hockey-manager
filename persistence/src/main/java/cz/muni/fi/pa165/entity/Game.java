@@ -4,15 +4,7 @@ import cz.muni.fi.pa165.enums.GameState;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -41,17 +33,16 @@ public class Game {
     @Column(nullable = false)
     private LocalDateTime startTime;
 
-    @Column(nullable = true)
+    @Column
     private Integer firstTeamScore;
 
-    @Column(nullable = true)
+    @Column
     private Integer secondTeamScore;
 
     @NotNull
-    @Column(nullable = false, columnDefinition="default 'OK'")
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private GameState gameState = GameState.OK;
-
 
     public Long getId() {
         return id;
