@@ -17,12 +17,7 @@ public class HumanPlayerDaoImpl implements HumanPlayerDao {
     private HumanPlayerRepository humanPlayerRepository;
 
     @Override
-    public void create(HumanPlayer humanPlayer) {
-        humanPlayerRepository.save(humanPlayer);
-    }
-
-    @Override
-    public HumanPlayer update(HumanPlayer humanPlayer) {
+    public HumanPlayer save(HumanPlayer humanPlayer) {
         return humanPlayerRepository.save(humanPlayer);
     }
 

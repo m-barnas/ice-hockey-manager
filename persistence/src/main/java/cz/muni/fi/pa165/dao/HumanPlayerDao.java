@@ -10,19 +10,12 @@ import java.util.List;
 public interface HumanPlayerDao {
 
   /**
-   * Create {@link HumanPlayer}.
+   * Save {@link HumanPlayer}.
    *
-   * @param humanPlayer to create
+   * @param humanPlayer to save
+   * @return saved human player
    */
-  void create(HumanPlayer humanPlayer);
-
-  /**
-   * Update {@link HumanPlayer}.
-   *
-   * @param humanPlayer to update
-   * @return updated human player
-   */
-  HumanPlayer update(HumanPlayer humanPlayer);
+  HumanPlayer save(HumanPlayer humanPlayer);
 
   /**
    * Delete {@link HumanPlayer}.
