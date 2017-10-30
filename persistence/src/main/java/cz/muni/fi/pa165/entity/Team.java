@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.enums.CompetitionCountry;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -30,15 +31,13 @@ public class Team {
     private HumanPlayer humanPlayer;
 
     @OneToMany(mappedBy = "team")
-    private Set<HockeyPlayer> hockeyPlayers = new HashSet<HockeyPlayer>();
+    private Set<HockeyPlayer> hockeyPlayers = new HashSet<>();
 
     @NotNull
     @Column(nullable = false)
     @Min(0)
-    private Long budget;
+    private BigDecimal budget;
 
-    @NotNull
-    @Column(nullable = false)
     public Long getId() {
         return id;
     }
@@ -71,11 +70,11 @@ public class Team {
         this.humanPlayer = humanPlayer;
     }
 
-    public Long getBudget() {
+    public BigDecimal getBudget() {
         return budget;
     }
 
-    public void setBudget(Long budget) {
+    public void setBudget(BigDecimal budget) {
         this.budget = budget;
     }
 

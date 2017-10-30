@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.Position;
 import org.springframework.data.repository.CrudRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface HockeyPlayerRepository extends CrudRepository<HockeyPlayer, Lon
 
 	List<HockeyPlayer> findByTeam(Team team);
 
-	List<HockeyPlayer> findByPriceIsLessThanEqual(Long price);
+	List<HockeyPlayer> findByPriceIsLessThanEqual(BigDecimal price);
 
 	List<HockeyPlayer> findAll();
 }

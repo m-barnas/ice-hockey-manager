@@ -8,6 +8,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 
@@ -57,7 +58,7 @@ public class HockeyPlayer {
 	@NotNull
 	@Column(nullable = false)
 	@Min(0)
-	private Long price;
+	private BigDecimal price;
 
 	/**
 	 * Getters
@@ -86,7 +87,7 @@ public class HockeyPlayer {
 		return team;
 	}
 
-	public Long getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
@@ -105,31 +106,15 @@ public class HockeyPlayer {
 		this.post = post;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
-	/**
-	 * Attack skill must be in (0, 100)
-	 * @param attackSkill int (min 1, max 99)
-	 * @throws ValidationException
-	 */
-	public void setAttackSkill(int attackSkill) throws ValidationException {
-		if (attackSkill < 1 || attackSkill > 99) {
-			throw new ValidationException("Attack skill must be in (1, 99).");
-		}
+	public void setAttackSkill(int attackSkill) {
 		this.attackSkill = attackSkill;
 	}
 
-	/**
-	 * Defense skill must be in (0, 100)
-	 * @param defenseSkill int (min 1, max 99)
-	 * @throws ValidationException
-	 */
-	public void setDefenseSkill(int defenseSkill) throws ValidationException {
-		if (defenseSkill < 1 || defenseSkill > 99) {
-			throw new ValidationException("Defense skill must be in (1, 99).");
-		}
+	public void setDefenseSkill(int defenseSkill) {
 		this.defenseSkill = defenseSkill;
 	}
 

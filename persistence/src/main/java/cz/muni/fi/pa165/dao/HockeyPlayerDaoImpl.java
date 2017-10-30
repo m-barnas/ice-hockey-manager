@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.repositories.HockeyPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 	}
 
 	@Override
-	public List<HockeyPlayer> findByPriceIsLessThan(Long price) {
+	public List<HockeyPlayer> findByPriceIsLessThan(BigDecimal price) {
 		return repository.findByPriceIsLessThanEqual(price);
 	}
 

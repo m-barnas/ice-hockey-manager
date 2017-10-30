@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.Position;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -66,7 +67,7 @@ public interface HockeyPlayerDao {
 	 * @param price maximum price to find (not including the border).
 	 * @return list of hockey players with price less than the given price.
 	 */
-	List<HockeyPlayer> findByPriceIsLessThan(Long price);
+	List<HockeyPlayer> findByPriceIsLessThan(BigDecimal price);
 
 	/**
 	 * Find all {@link HockeyPlayer}s.
