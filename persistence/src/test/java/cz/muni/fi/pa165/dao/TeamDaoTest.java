@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.dao;
 
 
+import cz.muni.fi.pa165.config.PersistenceConfiguration;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
@@ -8,6 +9,7 @@ import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -15,17 +17,19 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
-import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolationException;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 /**
  * @author Jakub Hruska jhruska@mail.muni.cz
  */
-@ContextConfiguration(classes = PersistenceContext.class)
+@ContextConfiguration(classes = PersistenceConfiguration.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
 public class TeamDaoTest extends AbstractTestNGSpringContextTests {
@@ -39,14 +43,12 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	private HumanPlayerDao humanPlayerDao;
 
-	// TODO: setup in-memory database
-
 	@Test
 	void createMinimalParameters() {
 		Team team = new Team();
 		team.setName("HC Kometa Brno");
 		team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		team.setBudget(5000L);
+		team.setBudget(new BigDecimal("5000"));
 
 		teamDao.save(team);
 
@@ -59,33 +61,25 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		assertThat(foundTeams.get(0).getCompetitionCountry())
 				.isEqualTo(CompetitionCountry.CZECH_REPUBLIC);
 		assertThat(foundTeams.get(0).getBudget())
-				.isEqualTo(5000L);
+				.isEqualTo(new BigDecimal("5000"));
 	}
 
 	@Test
 	void createWithNullName() {
 		Team team = new Team();
 		team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		team.setBudget(5000L);
+		team.setBudget(new BigDecimal("5000"));
 
-		teamDao.save(team);
-
-		List<Team> foundTeams = teamDao.findAll();
-
-		assertThat(foundTeams.size()).isEqualTo(0);
+		assertThatThrownBy(() -> teamDao.save(team)).isInstanceOf(ConstraintViolationException.class);
 	}
 
 	@Test
 	void createWithNullCountry() {
 		Team team = new Team();
 		team.setName("HC Kometa Brno");
-		team.setBudget(5000L);
+		team.setBudget(new BigDecimal("5000"));
 
-		teamDao.save(team);
-
-		List<Team> foundTeams = teamDao.findAll();
-
-		assertThat(foundTeams.size()).isEqualTo(0);
+		assertThatThrownBy(() -> teamDao.save(team)).isInstanceOf(ConstraintViolationException.class);
 	}
 
 	@Test
@@ -94,31 +88,23 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		team.setName("HC Kometa Brno");
 		team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
 
-		teamDao.save(team);
-
-		List<Team> foundTeams = teamDao.findAll();
-
-		assertThat(foundTeams.size()).isEqualTo(0);
+		assertThatThrownBy(() -> teamDao.save(team)).isInstanceOf(ConstraintViolationException.class);
 	}
 
 	@Test
 	void createWithNonUniqueName() {
 		Team team1 = new Team();
 		team1.setName("HC Kometa Brno");
+		team1.setBudget(new BigDecimal("5000"));
 		team1.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
 		teamDao.save(team1);
 
 		Team team2 = new Team();
 		team2.setName("HC Kometa Brno");
+		team2.setBudget(new BigDecimal("5000"));
 		team2.setCompetitionCountry(CompetitionCountry.FINLAND);
-		teamDao.save(team2);
 
-		List<Team> foundTeams = teamDao.findAll();
-
-		assertThat(foundTeams.size())
-				.isEqualTo(1);
-		assertThat(foundTeams.get(0).getCompetitionCountry())
-				.isEqualTo(CompetitionCountry.CZECH_REPUBLIC);
+		assertThatThrownBy(() -> teamDao.save(team2)).isInstanceOf(DataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -126,13 +112,9 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		Team team = new Team();
 		team.setName("HC Kometa Brno");
 		team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		team.setBudget(-5L);
+		team.setBudget(new BigDecimal("-5"));
 
-		teamDao.save(team);
-
-		List<Team> foundTeams = teamDao.findAll();
-
-		assertThat(foundTeams.size()).isEqualTo(0);
+		assertThatThrownBy(() -> teamDao.save(team)).isInstanceOf(ConstraintViolationException.class);
 	}
 
 	@Test
@@ -140,14 +122,14 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		Team kometa = new Team();
 		kometa.setName("HC Kometa Brno");
 		kometa.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		kometa.setBudget(5000L);
+		kometa.setBudget(new BigDecimal("5000"));
 
 		HockeyPlayer captain = new HockeyPlayer();
 		captain.setName("Leoš Čermák");
 		captain.setPost(Position.C);
 		captain.setAttackSkill(50);
 		captain.setDefenseSkill(50);
-		captain.setPrice(100L);
+		captain.setPrice(new BigDecimal("100"));
 		hockeyPlayerDao.save(captain);
 		HashSet<HockeyPlayer> players = new HashSet<>();
 		players.add(captain);
@@ -159,7 +141,7 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		user.setEmail("username@email.com");
 		user.setPasswordHash("pass");
 		user.setRole(Role.USER);
-		humanPlayerDao.create(user);
+		humanPlayerDao.save(user);
 		kometa.setHumanPlayer(user);
 		user.setTeam(kometa);
 
@@ -173,7 +155,7 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		assertThat(foundTeam.getCompetitionCountry())
 				.isEqualTo(CompetitionCountry.CZECH_REPUBLIC);
 		assertThat(foundTeam.getBudget())
-				.isEqualTo(5000L);
+				.isEqualTo(new BigDecimal("5000"));
 		assertThat(foundTeam.getHumanPlayer())
 				.isEqualTo(user);
 		assertThat(foundTeam.getHockeyPlayers())
@@ -185,13 +167,13 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		Team kometa = new Team();
 		kometa.setName("HC Kometa Brno");
 		kometa.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		kometa.setBudget(5000L);
+		kometa.setBudget(new BigDecimal("5000"));
 		teamDao.save(kometa);
 
 		Team sparta = new Team();
 		sparta.setName("HC Sparta Praha");
 		sparta.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		sparta.setBudget(8000L);
+		sparta.setBudget(new BigDecimal("8000"));
 		teamDao.save(sparta);
 
 		Team foundKometa = teamDao.findByName("HC Kometa Brno");
@@ -210,19 +192,19 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		Team kometa = new Team();
 		kometa.setName("HC Kometa Brno");
 		kometa.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		kometa.setBudget(5000L);
+		kometa.setBudget(new BigDecimal("5000"));
 		teamDao.save(kometa);
 
 		Team sparta = new Team();
 		sparta.setName("HC Sparta Praha");
 		sparta.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		sparta.setBudget(8000L);
+		sparta.setBudget(new BigDecimal("8000"));
 		teamDao.save(sparta);
 
 		Team slovan = new Team();
 		slovan.setName("HC Slovan Bratislava");
 		slovan.setCompetitionCountry(CompetitionCountry.SLOVAKIA);
-		slovan.setBudget(10000L);
+		slovan.setBudget(new BigDecimal("10000"));
 		teamDao.save(slovan);
 
 		List<Team> czechTeams = teamDao.findByCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
@@ -240,7 +222,7 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		Team kometa = new Team();
 		kometa.setName("HC Kometa Brno");
 		kometa.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		kometa.setBudget(5000L);
+		kometa.setBudget(new BigDecimal("5000"));
 		teamDao.save(kometa);
 
 		kometa.setCompetitionCountry(CompetitionCountry.SLOVAKIA);
@@ -264,7 +246,7 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		Team kometa = new Team();
 		kometa.setName("HC Kometa Brno");
 		kometa.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-		kometa.setBudget(5000L);
+		kometa.setBudget(new BigDecimal("5000"));
 		teamDao.save(kometa);
 		assertThat(teamDao.findById(kometa.getId()))
 				.isNotNull();
