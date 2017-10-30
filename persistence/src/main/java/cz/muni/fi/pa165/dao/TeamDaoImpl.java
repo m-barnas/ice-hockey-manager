@@ -15,12 +15,7 @@ public class TeamDaoImpl implements TeamDao {
     private TeamRepository teamRepository;
 
     @Override
-    public void create(Team team) {
-        teamRepository.save(team);
-    }
-
-    @Override
-    public Team update(Team team) {
+    public Team save(Team team) {
         return teamRepository.save(team);
     }
 

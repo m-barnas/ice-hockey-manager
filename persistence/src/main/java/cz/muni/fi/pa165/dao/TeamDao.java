@@ -7,19 +7,11 @@ import java.util.List;
 
 public interface TeamDao {
     /**
-     * Create
+     *  Save
      *
-     * @param team to create
+     * @param team to save
      */
-    void create(Team team);
-
-    /**
-     * Update
-     *
-     * @param team to update
-     * @return updated team
-     */
-    Team update(Team team);
+    Team save(Team team);
 
     /**
      * Delete
