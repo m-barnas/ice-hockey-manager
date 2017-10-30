@@ -32,7 +32,6 @@ public class HumanPlayerDaoTest extends AbstractTestNGSpringContextTests {
 
     @BeforeClass
     public void setUp() {
-
         humanPlayer = new HumanPlayer();
         humanPlayer.setUsername("someone");
         humanPlayer.setPasswordHash("xxx");
@@ -60,47 +59,35 @@ public class HumanPlayerDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void delete() {
-
+        humanPlayerDao.save(humanPlayer);
         humanPlayerDao.delete(humanPlayer);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(0);
-        humanPlayer = humanPlayerDao.save(humanPlayer);
-    }
-
-    @Test
-    public void findById() {
-
-        assertThat(humanPlayerDao.findById(humanPlayer.getId())).isNotNull();
-        assertThat(humanPlayerDao.findById(humanPlayer.getId() + 1)).isNull();
     }
 
     @Test
     public void findByEmail() {
-
+        humanPlayerDao.save(humanPlayer);
         assertThat(humanPlayerDao.findByEmail(humanPlayer.getEmail())).isNotNull();
         assertThat(humanPlayerDao.findByEmail("poihedb")).isNull();
    }
 
     @Test
     public void findByUsername() {
-
+        humanPlayerDao.save(humanPlayer);
         assertThat(humanPlayerDao.findByUsername(humanPlayer.getUsername())).isNotNull();
         assertThat(humanPlayerDao.findByUsername("poihedb")).isNull();
-   }
+    }
 
     @Test
     public void findAll() {
-
-        for (HumanPlayer hp : humanPlayerDao.findAll()) {
-            humanPlayerDao.delete(hp);
-        }
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(0);
 
         humanPlayerDao.save(humanPlayer);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(1);
 
         HumanPlayer humanPlayer2 = new HumanPlayer();
-        humanPlayer2.setUsername("a");
-        humanPlayer2.setPasswordHash("b");
+        humanPlayer2.setUsername("aaaa");
+        humanPlayer2.setPasswordHash("bbbb");
         humanPlayer2.setEmail("c@cc.cz");
         humanPlayer2.setRole(Role.USER);
         humanPlayerDao.save(humanPlayer2);
