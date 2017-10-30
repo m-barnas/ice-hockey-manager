@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolationException;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -43,11 +44,12 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
         hockeyPlayer.setPost(Position.LW);
         hockeyPlayer.setAttackSkill(10);
         hockeyPlayer.setDefenseSkill(23);
+        hockeyPlayer.setPrice(new BigDecimal("0"));
     }
 
     @Test
     public void createHockeyPlayer() {
-        hockeyPlayerDao.create(hockeyPlayer);
+        hockeyPlayerDao.save(hockeyPlayer);
         assertThat(hockeyPlayerDao.findAll().size()).isEqualTo(1);
         assertThat(hockeyPlayerDao.findById(hockeyPlayer.getId())).isEqualToComparingFieldByField(hockeyPlayer);
     }
@@ -55,43 +57,43 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
     @Test
     public void createHockeyPlayerNullName() {
         hockeyPlayer.setName(null);
-        assertThatThrownBy(() -> hockeyPlayerDao.create(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> hockeyPlayerDao.save(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void createHockeyPlayerNullPosition() {
         hockeyPlayer.setPost(null);
-        assertThatThrownBy(() -> hockeyPlayerDao.create(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> hockeyPlayerDao.save(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void updateHockeyPlayer() {
-        hockeyPlayerDao.create(hockeyPlayer);
+        hockeyPlayerDao.save(hockeyPlayer);
         hockeyPlayer.setName("Updated");
         hockeyPlayer.setPost(Position.C);
         hockeyPlayer.setAttackSkill(30);
         hockeyPlayer.setDefenseSkill(3);
-        hockeyPlayerDao.update(hockeyPlayer);
+        hockeyPlayerDao.save(hockeyPlayer);
         assertThat(hockeyPlayerDao.findAll().size()).isEqualTo(1);
         assertThat(hockeyPlayerDao.findById(hockeyPlayer.getId())).isEqualToComparingFieldByField(hockeyPlayer);
     }
 
     @Test
     public void deleteHockeyPlayer() {
-        hockeyPlayerDao.create(hockeyPlayer);
+        hockeyPlayerDao.save(hockeyPlayer);
         hockeyPlayerDao.delete(hockeyPlayer);
         assertThat(hockeyPlayerDao.findAll()).isEmpty();
     }
 
     @Test
     public void findByNameHockeyPlayer() {
-        hockeyPlayerDao.create(hockeyPlayer);
+        hockeyPlayerDao.save(hockeyPlayer);
         assertThat(hockeyPlayerDao.findByName("Jan Novák")).isEqualToComparingFieldByField(hockeyPlayer);
     }
 
     @Test
     public void findByPostHockeyPlayer() {
-        hockeyPlayerDao.create(hockeyPlayer);
+        hockeyPlayerDao.save(hockeyPlayer);
         assertThat(hockeyPlayerDao.findByPost(Position.LW)).contains(hockeyPlayer);
     }
 
@@ -101,19 +103,20 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
         team.setName("BestTeam");
         team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
         team.setHockeyPlayers(new HashSet<>(Arrays.asList(hockeyPlayer)));
+        team.setBudget(new BigDecimal("0"));
 
         hockeyPlayer.setTeam(team);
         teamDao.save(team);
-        hockeyPlayerDao.create(hockeyPlayer);
+        hockeyPlayerDao.save(hockeyPlayer);
 
         assertThat(hockeyPlayerDao.findByTeam(team)).contains(hockeyPlayer);
     }
 
     @Test
     public void findAll() {
-        hockeyPlayerDao.create(hockeyPlayer);
-        hockeyPlayerDao.create(createHockeyPlayerByName("Petr Rychlý"));
-        hockeyPlayerDao.create(createHockeyPlayerByName("Ivan Pomalý"));
+        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.save(createHockeyPlayerByName("Petr Rychlý"));
+        hockeyPlayerDao.save(createHockeyPlayerByName("Ivan Pomalý"));
         assertThat(hockeyPlayerDao.findAll().size()).isEqualTo(3);
     }
 
@@ -123,6 +126,7 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
         player.setPost(Position.LW);
         player.setAttackSkill(10);
         player.setDefenseSkill(23);
+        player.setPrice(new BigDecimal("0"));
         return player;
     }
 
