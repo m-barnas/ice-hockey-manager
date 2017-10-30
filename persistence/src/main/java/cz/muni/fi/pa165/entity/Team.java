@@ -93,7 +93,6 @@ public class Team {
                 ", name='" + name + '\'' +
                 ", competitionCountry=" + competitionCountry +
                 ", humanPlayer=" + humanPlayer +
-                ", hockeyPlayers=" + hockeyPlayers +
                 '}';
     }
 }

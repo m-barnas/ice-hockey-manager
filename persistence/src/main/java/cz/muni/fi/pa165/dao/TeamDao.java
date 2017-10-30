@@ -6,20 +6,14 @@ import cz.muni.fi.pa165.enums.CompetitionCountry;
 import java.util.List;
 
 public interface TeamDao {
-    /**
-     * Create
-     *
-     * @param team to create
-     */
-    void create(Team team);
 
     /**
      * Update
      *
-     * @param team to update
+     * @param team to save
      * @return updated team
      */
-    Team update(Team team);
+    Team save(Team team);
 
     /**
      * Delete

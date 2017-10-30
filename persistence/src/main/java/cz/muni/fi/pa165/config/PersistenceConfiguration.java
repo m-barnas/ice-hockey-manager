@@ -21,6 +21,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+import cz.muni.fi.pa165.dao.*;
 /**
  * @author Martin Barnas 433523@mail.muni.cz
  */
@@ -77,9 +78,15 @@ public class PersistenceConfiguration {
     driver.setDriverClassName(env.getProperty("jdbc.driver"));
     driver.setUsername(env.getProperty("db.username"));
     driver.setPassword(env.getProperty("db.password"));
-    driver.setUrl(env.getProperty("db.url"));
+    driver.setUrl(env.getProperty("jdbc.url"));
     return driver;
   }
+
+  @Bean
+  public HockeyPlayerDao hockeyPlayerDao(){
+    return new HockeyPlayerDaoImpl();
+  }
+
 
   private Properties hibernateProperties() {
     Properties properties = new Properties();
@@ -87,6 +94,7 @@ public class PersistenceConfiguration {
     properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
     properties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
     properties.setProperty("hibernate.cache.provider_class", env.getProperty("hibernate.cache.provider_class"));
+    properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
     return properties;
   }
 }
