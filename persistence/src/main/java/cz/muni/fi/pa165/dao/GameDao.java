@@ -12,12 +12,19 @@ import java.util.List;
 public interface GameDao {
 
     /**
+    * Create {@link Game}.
+    *
+    * @param game to create
+    */
+    void create(Game game);
+    
+    /**
     * Update {@link Game}.
     *
-    * @param game to save
-    * @return saved game
+    * @param game to update
+    * @return updated game
     */
-    Game save(Game game);
+    Game update(Game game);
 
     /**
     * Delete {@link Game}.

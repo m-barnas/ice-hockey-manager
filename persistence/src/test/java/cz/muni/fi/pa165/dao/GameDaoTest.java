@@ -46,8 +46,8 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void saveGameOk() {
-        gameDao.save(gameOk);
+    public void createGameOk() {
+        gameDao.create(gameOk);
 
         Game game = gameDao.findById(gameOk.getId());
 
@@ -55,41 +55,41 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void saveMissingFirstTeam() {
+    public void createMissingFirstTeam() {
         gameOk.setFirstTeam(null);
 
-        assertThatThrownBy(() -> gameDao.save(gameOk)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> gameDao.create(gameOk)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
-    public void saveMissingSecondTeam() {
+    public void createMissingSecondTeam() {
         gameOk.setSecondTeam(null);
 
-        assertThatThrownBy(() -> gameDao.save(gameOk)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> gameDao.create(gameOk)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
-    public void saveMissingStartTime() {
+    public void createMissingStartTime() {
         gameOk.setStartTime(null);
 
-        assertThatThrownBy(() -> gameDao.save(gameOk)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> gameDao.create(gameOk)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void update() {
-        gameDao.save(gameOk);
+        gameDao.create(gameOk);
 
         Game game = gameDao.findById(gameOk.getId());
         game.setGameState(GameState.CANCELED);
-        Game updatedGame = gameDao.save(game);
+        Game updatedGame = gameDao.update(game);
 
         assertThat(gameDao.findById(updatedGame.getId()).getGameState()).isEqualTo(GameState.CANCELED);
     }
 
     @Test
     public void delete() {
-        gameDao.save(gameOk);
-        gameDao.save(gameCanceled);
+        gameDao.create(gameOk);
+        gameDao.create(gameCanceled);
         gameDao.delete(gameOk);
 
         assertThat(gameDao.findAll().size()).isEqualTo(1);
@@ -97,8 +97,8 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findById() {
-        gameDao.save(gameOk);
-        gameDao.save(gameCanceled);
+        gameDao.create(gameOk);
+        gameDao.create(gameCanceled);
 
         Game game = gameDao.findById(gameOk.getId());
         assertThat(game).isEqualTo(gameOk);
@@ -106,7 +106,7 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findByFirstTeamAndSecondTeamAndStartTime() {
-        gameDao.save(gameOk);
+        gameDao.create(gameOk);
 
         Game game = gameDao.findByFirstTeamAndSecondTeamAndStartTime(gameOk.getFirstTeam(),
                 gameOk.getSecondTeam(), gameOk.getStartTime());
@@ -116,7 +116,7 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findByTeam() {
-        gameDao.save(gameCanceled);
+        gameDao.create(gameCanceled);
 
         List<Game> games = gameDao.findByTeam(gameCanceled.getSecondTeam());
 
@@ -125,8 +125,8 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findAll() {
-        gameDao.save(gameOk);
-        gameDao.save(gameCanceled);
+        gameDao.create(gameOk);
+        gameDao.create(gameCanceled);
 
         assertThat(gameDao.findAll()).hasSize(2);
     }
