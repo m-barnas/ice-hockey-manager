@@ -1,5 +1,7 @@
 package cz.muni.fi.pa165.config;
 
+import cz.muni.fi.pa165.service.TeamService;
+import cz.muni.fi.pa165.service.TeamServiceImpl;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -87,6 +89,10 @@ public class PersistenceConfiguration {
     return new HockeyPlayerDaoImpl();
   }
 
+  @Bean
+  public TeamService teamService(){
+    return new TeamServiceImpl();
+  }
 
   private Properties hibernateProperties() {
     Properties properties = new Properties();
@@ -97,4 +103,5 @@ public class PersistenceConfiguration {
     properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
     return properties;
   }
+
 }
