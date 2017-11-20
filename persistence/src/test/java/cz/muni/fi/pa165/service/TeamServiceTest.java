@@ -2,6 +2,8 @@ package cz.muni.fi.pa165.service;
 
 
 import cz.muni.fi.pa165.config.PersistenceConfiguration;
+import cz.muni.fi.pa165.dao.HockeyPlayerDao;
+import cz.muni.fi.pa165.dao.HumanPlayerDao;
 import cz.muni.fi.pa165.dao.TeamDao;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.HumanPlayer;
@@ -9,8 +11,9 @@ import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.enums.Role;
-import org.mockito.InjectMocks;
+import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,9 +25,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.*;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @ContextConfiguration(classes = PersistenceConfiguration.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
@@ -35,10 +43,16 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     private TeamDao teamDao;
 
     @Autowired
-    @InjectMocks
     private TeamService teamService;
 
-    private Team team;
+    @Autowired
+    private HumanPlayerDao humanPlayerDao;
+
+    @Autowired
+    private HockeyPlayerDao hockeyPlayerDao;
+
+    private Team team1;
+    private Team team2;
 
     @BeforeClass
     public void setup() {
@@ -56,24 +70,52 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         HockeyPlayer hockeyPlayerOne = createHockeyPlayer("Jaromír Jágr");
         HockeyPlayer hockeyPlayerTwo = createHockeyPlayer("Patrik Eliáš");
 
-        Team team = new Team();
-        team.setName("Team");
-        team.setHumanPlayer(humanPlayer);
-        team.setBudget(BigDecimal.valueOf(500));
-        team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-        team.setHockeyPlayers(new HashSet<HockeyPlayer>(Arrays.asList(hockeyPlayerOne, hockeyPlayerTwo)));
-
-        hockeyPlayerOne.setTeam(team);
-        hockeyPlayerTwo.setTeam(team);
-        humanPlayer.setTeam(team);
-
-        this.team = team;
+        team1 = createTeam("TeamField", humanPlayer, new HashSet<HockeyPlayer>(Arrays.asList(hockeyPlayerOne, hockeyPlayerTwo)));
+        team2 = createTeam("TestTeam", null, null);
+        hockeyPlayerOne.setTeam(team1);
+        hockeyPlayerTwo.setTeam(team1);
+        humanPlayer.setTeam(team1);
+        hockeyPlayerDao.save(hockeyPlayerOne);
+        hockeyPlayerDao.save(hockeyPlayerTwo);
+        humanPlayerDao.save(humanPlayer);
     }
 
     @Test
-    public void createTeam() {
-        teamService.createTeam(team);
+    public void createTeamTest() {
+        teamService.createTeam(team1);
+        assertThat(teamService.findById(team1.getId())).isEqualToComparingFieldByField(team1);
+    }
 
+    @Test
+    public void findTeamByNameTest() {
+        teamService.createTeam(team1);
+        when(teamDao.findByName(Mockito.anyString())).thenReturn(team1);
+        Team foundTeam = teamService.findByName(team1.getName());
+        assertThat(foundTeam).isEqualToComparingFieldByField(team1);
+    }
+
+    @Test
+    public void findAllTest() {
+        teamService.createTeam(team1);
+        teamService.createTeam(team2);
+        when(teamDao.findAll()).thenReturn(Arrays.asList(team1, team2));
+        List<Team> foundTeams = teamService.findAll();
+        assertThat(foundTeams).containsExactly(team1, team2);
+    }
+
+    @Test
+    public void findByCompetitionCountryTest() {
+        teamService.createTeam(team1);
+        teamService.createTeam(team2);
+        when(teamDao.findByCompetitionCountry(Mockito.any(CompetitionCountry.class))).thenReturn(Arrays.asList(team1, team2));
+        List<Team> foundTeams = teamService.findByCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
+        assertThat(foundTeams).containsExactly(team1, team2);
+    }
+
+    @Test
+    public void setBudgetLessThanZeroTest() {
+        teamService.createTeam(team1);
+        assertThatThrownBy(() -> teamService.spendMoneyFromBudget(team1, BigDecimal.valueOf(500))).isInstanceOf(TeamServiceException.class);
     }
 
     private HockeyPlayer createHockeyPlayer(String name) {
@@ -84,6 +126,16 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         hockeyPlayer.setPost(Position.C);
         hockeyPlayer.setPrice(BigDecimal.TEN);
         return hockeyPlayer;
+    }
+
+    private Team createTeam(String name, HumanPlayer humanPlayer, Set<HockeyPlayer> hockeyPlayers) {
+        Team team = new Team();
+        team.setName(name);
+        team.setHumanPlayer(humanPlayer);
+        team.setBudget(BigDecimal.valueOf(500));
+        team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
+        team.setHockeyPlayers(hockeyPlayers);
+        return team;
     }
 
 }

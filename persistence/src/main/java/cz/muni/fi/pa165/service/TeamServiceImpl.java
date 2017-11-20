@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.dao.TeamDao;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
+import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,8 +62,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void spendMoneyFromBudget(Team team, BigDecimal amount) {
+    public void spendMoneyFromBudget(Team team, BigDecimal amount) throws TeamServiceException {
         BigDecimal resultBudget = team.getBudget().subtract(amount);
+        if (resultBudget.intValue() < 0) {
+            throw new TeamServiceException("Amount of budget cannot be lower than 0");
+        }
         team.setBudget(resultBudget);
     }
 
