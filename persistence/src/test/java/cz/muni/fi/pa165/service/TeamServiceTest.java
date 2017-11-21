@@ -113,9 +113,16 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void setBudgetLessThanZeroTest() {
+    public void spendMoneyFromBudget() throws TeamServiceException {
         teamService.createTeam(team1);
-        assertThatThrownBy(() -> teamService.spendMoneyFromBudget(team1, BigDecimal.valueOf(500))).isInstanceOf(TeamServiceException.class);
+        teamService.spendMoneyFromBudget(team1, BigDecimal.valueOf(200));
+        assertThat(team1.getBudget()).isEqualTo(BigDecimal.valueOf(300));
+    }
+
+    @Test
+    public void spendMoneyFromBudgetLessThanZeroTest() {
+        teamService.createTeam(team1);
+        assertThatThrownBy(() -> teamService.spendMoneyFromBudget(team1, BigDecimal.valueOf(1000))).isInstanceOf(TeamServiceException.class);
     }
 
     private HockeyPlayer createHockeyPlayer(String name) {
