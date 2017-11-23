@@ -68,15 +68,37 @@
     <!-- versions not in sync with parent, ordered alphabetically -->
     <assertj.version>3.8.0</assertj.version>
     <postgresql.version>42.1.4</postgresql.version>
+
+    <!-- other versions, ordered alphabetically -->
+    <dozer.version>5.5.1</dozer.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <!-- This project -->
+      <dependency>
+        <groupId>cz.muni.fi.pa165</groupId>
+        <artifactId>ice-hockey-manager-persistence</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cz.muni.fi.pa165</groupId>
+        <artifactId>ice-hockey-manager-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <!-- PostgreSQL -->
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
         <version>${postgresql.version}</version>
+      </dependency>
+
+      <!-- Dozer -->
+      <dependency>
+        <groupId>net.sf.dozer</groupId>
+        <artifactId>dozer</artifactId>
+        <version>${dozer.version}</version>
       </dependency>
 
       <!-- AssertJ -->
@@ -106,6 +128,8 @@
   </build>
 
   <modules>
-    <module>persistence</module>
+    <module>ice-hockey-manager-persistence</module>
+    <module>ice-hockey-manager-service</module>
+    <module>ice-hockey-manager-api</module>
   </modules>
 </project>
