@@ -106,7 +106,7 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
         team.setBudget(new BigDecimal("0"));
 
         hockeyPlayer.setTeam(team);
-//        teamDao.save(team);
+        teamDao.create(team);
         hockeyPlayerDao.save(hockeyPlayer);
 
         assertThat(hockeyPlayerDao.findByTeam(team)).contains(hockeyPlayer);

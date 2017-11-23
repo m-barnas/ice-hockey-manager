@@ -150,7 +150,7 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
         team.setName(name);
         team.setCompetitionCountry(CompetitionCountry.ENGLAND);
         team.setBudget(new BigDecimal("0"));
-//        teamDao.save(team);
+        teamDao.create(team);
         return team;
     }
 }

@@ -49,59 +49,59 @@ public class HumanPlayerDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void save() {
-        humanPlayerDao.save(humanPlayer);
+        humanPlayerDao.create(humanPlayer);
         assertThat(humanPlayer.getId()).isNotNull();
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(1);
         assertThat(humanPlayerDao.findById(humanPlayer.getId())).isEqualToComparingFieldByField(humanPlayer);
 
-        humanPlayerDao.save(humanPlayer2);
+        humanPlayerDao.create(humanPlayer2);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(2);
     }
 
     @Test
     public void saveWithNullUsername() {
         humanPlayer.setUsername(null);
-        assertThatThrownBy(() -> humanPlayerDao.save(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> humanPlayerDao.create(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void saveWithNullEmail() {
         humanPlayer.setEmail(null);
-        assertThatThrownBy(() -> humanPlayerDao.save(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> humanPlayerDao.create(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void saveWithNullPasswordHash() {
         humanPlayer.setPasswordHash(null);
-        assertThatThrownBy(() -> humanPlayerDao.save(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> humanPlayerDao.create(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void saveWithNullRole() {
         humanPlayer.setRole(null);
-        assertThatThrownBy(() -> humanPlayerDao.save(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> humanPlayerDao.create(humanPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void update() {
-        humanPlayerDao.save(humanPlayer);
+        humanPlayerDao.create(humanPlayer);
         humanPlayer.setRole(Role.ADMIN);
-        humanPlayerDao.save(humanPlayer);
+        humanPlayerDao.update(humanPlayer);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(1);
         assertThat(humanPlayerDao.findById(humanPlayer.getId()).getRole()).isEqualTo(Role.ADMIN);
     }
 
     @Test
     public void delete() {
-        humanPlayerDao.save(humanPlayer);
-        humanPlayerDao.save(humanPlayer2);
+        humanPlayerDao.create(humanPlayer);
+        humanPlayerDao.create(humanPlayer2);
         humanPlayerDao.delete(humanPlayer);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(1);
     }
 
     @Test
     public void deleteNotExistingEntity() {
-        humanPlayerDao.save(humanPlayer2);
+        humanPlayerDao.create(humanPlayer2);
         humanPlayerDao.delete(humanPlayer);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(1);
     }
@@ -109,20 +109,20 @@ public class HumanPlayerDaoTest extends AbstractTestNGSpringContextTests {
     @Test
     public void findById() {
         assertThat(humanPlayerDao.findById(1l)).isNull();
-        humanPlayerDao.save(humanPlayer);
+        humanPlayerDao.create(humanPlayer);
         assertThat(humanPlayerDao.findById(humanPlayer.getId())).isEqualToComparingFieldByField(humanPlayer);
     }
 
     @Test
     public void findByEmail() {
-        humanPlayerDao.save(humanPlayer);
+        humanPlayerDao.create(humanPlayer);
         assertThat(humanPlayerDao.findByEmail(humanPlayer.getEmail())).isNotNull();
         assertThat(humanPlayerDao.findByEmail("poihedb")).isNull();
    }
 
     @Test
     public void findByUsername() {
-        humanPlayerDao.save(humanPlayer);
+        humanPlayerDao.create(humanPlayer);
         assertThat(humanPlayerDao.findByUsername(humanPlayer.getUsername())).isNotNull();
         assertThat(humanPlayerDao.findByUsername("poihedb")).isNull();
     }
@@ -130,9 +130,9 @@ public class HumanPlayerDaoTest extends AbstractTestNGSpringContextTests {
     @Test
     public void findAll() {
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(0);
-        humanPlayerDao.save(humanPlayer);
+        humanPlayerDao.create(humanPlayer);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(1);
-        humanPlayerDao.save(humanPlayer2);
+        humanPlayerDao.create(humanPlayer2);
         assertThat(humanPlayerDao.findAll().size()).isEqualTo(2);
    }
 }

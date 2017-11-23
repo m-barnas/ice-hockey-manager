@@ -141,7 +141,7 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		user.setEmail("username@email.com");
 		user.setPasswordHash("pass");
 		user.setRole(Role.USER);
-		humanPlayerDao.save(user);
+		humanPlayerDao.create(user);
 		kometa.setHumanPlayer(user);
 		user.setTeam(kometa);
 
