@@ -13,25 +13,32 @@ import java.util.List;
 public interface HockeyPlayerDao {
 
 	/**
-	 * Save {@link HockeyPlayer}.
+	 * Create {@link HockeyPlayer}
 	 *
-	 * @param hockeyPlayer to be saved
-	 * @return saved hockey player
+	 * @param hockeyPlayer to create
 	 */
-	HockeyPlayer save(HockeyPlayer hockeyPlayer);
+	void create(HockeyPlayer hockeyPlayer);
 
 	/**
-	 * Delete {@link HockeyPlayer}.
+	 * Update {@link HockeyPlayer}
 	 *
-	 * @param hockeyPlayer to be deleted
+	 * @param hockeyPlayer to update
+	 * @return updated hockey player
+	 */
+	HockeyPlayer update(HockeyPlayer hockeyPlayer);
+
+	/**
+	 * Delete {@link HockeyPlayer}
+	 *
+	 * @param hockeyPlayer to delete
 	 */
 	void delete(HockeyPlayer hockeyPlayer);
 
 	/**
-	 * Find {@link HockeyPlayer} by ID.
+	 * Find {@link HockeyPlayer} by id.
 	 *
-	 * @param id to find.
-	 * @return hockey player with given ID.
+	 * @param id to find
+	 * @return hockey player with given id
 	 */
 	HockeyPlayer findById(Long id);
 
@@ -54,7 +61,7 @@ public interface HockeyPlayerDao {
 	/**
 	 * Find {@link HockeyPlayer}s by team.
 	 *
-	 * Free agents (hockey players without team have null team.
+	 * Free agents (hockey players without team have null team)
 	 *
 	 * @param team to find (null for free agents).
 	 * @return list of hockey players of the given team.
