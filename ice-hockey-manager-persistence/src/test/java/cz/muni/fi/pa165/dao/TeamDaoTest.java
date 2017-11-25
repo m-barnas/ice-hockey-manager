@@ -130,7 +130,7 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		captain.setAttackSkill(50);
 		captain.setDefenseSkill(50);
 		captain.setPrice(new BigDecimal("100"));
-		hockeyPlayerDao.save(captain);
+		hockeyPlayerDao.create(captain);
 		HashSet<HockeyPlayer> players = new HashSet<>();
 		players.add(captain);
 		kometa.setHockeyPlayers(players);
