@@ -1,29 +1,27 @@
-package cz.muni.fi.pa165.service.dto;
+package cz.muni.fi.pa165.dto;
 
-import cz.muni.fi.pa165.entity.HockeyPlayer;
-import cz.muni.fi.pa165.entity.HumanPlayer;
+
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 
-import javax.validation.constraints.Min;
+
+import javax.validation.constraints.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
-/**
- * @author Lukáš Kotol
- */
-public class TeamDTO {
+public class TeamCreateDTO {
 
+    @NotNull
     private String name;
 
+    @NotNull
     private CompetitionCountry competitionCountry;
 
-    private HumanPlayer humanPlayer;
+    @NotNull
+    private Long humanPlayerId;
 
-    private Set<HockeyPlayer> hockeyPlayers = new HashSet<>();
-
+    @NotNull
+    @Min(0)
     private BigDecimal budget;
 
     public String getName() {
@@ -42,20 +40,12 @@ public class TeamDTO {
         this.competitionCountry = competitionCountry;
     }
 
-    public HumanPlayer getHumanPlayer() {
-        return humanPlayer;
+    public Long getHumanPlayerId() {
+        return humanPlayerId;
     }
 
-    public void setHumanPlayer(HumanPlayer humanPlayer) {
-        this.humanPlayer = humanPlayer;
-    }
-
-    public Set<HockeyPlayer> getHockeyPlayers() {
-        return hockeyPlayers;
-    }
-
-    public void setHockeyPlayers(Set<HockeyPlayer> hockeyPlayers) {
-        this.hockeyPlayers = hockeyPlayers;
+    public void setHumanPlayerId(Long humanPlayerId) {
+        this.humanPlayerId = humanPlayerId;
     }
 
     public BigDecimal getBudget() {
@@ -66,14 +56,15 @@ public class TeamDTO {
         this.budget = budget;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TeamDTO)) return false;
+        if (!(o instanceof TeamCreateDTO)) return false;
 
-        TeamDTO teamDTO = (TeamDTO) o;
+        TeamCreateDTO that = (TeamCreateDTO) o;
 
-        return Objects.equals(getName(), teamDTO.getName());
+        return Objects.equals(name, that.name);
     }
 
     @Override
@@ -83,11 +74,10 @@ public class TeamDTO {
 
     @Override
     public String toString() {
-        return "TeamDTO{" +
+        return "TeamCreateDTO{" +
                 "name='" + name + '\'' +
                 ", competitionCountry=" + competitionCountry +
-                ", humanPlayer=" + humanPlayer +
-                ", hockeyPlayers=" + hockeyPlayers +
+                ", humanPlayerId=" + humanPlayerId +
                 ", budget=" + budget +
                 '}';
     }

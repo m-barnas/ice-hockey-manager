@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.service.facade;
 
-import cz.muni.fi.pa165.service.dto.TeamCreateDTO;
-import cz.muni.fi.pa165.service.dto.TeamDTO;
+import cz.muni.fi.pa165.dto.TeamCreateDTO;
+import cz.muni.fi.pa165.dto.TeamDTO;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 
 import java.util.List;

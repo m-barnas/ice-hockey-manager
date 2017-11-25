@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.service;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
-import cz.muni.fi.pa165.service.exceptions.TeamServiceException;
+import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

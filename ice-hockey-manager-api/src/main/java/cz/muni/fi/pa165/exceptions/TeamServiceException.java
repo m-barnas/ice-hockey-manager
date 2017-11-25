@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.service.exceptions;
+package cz.muni.fi.pa165.exceptions;
 
 /**
  * @author Lukáš Kotol
