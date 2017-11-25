@@ -126,7 +126,7 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 
 		HockeyPlayer captain = new HockeyPlayer();
 		captain.setName("Leoš Čermák");
-		captain.setPost(Position.C);
+		captain.setPost(Position.CENTER);
 		captain.setAttackSkill(50);
 		captain.setDefenseSkill(50);
 		captain.setPrice(new BigDecimal("100"));

@@ -41,7 +41,7 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
     public void setUp() {
         hockeyPlayer = new HockeyPlayer();
         hockeyPlayer.setName("Jan Novák");
-        hockeyPlayer.setPost(Position.LW);
+        hockeyPlayer.setPost(Position.LEFT_WING);
         hockeyPlayer.setAttackSkill(10);
         hockeyPlayer.setDefenseSkill(23);
         hockeyPlayer.setPrice(new BigDecimal("0"));
@@ -70,7 +70,7 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
     public void updateHockeyPlayer() {
         hockeyPlayerDao.create(hockeyPlayer);
         hockeyPlayer.setName("Updated");
-        hockeyPlayer.setPost(Position.C);
+        hockeyPlayer.setPost(Position.CENTER);
         hockeyPlayer.setAttackSkill(30);
         hockeyPlayer.setDefenseSkill(3);
         hockeyPlayerDao.update(hockeyPlayer);
@@ -94,7 +94,7 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
     @Test
     public void findByPostHockeyPlayer() {
         hockeyPlayerDao.create(hockeyPlayer);
-        assertThat(hockeyPlayerDao.findByPost(Position.LW)).contains(hockeyPlayer);
+        assertThat(hockeyPlayerDao.findByPost(Position.LEFT_WING)).contains(hockeyPlayer);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
     private static HockeyPlayer createHockeyPlayerByName(String name) {
         HockeyPlayer player = new HockeyPlayer();
         player.setName(name);
-        player.setPost(Position.LW);
+        player.setPost(Position.LEFT_WING);
         player.setAttackSkill(10);
         player.setDefenseSkill(23);
         player.setPrice(new BigDecimal("0"));

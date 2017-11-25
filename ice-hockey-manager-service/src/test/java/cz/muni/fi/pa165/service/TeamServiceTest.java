@@ -150,7 +150,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         hockeyPlayer.setName(name);
         hockeyPlayer.setAttackSkill(10);
         hockeyPlayer.setDefenseSkill(5);
-        hockeyPlayer.setPost(Position.C);
+        hockeyPlayer.setPost(Position.CENTER);
         hockeyPlayer.setPrice(BigDecimal.TEN);
         return hockeyPlayer;
     }
