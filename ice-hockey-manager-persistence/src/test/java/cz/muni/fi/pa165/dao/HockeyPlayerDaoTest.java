@@ -49,7 +49,7 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void createHockeyPlayer() {
-        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.create(hockeyPlayer);
         assertThat(hockeyPlayerDao.findAll().size()).isEqualTo(1);
         assertThat(hockeyPlayerDao.findById(hockeyPlayer.getId())).isEqualToComparingFieldByField(hockeyPlayer);
     }
@@ -57,43 +57,43 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
     @Test
     public void createHockeyPlayerNullName() {
         hockeyPlayer.setName(null);
-        assertThatThrownBy(() -> hockeyPlayerDao.save(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> hockeyPlayerDao.create(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void createHockeyPlayerNullPosition() {
         hockeyPlayer.setPost(null);
-        assertThatThrownBy(() -> hockeyPlayerDao.save(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> hockeyPlayerDao.create(hockeyPlayer)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void updateHockeyPlayer() {
-        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.create(hockeyPlayer);
         hockeyPlayer.setName("Updated");
         hockeyPlayer.setPost(Position.C);
         hockeyPlayer.setAttackSkill(30);
         hockeyPlayer.setDefenseSkill(3);
-        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.update(hockeyPlayer);
         assertThat(hockeyPlayerDao.findAll().size()).isEqualTo(1);
         assertThat(hockeyPlayerDao.findById(hockeyPlayer.getId())).isEqualToComparingFieldByField(hockeyPlayer);
     }
 
     @Test
     public void deleteHockeyPlayer() {
-        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.create(hockeyPlayer);
         hockeyPlayerDao.delete(hockeyPlayer);
         assertThat(hockeyPlayerDao.findAll()).isEmpty();
     }
 
     @Test
     public void findByNameHockeyPlayer() {
-        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.create(hockeyPlayer);
         assertThat(hockeyPlayerDao.findByName("Jan Novák")).isEqualToComparingFieldByField(hockeyPlayer);
     }
 
     @Test
     public void findByPostHockeyPlayer() {
-        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.create(hockeyPlayer);
         assertThat(hockeyPlayerDao.findByPost(Position.LW)).contains(hockeyPlayer);
     }
 
@@ -107,16 +107,16 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
 
         hockeyPlayer.setTeam(team);
         teamDao.create(team);
-        hockeyPlayerDao.save(hockeyPlayer);
+        hockeyPlayerDao.create(hockeyPlayer);
 
         assertThat(hockeyPlayerDao.findByTeam(team)).contains(hockeyPlayer);
     }
 
     @Test
     public void findAll() {
-        hockeyPlayerDao.save(hockeyPlayer);
-        hockeyPlayerDao.save(createHockeyPlayerByName("Petr Rychlý"));
-        hockeyPlayerDao.save(createHockeyPlayerByName("Ivan Pomalý"));
+        hockeyPlayerDao.create(hockeyPlayer);
+        hockeyPlayerDao.create(createHockeyPlayerByName("Petr Rychlý"));
+        hockeyPlayerDao.create(createHockeyPlayerByName("Ivan Pomalý"));
         assertThat(hockeyPlayerDao.findAll().size()).isEqualTo(3);
     }
 

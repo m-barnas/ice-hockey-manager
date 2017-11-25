@@ -40,7 +40,7 @@ public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 
 	@Override
 	public HockeyPlayer findByName(String name) {
-		List<HockeyPlayer> hockeyPlayers = em.createQuery("select h from HockeyPlayer h where lower(h.name) = :name",
+		List<HockeyPlayer> hockeyPlayers = em.createQuery("select h from HockeyPlayer h where h.name = :name",
 				HockeyPlayer.class)
 				.setMaxResults(1)
 				.setParameter("name", name)
