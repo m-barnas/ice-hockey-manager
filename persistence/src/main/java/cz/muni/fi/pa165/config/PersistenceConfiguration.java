@@ -1,7 +1,13 @@
 package cz.muni.fi.pa165.config;
 
+import cz.muni.fi.pa165.facades.BeanMappingService;
+import cz.muni.fi.pa165.facades.BeanMappingServiceImpl;
+import cz.muni.fi.pa165.facades.TeamFacade;
+import cz.muni.fi.pa165.facades.TeamFacadeImpl;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.TeamServiceImpl;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +30,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 import cz.muni.fi.pa165.dao.*;
+
 /**
  * @author Martin Barnas 433523@mail.muni.cz
  */
@@ -34,74 +41,89 @@ import cz.muni.fi.pa165.dao.*;
 @PropertySource("classpath:config.properties")
 public class PersistenceConfiguration {
 
-  @Autowired
-  private Environment env;
+    @Autowired
+    private Environment env;
 
-  /**
-   * Enables automatic translation of exceptions to DataAccessExceptions.
-   */
-  @Bean
-  public PersistenceExceptionTranslationPostProcessor postProcessor() {
-    return new PersistenceExceptionTranslationPostProcessor();
-  }
+    /**
+     * Enables automatic translation of exceptions to DataAccessExceptions.
+     */
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor postProcessor() {
+        return new PersistenceExceptionTranslationPostProcessor();
+    }
 
-  @Bean
-  public JpaTransactionManager transactionManager() {
-    return new JpaTransactionManager(entityManagerFactory().getObject());
-  }
+    @Bean
+    public JpaTransactionManager transactionManager() {
+        return new JpaTransactionManager(entityManagerFactory().getObject());
+    }
 
-  /**
-   * Starts up a container that emulates behavior prescribed in JPA spec for container-managed EntityManager
-   */
-  @Bean
-  public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-    LocalContainerEntityManagerFactoryBean jpaFactoryBean = new LocalContainerEntityManagerFactoryBean();
-    jpaFactoryBean.setDataSource(db());
-    jpaFactoryBean.setLoadTimeWeaver(instrumentationLoadTimeWeaver());
-    jpaFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-    jpaFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-    jpaFactoryBean.setJpaProperties(hibernateProperties());
-    return jpaFactoryBean;
-  }
+    /**
+     * Starts up a container that emulates behavior prescribed in JPA spec for container-managed EntityManager
+     */
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean jpaFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        jpaFactoryBean.setDataSource(db());
+        jpaFactoryBean.setLoadTimeWeaver(instrumentationLoadTimeWeaver());
+        jpaFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        jpaFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        jpaFactoryBean.setJpaProperties(hibernateProperties());
+        return jpaFactoryBean;
+    }
 
-  @Bean
-  public LocalValidatorFactoryBean localValidatorFactoryBean() {
-    return new LocalValidatorFactoryBean();
-  }
+    @Bean
+    public LocalValidatorFactoryBean localValidatorFactoryBean() {
+        return new LocalValidatorFactoryBean();
+    }
 
-  @Bean
-  public LoadTimeWeaver instrumentationLoadTimeWeaver() {
-    return new InstrumentationLoadTimeWeaver();
-  }
+    @Bean
+    public LoadTimeWeaver instrumentationLoadTimeWeaver() {
+        return new InstrumentationLoadTimeWeaver();
+    }
 
-  @Bean
-  public DataSource db() {
-    DriverManagerDataSource driver = new DriverManagerDataSource();
-    driver.setDriverClassName(env.getProperty("jdbc.driver"));
-    driver.setUsername(env.getProperty("db.username"));
-    driver.setPassword(env.getProperty("db.password"));
-    driver.setUrl(env.getProperty("jdbc.url"));
-    return driver;
-  }
+    @Bean
+    public DataSource db() {
+        DriverManagerDataSource driver = new DriverManagerDataSource();
+        driver.setDriverClassName(env.getProperty("jdbc.driver"));
+        driver.setUsername(env.getProperty("db.username"));
+        driver.setPassword(env.getProperty("db.password"));
+        driver.setUrl(env.getProperty("jdbc.url"));
+        return driver;
+    }
 
-  @Bean
-  public HockeyPlayerDao hockeyPlayerDao(){
-    return new HockeyPlayerDaoImpl();
-  }
+    @Bean
+    public HockeyPlayerDao hockeyPlayerDao() {
+        return new HockeyPlayerDaoImpl();
+    }
 
-  @Bean
-  public TeamService teamService(){
-    return new TeamServiceImpl();
-  }
+    @Bean
+    public TeamService teamService() {
+        return new TeamServiceImpl();
+    }
 
-  private Properties hibernateProperties() {
-    Properties properties = new Properties();
-    properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
-    properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-    properties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
-    properties.setProperty("hibernate.cache.provider_class", env.getProperty("hibernate.cache.provider_class"));
-    properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-    return properties;
-  }
+    @Bean
+    public TeamFacade teamFacade() {
+        return new TeamFacadeImpl();
+    }
+
+    @Bean
+    public BeanMappingService beanMappingService() {
+        return new BeanMappingServiceImpl();
+    }
+
+    @Bean
+    public Mapper mapper() {
+        return new DozerBeanMapper();
+    }
+
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+        properties.setProperty("hibernate.cache.provider_class", env.getProperty("hibernate.cache.provider_class"));
+        properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        return properties;
+    }
 
 }

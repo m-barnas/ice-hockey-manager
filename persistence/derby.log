@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Wed Nov 22 18:50:42 CET 2017:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-015f-e4da-7183-0000042a8138 
-on database directory memory:/home/lukas/Documents/ice-hockey-manager/persistence/testdb with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
-Loaded from file:/home/lukas/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
+Sat Nov 25 10:45:35 CET 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-015f-f291-60b0-0000058cb898 
+on database directory memory:C:\Users\H269193\Documents\git\ice-hockey-manager\persistence\testdb with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/C:/Users/H269193/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_101-b13
-user.dir=/home/lukas/Documents/ice-hockey-manager/persistence
-os.name=Linux
+java.runtime.version=1.8.0_144-b01
+user.dir=C:\Users\H269193\Documents\git\ice-hockey-manager\persistence
+os.name=Windows 10
 os.arch=amd64
-os.version=4.4.0-101-generic
+os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
