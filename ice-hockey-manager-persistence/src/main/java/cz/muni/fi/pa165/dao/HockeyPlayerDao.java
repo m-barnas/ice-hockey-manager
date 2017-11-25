@@ -71,10 +71,10 @@ public interface HockeyPlayerDao {
 	/**
 	 * Find {@link HockeyPlayer}s by price.
 	 *
-	 * @param price maximum price to find (not including the border).
-	 * @return list of hockey players with price less than the given price.
+	 * @param price maximum price to find (including the border).
+	 * @return list of hockey players with price less or equal than the given price.
 	 */
-	List<HockeyPlayer> findByPriceIsLessThan(BigDecimal price);
+	List<HockeyPlayer> findByPriceLessOrEqualThan(BigDecimal price);
 
 	/**
 	 * Find all {@link HockeyPlayer}s.
