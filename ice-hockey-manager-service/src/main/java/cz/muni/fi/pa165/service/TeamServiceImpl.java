@@ -63,6 +63,10 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void spendMoneyFromBudget(Team team, BigDecimal amount) throws TeamServiceException {
+        if (amount == null) {
+            throw new TeamServiceException("Amount cannot be null");
+        }
+
         BigDecimal resultBudget = team.getBudget().subtract(amount);
         if (resultBudget.intValue() < 0) {
             throw new TeamServiceException("Amount of budget cannot be lower than 0");

@@ -82,6 +82,16 @@ public class Team {
         return hockeyPlayers;
     }
 
+    public void addHockeyPlayer(HockeyPlayer hockeyPlayer){
+        hockeyPlayers.add(hockeyPlayer);
+        hockeyPlayer.setTeam(this);
+    }
+
+    public void removeHockeyPlayer(HockeyPlayer hockeyPlayer){
+        hockeyPlayers.remove(hockeyPlayer);
+        hockeyPlayer.setTeam(null);
+    }
+
     public void setHockeyPlayers(Set<HockeyPlayer> hockeyPlayers) {
         this.hockeyPlayers = hockeyPlayers;
     }

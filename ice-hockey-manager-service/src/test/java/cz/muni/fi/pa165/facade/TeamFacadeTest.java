@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.config.PersistenceConfiguration;
 import cz.muni.fi.pa165.dto.TeamCreateDTO;
 import cz.muni.fi.pa165.dto.TeamDTO;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
+import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import cz.muni.fi.pa165.service.facade.TeamFacade;
 import cz.muni.fi.pa165.service.facade.TeamFacadeImpl;
@@ -20,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 import java.math.BigDecimal;
@@ -90,6 +91,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void addHockeyPlayerTeamTest(){
+        // TODO
         Long teamId = teamFacade.createTeam(teamCreateDTO);
 //        teamFacade.addHockyPlayer(teamId, hockeyPlayerId);
 //        assertThat(teamFacade.getTeamById(teamId).getHockeyPlayers()).contains(hockeyPlayer)  ;
@@ -97,9 +99,44 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void removeHockeyPlayerTeamTest(){
+        // TODO
         Long teamId = teamFacade.createTeam(teamCreateDTO);
 //        teamFacade.addHockyPlayer(teamId, hockeyPlayerId);
 //        assertThat(teamFacade.getTeamById(teamId).getHockeyPlayers()) contains(hockeyPlayer);
     }
 
+    @Test
+    public void spendMoneyFromBudgetTeamTest() throws TeamServiceException {
+        Long teamId = teamFacade.createTeam(teamCreateDTO);
+        teamFacade.spendMoneyFromBudget(teamId, BigDecimal.valueOf(300));
+        assertThat(teamFacade.getTeamById(teamId).getBudget()).isEqualTo(BigDecimal.valueOf(2700));
+    }
+
+    @Test
+    public void getTeamPriceTeamTest(){
+        Long teamId = teamFacade.createTeam(teamCreateDTO);
+        // TODO
+        assertThat(teamFacade.getTeamPrice(teamId)).isEqualTo(BigDecimal.valueOf(30));
+    }
+
+    @Test
+    public void getTeamAttackSkillTeamTest(){
+        Long teamId = teamFacade.createTeam(teamCreateDTO);
+        // TODO
+        assertThat(teamFacade.getTeamAttackSkill(teamId)).isEqualTo(30);
+    }
+
+
+    @Test
+    public void getTeamDefenseSkillTeamTest(){
+        Long teamId = teamFacade.createTeam(teamCreateDTO);
+        // TODO
+        assertThat(teamFacade.getTeamDefenseSkill(teamId)).isEqualTo(30);
+    }
+
+    @Test
+    public void findTeamByNameTeamTest(){
+        Long teamId = teamFacade.createTeam(teamCreateDTO);
+        assertThat(teamFacade.findTeamByName("teamTestCreate")).isEqualTo(teamDTO);
+    }
 }

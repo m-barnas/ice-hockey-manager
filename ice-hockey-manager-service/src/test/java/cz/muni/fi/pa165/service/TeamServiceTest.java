@@ -127,16 +127,23 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    public void spendMoneyFromBudgetNullTest() {
+        teamService.createTeam(team1);
+        assertThatThrownBy(() -> teamService.spendMoneyFromBudget(team1, null)).isInstanceOf(TeamServiceException.class);
+    }
+
+    @Test
     public void getTeamAttackSkillTest() {
         teamService.createTeam(team1);
         assertThat(teamService.getTeamAttackSkill(team1)).isEqualTo(20);
     }
 
     @Test
-    public void getTeamDefenseSkillTest(){
+    public void getTeamDefenseSkillTest() {
         teamService.createTeam(team1);
         assertThat(teamService.getTeamDefenseSkill(team1)).isEqualTo(10);
     }
+
 
     private HockeyPlayer createHockeyPlayer(String name) {
         HockeyPlayer hockeyPlayer = new HockeyPlayer();

@@ -4,12 +4,14 @@ import cz.muni.fi.pa165.dto.TeamCreateDTO;
 import cz.muni.fi.pa165.dto.TeamDTO;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
+import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -63,5 +65,30 @@ public class TeamFacadeImpl implements TeamFacade {
     public TeamDTO getTeamById(Long id) {
         Team team = teamService.findById(id);
         return (team == null) ? null : beanMappingService.mapTo(team, TeamDTO.class);
+    }
+
+    @Override
+    public void spendMoneyFromBudget(Long teamId, BigDecimal amount) throws TeamServiceException {
+        teamService.spendMoneyFromBudget(teamService.findById(teamId), amount);
+    }
+
+    @Override
+    public BigDecimal getTeamPrice(Long teamId) {
+        return teamService.getTeamPrice(teamService.findById(teamId));
+    }
+
+    @Override
+    public int getTeamAttackSkill(Long teamId) {
+        return teamService.getTeamAttackSkill(teamService.findById(teamId));
+    }
+
+    @Override
+    public int getTeamDefenseSkill(Long teamId) {
+        return teamService.getTeamDefenseSkill(teamService.findById(teamId));
+    }
+
+    @Override
+    public TeamDTO findTeamByName(String name) {
+        return beanMappingService.mapTo(teamService.findByName(name), TeamDTO.class);
     }
 }
