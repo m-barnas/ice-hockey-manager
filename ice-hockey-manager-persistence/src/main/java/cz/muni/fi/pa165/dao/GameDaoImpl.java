@@ -74,7 +74,7 @@ public class GameDaoImpl implements GameDao {
 		CriteriaQuery<Game> query = cb.createQuery(Game.class);
 		Root<Game> g = query.from(Game.class);
 		query.select(g).where(cb.and(
-                cb.equal(g.get("firstTeamScore"), null),
+                cb.isNull(g.get("firstTeamScore")),
                 cb.equal(g.get("gameState"), GameState.OK)
         ));
 		return em.createQuery(query).getResultList();
