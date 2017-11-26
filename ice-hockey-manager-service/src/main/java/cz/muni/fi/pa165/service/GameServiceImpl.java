@@ -96,6 +96,18 @@ public class GameServiceImpl implements GameService {
      * time is in future or game has been already played (has not null score)
      */
     public void playGame(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("Game is null.");
+        }
+        if (game.getGameState() == null) {
+            throw new IllegalArgumentException("Game state is null.");
+        }
+        if (game.getStartTime() == null) {
+            throw new IllegalArgumentException("Start time is null.");
+        }
+        if ((game.getFirstTeam() == null) || (game.getSecondTeam() == null)) {
+            throw new IllegalArgumentException("Team is null.");
+        }
         if (game.getGameState().equals(GameState.CANCELED)) {
             throw new IllegalArgumentException("Game is canceled.");
         }
@@ -170,9 +182,8 @@ public class GameServiceImpl implements GameService {
         double percent2 = random.nextInt(25);
         double fortune = random.nextInt(101);
         return (int) Math.round(
-                Math.pow(
-                        (attackSkill + attackSkill * percent1 / 100) /
-                (opponentDefenseSkill + opponentDefenseSkill * percent2 / 100), 2)
+                (attackSkill + attackSkill * percent1 / 100) /
+                (opponentDefenseSkill + opponentDefenseSkill * percent2 / 100)
                 + (fortune / 100 - 0.5));
     }
 }
