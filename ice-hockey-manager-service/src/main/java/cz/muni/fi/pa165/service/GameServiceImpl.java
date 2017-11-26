@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.entity.Game;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.GameState;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,20 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private GameDao gameDao;
 
+    private Clock clock;
+
+    public Clock getClock() {
+        return clock;
+    }
+
+    public void setClock(Clock clock) {
+        this.clock = clock;
+    }
+
+    public GameServiceImpl() {
+        clock = Clock.system(Clock.systemDefaultZone().getZone());
+    }
+
     @Override
     public void create(Game game) {
         gameDao.create(game);
@@ -36,9 +51,6 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game update(Game game) {
-        if ((game.getFirstTeamScore() != null) || (game.getSecondTeamScore() != null)) {
-            throw new IllegalArgumentException("Game has been already played.");
-        }
         return gameDao.update(game);
     }
 
@@ -66,7 +78,7 @@ public class GameServiceImpl implements GameService {
     public List<Game> playGames() {
         List<Game> games = findScheduledGames();
         Predicate<Game> predicateGamesInFuture =
-                game -> game.getStartTime().isAfter(LocalDateTime.now());
+                game -> !(game.getStartTime().isBefore(LocalDateTime.now(clock)));
         games.removeIf(predicateGamesInFuture);
 
         for (Game game : games) {
@@ -90,7 +102,7 @@ public class GameServiceImpl implements GameService {
         if ((game.getFirstTeamScore() != null) || (game.getSecondTeamScore() != null)) {
             throw new IllegalArgumentException("Game has been already played.");
         }
-        if (game.getStartTime().isAfter(LocalDateTime.now())) {
+        if (game.getStartTime().isAfter(LocalDateTime.now(clock))) {
             throw new IllegalArgumentException("Game start time is in future.");
         }
 
