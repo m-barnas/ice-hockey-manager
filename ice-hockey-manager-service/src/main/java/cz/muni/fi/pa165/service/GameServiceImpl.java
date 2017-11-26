@@ -78,7 +78,7 @@ public class GameServiceImpl implements GameService {
     public List<Game> playGames() {
         List<Game> games = findScheduledGames();
         Predicate<Game> predicateGamesInFuture =
-                game -> !(game.getStartTime().isBefore(LocalDateTime.now(clock)));
+                game -> game.getStartTime().isAfter(LocalDateTime.now(clock));
         games.removeIf(predicateGamesInFuture);
 
         for (Game game : games) {
