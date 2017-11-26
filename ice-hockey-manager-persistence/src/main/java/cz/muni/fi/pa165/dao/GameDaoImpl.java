@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.dao;
 
 import cz.muni.fi.pa165.entity.Game;
 import cz.muni.fi.pa165.entity.Team;
+import cz.muni.fi.pa165.enums.GameState;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -63,6 +64,18 @@ public class GameDaoImpl implements GameDao {
 		query.select(g).where(cb.or(
                 cb.equal(g.get("firstTeam"), team),
                 cb.equal(g.get("secondTeam"), team)
+        ));
+		return em.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<Game> findScheduledGames() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Game> query = cb.createQuery(Game.class);
+		Root<Game> g = query.from(Game.class);
+		query.select(g).where(cb.and(
+                cb.equal(g.get("firstTeamScore"), null),
+                cb.equal(g.get("gameState"), GameState.OK)
         ));
 		return em.createQuery(query).getResultList();
     }
