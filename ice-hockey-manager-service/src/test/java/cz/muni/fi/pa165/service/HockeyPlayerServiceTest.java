@@ -11,6 +11,7 @@ import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.enums.Role;
 import cz.muni.fi.pa165.exceptions.HockeyPlayerServiceException;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +35,14 @@ import static org.assertj.core.api.Assertions.*;
 public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 
 	@Mock
-	private HockeyPlayerDao playerDao;
+	private HumanPlayerService humanSevice;
+
+	@Mock
+	private TeamService teamService;
 
 	@Autowired
+	@InjectMocks
 	private HockeyPlayerService playerService;
-
-	@Autowired
-	private HumanPlayerDao humanDao;
-
-	@Autowired
-	private TeamDao teamDao;
 
 	private Team kometa;
 	private HockeyPlayer hasek;
@@ -83,8 +82,8 @@ public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 		kometa.addHockeyPlayer(jagr);
 
 		owner.setTeam(kometa);
-		humanDao.create(owner);
-		teamDao.create(kometa);
+		humanSevice.register(owner, "passwd");
+		teamService.createTeam(kometa);
 		playerService.create(hasek);
 		playerService.create(kaberle);
 		playerService.create(zidlicky);

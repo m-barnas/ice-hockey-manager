@@ -5,7 +5,7 @@ package cz.muni.fi.pa165.exceptions;
  *
  * @author Jakub Hruska jhruska@mail.muni.cz
  */
-public class HockeyPlayerServiceException extends Exception {
+public class HockeyPlayerServiceException extends IllegalArgumentException {
 
 	public HockeyPlayerServiceException(String msg, Throwable t) {
 		super(msg, t);

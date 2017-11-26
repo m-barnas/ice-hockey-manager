@@ -30,6 +30,11 @@ public class HockeyPlayerServiceImpl implements HockeyPlayerService {
 	}
 
 	@Override
+	public HockeyPlayer update(HockeyPlayer player) {
+		return playerDao.update(player);
+	}
+
+	@Override
 	public void delete(HockeyPlayer player) {
 		playerDao.delete(player);
 	}
@@ -82,7 +87,7 @@ public class HockeyPlayerServiceImpl implements HockeyPlayerService {
 	}
 
 	@Override
-	public List<HockeyPlayer> findByAttSkill(int minAttSkill) throws HockeyPlayerServiceException {
+	public List<HockeyPlayer> findByAttSkill(int minAttSkill) {
 		if (minAttSkill < 1 || minAttSkill > 99) {
 			throw new HockeyPlayerServiceException("Attack skill must be between 1 and 99");
 		}
@@ -97,7 +102,7 @@ public class HockeyPlayerServiceImpl implements HockeyPlayerService {
 	}
 
 	@Override
-	public List<HockeyPlayer> findByDefSkill(int minDefSkill) throws HockeyPlayerServiceException {
+	public List<HockeyPlayer> findByDefSkill(int minDefSkill) {
 		if (minDefSkill < 1 || minDefSkill > 99) {
 			throw new HockeyPlayerServiceException("Defensive skill must be between 1 and 99");
 		}

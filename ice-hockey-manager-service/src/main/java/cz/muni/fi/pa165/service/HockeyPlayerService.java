@@ -24,6 +24,14 @@ public interface HockeyPlayerService {
 	HockeyPlayer create(HockeyPlayer player);
 
 	/**
+	 * Updates {@link HockeyPlayer}.
+	 *
+	 * @param player to update
+	 * @return updated hockey player
+	 */
+	HockeyPlayer update(HockeyPlayer player);
+
+	/**
 	 * Deletes {@link HockeyPlayer}.
 	 *
 	 * @param player to remove.
@@ -99,7 +107,7 @@ public interface HockeyPlayerService {
 	 * @param minAttSkill minimal attack skill
 	 * @return list of hockey players
 	 */
-	List<HockeyPlayer> findByAttSkill(int minAttSkill) throws HockeyPlayerServiceException;
+	List<HockeyPlayer> findByAttSkill(int minAttSkill);
 
 	/**
 	 * Returns {@link HockeyPlayer}s with higher defense skill than given limit (border included).
@@ -107,5 +115,5 @@ public interface HockeyPlayerService {
 	 * @param minDefSkill minimal defense skill
 	 * @return list of hockey players
 	 */
-	List<HockeyPlayer> findByDefSkill(int minDefSkill) throws HockeyPlayerServiceException;
+	List<HockeyPlayer> findByDefSkill(int minDefSkill);
 }
