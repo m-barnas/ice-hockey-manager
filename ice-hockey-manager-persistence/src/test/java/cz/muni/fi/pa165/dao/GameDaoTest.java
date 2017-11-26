@@ -124,6 +124,22 @@ public class GameDaoTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    public void findScheduledGames() {
+        gameDao.create(gameOk);
+        gameDao.create(gameCanceled);
+
+        List<Game> games = gameDao.findScheduledGames();
+        assertThat(games).containsExactly(gameOk);
+
+        gameOk.setFirstTeamScore(1);
+        gameOk.setSecondTeamScore(2);
+        gameOk = gameDao.update(gameOk);
+
+        games = gameDao.findScheduledGames();
+        assertThat(games).isEmpty();
+    }
+
+    @Test
     public void findAll() {
         gameDao.create(gameOk);
         gameDao.create(gameCanceled);

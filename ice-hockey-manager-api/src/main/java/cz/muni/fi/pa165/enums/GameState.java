@@ -1,8 +1,7 @@
 package cz.muni.fi.pa165.enums;
 
 /**
- *
- * @author Markéta
+ * @author Marketa Elederova
  */
 public enum GameState {
     OK,

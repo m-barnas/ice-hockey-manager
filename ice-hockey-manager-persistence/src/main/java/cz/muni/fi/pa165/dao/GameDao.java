@@ -17,7 +17,7 @@ public interface GameDao {
     * @param game to create
     */
     void create(Game game);
-    
+
     /**
     * Update {@link Game}.
     *
@@ -58,6 +58,13 @@ public interface GameDao {
      * @return all games of given team
      */
     List<Game> findByTeam(Team team);
+
+    /**
+     * Find all games with state OK which were not played yet (have null score).
+     *
+     * @return all scheduled games
+     */
+    List<Game> findScheduledGames();
 
     /**
     * Find all {@link Game}s.
