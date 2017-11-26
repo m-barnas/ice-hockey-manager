@@ -20,7 +20,8 @@ import java.util.Objects;
  * - position ({@link cz.muni.fi.pa165.enums.Position}),
  * - attack skill rating (int (0, 100))
  * - defense skill rating (int (0, 100))
- * - team (null if is a free agent)
+ * - team (null for free agent)
+ * - price (BigDecimal)
  *
  * @author Jakub Hruska jhruska@mail.muni.cz
  */

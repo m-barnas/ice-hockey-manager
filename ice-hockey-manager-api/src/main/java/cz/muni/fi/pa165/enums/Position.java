@@ -11,9 +11,9 @@ package cz.muni.fi.pa165.enums;
  * @author Jakub Hruska jhruska@mail.muni.cz
  */
 public enum Position {
-	G,
-	D,
-	C,
-	LW,
-	RW
+	GOALKEEPER,
+	DEFENSEMAN,
+	CENTER,
+	LEFT_WING,
+	RIGHT_WING
 }

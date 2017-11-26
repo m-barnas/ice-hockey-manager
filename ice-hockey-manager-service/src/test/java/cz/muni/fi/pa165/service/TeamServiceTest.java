@@ -76,8 +76,8 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         hockeyPlayerOne.setTeam(team1);
         hockeyPlayerTwo.setTeam(team1);
         humanPlayer.setTeam(team1);
-        hockeyPlayerDao.save(hockeyPlayerOne);
-        hockeyPlayerDao.save(hockeyPlayerTwo);
+        hockeyPlayerDao.create(hockeyPlayerOne);
+        hockeyPlayerDao.create(hockeyPlayerTwo);
         humanPlayerDao.create(humanPlayer);
     }
 
@@ -150,7 +150,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         hockeyPlayer.setName(name);
         hockeyPlayer.setAttackSkill(10);
         hockeyPlayer.setDefenseSkill(5);
-        hockeyPlayer.setPost(Position.C);
+        hockeyPlayer.setPost(Position.CENTER);
         hockeyPlayer.setPrice(BigDecimal.TEN);
         return hockeyPlayer;
     }

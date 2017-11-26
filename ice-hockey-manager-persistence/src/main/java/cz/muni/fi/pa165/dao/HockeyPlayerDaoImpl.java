@@ -65,8 +65,8 @@ public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 	}
 
 	@Override
-	public List<HockeyPlayer> findByPriceIsLessThan(BigDecimal price) {
-		return em.createQuery("select h from HockeyPlayer h where h.price < :price",
+	public List<HockeyPlayer> findByPriceLessOrEqualThan(BigDecimal price) {
+		return em.createQuery("select h from HockeyPlayer h where h.price <= :price",
 				HockeyPlayer.class)
 				.setParameter("price", price)
 				.getResultList();

@@ -18,7 +18,7 @@ public class TeamDTO {
 
     private HumanPlayerDto humanPlayer;
 
-    private Set<HockeyPlayerDTO> hockeyPlayers = new HashSet<>();
+    private Set<HockeyPlayerDto> hockeyPlayers = new HashSet<>();
 
     private BigDecimal budget;
 
@@ -46,11 +46,11 @@ public class TeamDTO {
         this.humanPlayer = humanPlayer;
     }
 
-    public Set<HockeyPlayerDTO> getHockeyPlayers() {
+    public Set<HockeyPlayerDto> getHockeyPlayers() {
         return hockeyPlayers;
     }
 
-    public void setHockeyPlayers(Set<HockeyPlayerDTO> hockeyPlayers) {
+    public void setHockeyPlayers(Set<HockeyPlayerDto> hockeyPlayers) {
         this.hockeyPlayers = hockeyPlayers;
     }
 
