@@ -8,6 +8,7 @@ import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.facade.HockeyPlayerFacade;
 import cz.muni.fi.pa165.service.HockeyPlayerService;
+import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.mockito.InjectMocks;
@@ -38,6 +39,9 @@ public class HockeyPlayerFacadeTest extends AbstractTestNGSpringContextTests {
 
 	@Mock
 	private BeanMappingService beanMappingService;
+
+	@Mock
+	private TeamService teamService;
 
 	@InjectMocks
 	private HockeyPlayerFacade hockeyPlayerFacade = new HockeyPlayerFacadeImpl();
@@ -151,6 +155,7 @@ public class HockeyPlayerFacadeTest extends AbstractTestNGSpringContextTests {
 		when(beanMappingService.mapTo(hockeyPlayers, HockeyPlayerDto.class)).thenReturn(hockeyPlayerDtos);
 		when(beanMappingService.mapTo(hockeyPlayerDtos, HockeyPlayer.class)).thenReturn(hockeyPlayers);
 		when(hockeyPlayerService.findByTeam(testTeam)).thenReturn(hockeyPlayers);
+		when(teamService.findByName(testTeam.getName())).thenReturn(testTeam);
 
 		// exercise
 		Collection<HockeyPlayerDto> result = hockeyPlayerFacade.findByTeam(testTeamDto);
