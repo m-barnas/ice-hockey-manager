@@ -49,9 +49,8 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
     @Mock
     private BeanMappingService beanMappingService;
 
-    @Autowired
     @InjectMocks
-    private GameFacadeImpl gameFacade;
+    private GameFacadeImpl gameFacade = new GameFacadeImpl();
 
     private Team team1;
     private Team team2;
