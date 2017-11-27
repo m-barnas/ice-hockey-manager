@@ -24,9 +24,9 @@ public class HockeyPlayerServiceImpl implements HockeyPlayerService {
 	private HockeyPlayerDao playerDao;
 
 	@Override
-	public HockeyPlayer create(HockeyPlayer player) {
+	public Long create(HockeyPlayer player) {
 		playerDao.create(player);
-		return player;
+		return player.getId();
 	}
 
 	@Override

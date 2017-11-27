@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.service.facade;
 import cz.muni.fi.pa165.dto.GameChangeStartTimeDto;
 import cz.muni.fi.pa165.dto.GameCreateDto;
 import cz.muni.fi.pa165.dto.GameDto;
-import cz.muni.fi.pa165.dto.TeamDTO;
+import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.entity.Game;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.GameState;
@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 /**
  * Tests for GameFacadeImpl.
  *
@@ -55,11 +56,12 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
     private Team team1;
     private Team team2;
     private Game game;
-    private TeamDTO teamDto1;
-    private TeamDTO teamDto2;
+    private TeamDto teamDto1;
+    private TeamDto teamDto2;
     private GameDto gameDto;
     private List<GameDto> gameDtos;
     private List<Game> games;
+
 
     @Mock
     private Clock clock;
@@ -87,9 +89,9 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
         game.setSecondTeam(team2);
         game.setStartTime(LocalDateTime.now(clock));
         game.setGameState(GameState.OK);
-        teamDto1 = new TeamDTO();
+        teamDto1 = new TeamDto();
         teamDto1.setName("team1");
-        teamDto2 = new TeamDTO();
+        teamDto2 = new TeamDto();
         teamDto2.setName("team2");
         gameDto = new GameDto();
         gameDto.setId(1l);

@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.dto;
 /**
  * @author Martin Barnas 433523@mail.muni.cz
  */
-public class HumanPlayerAuthenticateDTO {
+public class HumanPlayerAuthenticateDto {
 
     private String email;
     private String password;
@@ -11,7 +11,6 @@ public class HumanPlayerAuthenticateDTO {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -34,10 +33,10 @@ public class HumanPlayerAuthenticateDTO {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof HumanPlayerAuthenticateDTO)) {
+        if (!(o instanceof HumanPlayerAuthenticateDto)) {
             return false;
         }
-        HumanPlayerAuthenticateDTO that = (HumanPlayerAuthenticateDTO) o;
+        HumanPlayerAuthenticateDto that = (HumanPlayerAuthenticateDto) o;
         return getEmail().equals(that.getEmail());
     }
 
@@ -51,7 +50,7 @@ public class HumanPlayerAuthenticateDTO {
 
     @Override
     public String toString() {
-        return "HumanPlayerAuthenticateDTO{" +
+        return "HumanPlayerAuthenticateDto{" +
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';

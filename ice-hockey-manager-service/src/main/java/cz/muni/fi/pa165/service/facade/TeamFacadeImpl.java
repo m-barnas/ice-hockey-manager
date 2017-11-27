@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.service.facade;
 
-import cz.muni.fi.pa165.dto.TeamCreateDTO;
-import cz.muni.fi.pa165.dto.TeamDTO;
+import cz.muni.fi.pa165.dto.TeamCreateDto;
+import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
@@ -31,7 +31,7 @@ public class TeamFacadeImpl implements TeamFacade {
 
 
     @Override
-    public Long createTeam(TeamCreateDTO teamCreateDTO) {
+    public Long createTeam(TeamCreateDto teamCreateDTO) {
         Team mappedTeam = beanMappingService.mapTo(teamCreateDTO, Team.class);
         Team newTeam = teamService.createTeam(mappedTeam);
         return newTeam.getId();
@@ -43,19 +43,19 @@ public class TeamFacadeImpl implements TeamFacade {
     }
 
     @Override
-    public List<TeamDTO> getAllTeams() {
-        return beanMappingService.mapTo(teamService.findAll(), TeamDTO.class);
+    public List<TeamDto> getAllTeams() {
+        return beanMappingService.mapTo(teamService.findAll(), TeamDto.class);
     }
 
     @Override
-    public List<TeamDTO> getTeamsByCountry(CompetitionCountry competitionCountry) {
-        return beanMappingService.mapTo(teamService.findByCompetitionCountry(competitionCountry), TeamDTO.class);
+    public List<TeamDto> getTeamsByCountry(CompetitionCountry competitionCountry) {
+        return beanMappingService.mapTo(teamService.findByCompetitionCountry(competitionCountry), TeamDto.class);
     }
 
     @Override
-    public TeamDTO getTeamById(Long id) {
+    public TeamDto getTeamById(Long id) {
         Team team = teamService.findById(id);
-        return (team == null) ? null : beanMappingService.mapTo(team, TeamDTO.class);
+        return (team == null) ? null : beanMappingService.mapTo(team, TeamDto.class);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class TeamFacadeImpl implements TeamFacade {
     }
 
     @Override
-    public TeamDTO findTeamByName(String name) {
-        return beanMappingService.mapTo(teamService.findByName(name), TeamDTO.class);
+    public TeamDto findTeamByName(String name) {
+        return beanMappingService.mapTo(teamService.findByName(name), TeamDto.class);
     }
 }

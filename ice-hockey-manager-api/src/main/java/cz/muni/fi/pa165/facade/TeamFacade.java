@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.facade;
 
-import cz.muni.fi.pa165.dto.TeamCreateDTO;
-import cz.muni.fi.pa165.dto.TeamDTO;
+import cz.muni.fi.pa165.dto.TeamCreateDto;
+import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
 
@@ -18,7 +18,7 @@ public interface TeamFacade {
      * @param teamCreateDTO team which will be created.
      * @return id of created team.
      */
-    Long createTeam(TeamCreateDTO teamCreateDTO);
+    Long createTeam(TeamCreateDto teamCreateDTO);
 
     /**
      * Removes team.
@@ -32,7 +32,7 @@ public interface TeamFacade {
      *
      * @return List of all teams.
      */
-    List<TeamDTO> getAllTeams();
+    List<TeamDto> getAllTeams();
 
     /**
      * Return all team which have certain competitionCountry.
@@ -40,7 +40,7 @@ public interface TeamFacade {
      * @param competitionCountry of teams which well be returned.
      * @return List of teams with competition country.
      */
-    List<TeamDTO> getTeamsByCountry(CompetitionCountry competitionCountry);
+    List<TeamDto> getTeamsByCountry(CompetitionCountry competitionCountry);
 
     /**
      * Return team with id.
@@ -48,7 +48,7 @@ public interface TeamFacade {
      * @param id of returned team.
      * @return team which will be returned.
      */
-    TeamDTO getTeamById(Long id);
+    TeamDto getTeamById(Long id);
 
     /**
      * Spend amount of money from team budget.
@@ -89,5 +89,5 @@ public interface TeamFacade {
      * @param name of returned team.
      * @return Team.
      */
-    TeamDTO findTeamByName(String name);
+    TeamDto findTeamByName(String name);
 }

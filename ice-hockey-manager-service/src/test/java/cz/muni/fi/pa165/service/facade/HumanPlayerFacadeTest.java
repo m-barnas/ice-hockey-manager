@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.service.facade;
 
-import cz.muni.fi.pa165.dto.HumanPlayerAuthenticateDTO;
-import cz.muni.fi.pa165.dto.HumanPlayerDTO;
+import cz.muni.fi.pa165.dto.HumanPlayerAuthenticateDto;
+import cz.muni.fi.pa165.dto.HumanPlayerDto;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.enums.Role;
 import cz.muni.fi.pa165.exceptions.AuthenticationException;
@@ -45,11 +45,11 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
     private HumanPlayerFacade humanPlayerFacade = new HumanPlayerFacadeImpl();
 
     private HumanPlayer humanPlayer;
-    private HumanPlayerDTO humanPlayerDTO;
-    private HumanPlayerAuthenticateDTO authenticateDTO;
+    private HumanPlayerDto humanPlayerDto;
+    private HumanPlayerAuthenticateDto authenticateDto;
 
     private List<HumanPlayer> humanPlayers;
-    private List<HumanPlayerDTO> humanPlayerDTOS;
+    private List<HumanPlayerDto> humanPlayerDtoS;
 
     @BeforeClass
     public void setup() {
@@ -62,20 +62,20 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         humanPlayers = new ArrayList<>();
         humanPlayers.add(humanPlayer);
 
-        humanPlayerDTO = createHumanPlayerDTO();
-        humanPlayerDTOS = new ArrayList<>();
-        humanPlayerDTOS.add(humanPlayerDTO);
+        humanPlayerDto = createHumanPlayerDto();
+        humanPlayerDtoS = new ArrayList<>();
+        humanPlayerDtoS.add(humanPlayerDto);
 
-        authenticateDTO = createHumanPlayerAuthenticateDTO();
+        authenticateDto = createHumanPlayerAuthenticateDto();
 
-        when(beanMappingService.mapTo(humanPlayer, HumanPlayerDTO.class)).thenReturn(humanPlayerDTO);
-        when(beanMappingService.mapTo(humanPlayerDTO, HumanPlayer.class)).thenReturn(humanPlayer);
+        when(beanMappingService.mapTo(humanPlayer, HumanPlayerDto.class)).thenReturn(humanPlayerDto);
+        when(beanMappingService.mapTo(humanPlayerDto, HumanPlayer.class)).thenReturn(humanPlayer);
 
-        when(beanMappingService.mapTo(humanPlayer, HumanPlayerAuthenticateDTO.class)).thenReturn(authenticateDTO);
-        when(beanMappingService.mapTo(authenticateDTO, HumanPlayer.class)).thenReturn(humanPlayer);
+        when(beanMappingService.mapTo(humanPlayer, HumanPlayerAuthenticateDto.class)).thenReturn(authenticateDto);
+        when(beanMappingService.mapTo(authenticateDto, HumanPlayer.class)).thenReturn(humanPlayer);
 
-        when(beanMappingService.mapTo(humanPlayers, HumanPlayerDTO.class)).thenReturn(humanPlayerDTOS);
-        when(beanMappingService.mapTo(humanPlayerDTOS, HumanPlayer.class)).thenReturn(humanPlayers);
+        when(beanMappingService.mapTo(humanPlayers, HumanPlayerDto.class)).thenReturn(humanPlayerDtoS);
+        when(beanMappingService.mapTo(humanPlayerDtoS, HumanPlayer.class)).thenReturn(humanPlayers);
     }
 
     @Test
@@ -84,10 +84,10 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         doNothing().when(humanPlayerService).register(humanPlayer, COMMON_PASSWORD);
 
         // exercise
-        humanPlayerFacade.register(humanPlayerDTO, COMMON_PASSWORD);
+        humanPlayerFacade.register(humanPlayerDto, COMMON_PASSWORD);
 
         // verify
-        verify(humanPlayerService).register(humanPlayer, authenticateDTO.getPassword());
+        verify(humanPlayerService).register(humanPlayer, authenticateDto.getPassword());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         when(humanPlayerService.findById(humanPlayer.getId())).thenReturn(humanPlayer);
 
         // exercise
-        humanPlayerFacade.changePassword(humanPlayerDTO.getId(), COMMON_PASSWORD, STRONG_PASSWORD);
+        humanPlayerFacade.changePassword(humanPlayerDto.getId(), COMMON_PASSWORD, STRONG_PASSWORD);
 
         // verify
         assertThat(humanPlayer.getPasswordHash()).isNotBlank().isEqualTo(STRONG_PASSWORD);
@@ -110,7 +110,7 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         when(humanPlayerService.findById(humanPlayer.getId())).thenReturn(humanPlayer);
 
         // exercise
-        humanPlayerFacade.delete(humanPlayerDTO.getId());
+        humanPlayerFacade.delete(humanPlayerDto.getId());
 
         // verify
         verify(humanPlayerService).delete(humanPlayer);
@@ -122,10 +122,10 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         when(humanPlayerService.findById(humanPlayer.getId())).thenReturn(humanPlayer);
 
         // exercise
-        HumanPlayerDTO result = humanPlayerFacade.findById(humanPlayerDTO.getId());
+        HumanPlayerDto result = humanPlayerFacade.findById(humanPlayerDto.getId());
 
         // verify
-        assertThat(result).isEqualToComparingFieldByField(humanPlayerDTO);
+        assertThat(result).isEqualToComparingFieldByField(humanPlayerDto);
     }
 
     @Test
@@ -134,10 +134,11 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         when(humanPlayerService.findByEmail(humanPlayer.getEmail())).thenReturn(humanPlayer);
 
         // exercise
-        HumanPlayerDTO result = humanPlayerFacade.findByEmail(humanPlayerDTO.getEmail());
+        HumanPlayerDto result = humanPlayerFacade.findByEmail(humanPlayerDto.getEmail());
+
 
         // verify
-        assertThat(result).isEqualToComparingFieldByField(humanPlayerDTO);
+        assertThat(result).isEqualToComparingFieldByField(humanPlayerDto);
     }
 
     @Test
@@ -146,10 +147,10 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         when(humanPlayerService.findByUsername(humanPlayer.getUsername())).thenReturn(humanPlayer);
 
         // exercise
-        HumanPlayerDTO result = humanPlayerFacade.findByUsername(humanPlayerDTO.getUsername());
+        HumanPlayerDto result = humanPlayerFacade.findByUsername(humanPlayerDto.getUsername());
 
         // verify
-        assertThat(result).isEqualToComparingFieldByField(humanPlayerDTO);
+        assertThat(result).isEqualToComparingFieldByField(humanPlayerDto);
     }
 
     @Test
@@ -158,10 +159,10 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         when(humanPlayerService.findAll()).thenReturn(humanPlayers);
 
         // exercise
-        Collection<HumanPlayerDTO> result = humanPlayerFacade.findAll();
+        Collection<HumanPlayerDto> result = humanPlayerFacade.findAll();
 
         // verify
-        assertThat(result).isEqualTo(humanPlayerDTOS);
+        assertThat(result).isEqualTo(humanPlayerDtoS);
     }
 
     private void doAnswerSetPasswordHashWhenUpdate(String passwordHash) throws AuthenticationException {
@@ -180,19 +181,19 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         return humanPlayer;
     }
 
-    private HumanPlayerDTO createHumanPlayerDTO() {
-        HumanPlayerDTO humanPlayerDTO = new HumanPlayerDTO();
-        humanPlayerDTO.setId(1L);
-        humanPlayerDTO.setUsername("admin");
-        humanPlayerDTO.setRole(Role.ADMIN);
-        humanPlayerDTO.setEmail("admin@admin.com");
-        return humanPlayerDTO;
+    private HumanPlayerDto createHumanPlayerDto() {
+        HumanPlayerDto humanPlayerDto = new HumanPlayerDto();
+        humanPlayerDto.setId(1L);
+        humanPlayerDto.setUsername("admin");
+        humanPlayerDto.setRole(Role.ADMIN);
+        humanPlayerDto.setEmail("admin@admin.com");
+        return humanPlayerDto;
     }
 
-    private HumanPlayerAuthenticateDTO createHumanPlayerAuthenticateDTO() {
-        HumanPlayerAuthenticateDTO authenticateDTO = new HumanPlayerAuthenticateDTO();
-        authenticateDTO.setEmail("admin@admin.com");
-        authenticateDTO.setPassword(COMMON_PASSWORD);
-        return authenticateDTO;
+    private HumanPlayerAuthenticateDto createHumanPlayerAuthenticateDto() {
+        HumanPlayerAuthenticateDto authenticateDto = new HumanPlayerAuthenticateDto();
+        authenticateDto.setEmail("admin@admin.com");
+        authenticateDto.setPassword(COMMON_PASSWORD);
+        return authenticateDto;
     }
 }

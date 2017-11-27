@@ -12,9 +12,9 @@ public class GameDto {
 
     private Long id;
 
-    private TeamDTO firstTeamDto;
+    private TeamDto firstTeamDto;
 
-    private TeamDTO secondTeamDto;
+    private TeamDto secondTeamDto;
 
     private LocalDateTime startTime;
 
@@ -32,19 +32,19 @@ public class GameDto {
         this.id = id;
     }
 
-    public TeamDTO getFirstTeamDto() {
+    public TeamDto getFirstTeamDto() {
         return firstTeamDto;
     }
 
-    public void setFirstTeamDto(TeamDTO firstTeamDto) {
+    public void setFirstTeamDto(TeamDto firstTeamDto) {
         this.firstTeamDto = firstTeamDto;
     }
 
-    public TeamDTO getSecondTeamDto() {
+    public TeamDto getSecondTeamDto() {
         return secondTeamDto;
     }
 
-    public void setSecondTeamDto(TeamDTO secondTeamDto) {
+    public void setSecondTeamDto(TeamDto secondTeamDto) {
         this.secondTeamDto = secondTeamDto;
     }
 
