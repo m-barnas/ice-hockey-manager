@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class TeamCreateDTO {
+public class TeamCreateDto {
 
     @NotNull
     private String name;
@@ -60,9 +60,9 @@ public class TeamCreateDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TeamCreateDTO)) return false;
+        if (!(o instanceof TeamCreateDto)) return false;
 
-        TeamCreateDTO that = (TeamCreateDTO) o;
+        TeamCreateDto that = (TeamCreateDto) o;
 
         return Objects.equals(name, that.name);
     }
@@ -74,7 +74,7 @@ public class TeamCreateDTO {
 
     @Override
     public String toString() {
-        return "TeamCreateDTO{" +
+        return "TeamCreateDto{" +
                 "name='" + name + '\'' +
                 ", competitionCountry=" + competitionCountry +
                 ", humanPlayerId=" + humanPlayerId +

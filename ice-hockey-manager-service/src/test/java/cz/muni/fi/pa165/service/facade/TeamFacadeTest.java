@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.service.facade;
 
-import cz.muni.fi.pa165.dto.TeamCreateDTO;
-import cz.muni.fi.pa165.dto.TeamDTO;
+import cz.muni.fi.pa165.dto.TeamCreateDto;
+import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
@@ -45,13 +45,13 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
     private Team team;
 
-    private TeamDTO teamDTO;
+    private TeamDto teamDto;
 
-    private TeamCreateDTO teamCreateDTO;
+    private TeamCreateDto teamCreateDto;
 
     private List<Team> teams;
 
-    private List<TeamDTO> teamDTOS;
+    private List<TeamDto> teamDtoS;
 
     @BeforeClass
     public void setup() {
@@ -64,27 +64,27 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         teams = new ArrayList<>();
         teams.add(team);
 
-        teamDTO = createTeamDTO();
-        teamDTOS = new ArrayList<>();
-        teamDTOS.add(teamDTO);
+        teamDto = createTeamDto();
+        teamDtoS = new ArrayList<>();
+        teamDtoS.add(teamDto);
 
-        teamCreateDTO = createTeamCreateDTO();
+        teamCreateDto = createTeamCreateDto();
 
-        when(beanMappingService.mapTo(team, TeamDTO.class)).thenReturn(teamDTO);
-        when(beanMappingService.mapTo(teamDTO, Team.class)).thenReturn(team);
+        when(beanMappingService.mapTo(team, TeamDto.class)).thenReturn(teamDto);
+        when(beanMappingService.mapTo(teamDto, Team.class)).thenReturn(team);
 
-        when(beanMappingService.mapTo(team, TeamCreateDTO.class)).thenReturn(teamCreateDTO);
-        when(beanMappingService.mapTo(teamCreateDTO, Team.class)).thenReturn(team);
+        when(beanMappingService.mapTo(team, TeamCreateDto.class)).thenReturn(teamCreateDto);
+        when(beanMappingService.mapTo(teamCreateDto, Team.class)).thenReturn(team);
 
-        when(beanMappingService.mapTo(teams, TeamDTO.class)).thenReturn(teamDTOS);
-        when(beanMappingService.mapTo(teamDTOS, Team.class)).thenReturn(teams);
+        when(beanMappingService.mapTo(teams, TeamDto.class)).thenReturn(teamDtoS);
+        when(beanMappingService.mapTo(teamDtoS, Team.class)).thenReturn(teams);
 
     }
 
     @Test
     public void createTeamTest() {
         when(teamService.createTeam(team)).thenReturn(team);
-        teamFacade.createTeam(teamCreateDTO);
+        teamFacade.createTeam(teamCreateDto);
         verify(teamService).createTeam(team);
     }
 
@@ -99,16 +99,16 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void findAllTeamTest() {
         when(teamService.findAll()).thenReturn(teams);
-        Collection<TeamDTO> result = teamFacade.getAllTeams();
-        assertThat(result).isEqualTo(teamDTOS);
+        Collection<TeamDto> result = teamFacade.getAllTeams();
+        assertThat(result).isEqualTo(teamDtoS);
     }
 
     @Test
     public void findByCompetitionCountryTeamTest() {
         when(teamService.findByCompetitionCountry(team.getCompetitionCountry()))
                 .thenReturn(Collections.singletonList(team));
-        List<TeamDTO> result = teamFacade.getTeamsByCountry(teamDTO.getCompetitionCountry());
-        assertThat(result).containsExactly(teamDTO);
+        List<TeamDto> result = teamFacade.getTeamsByCountry(teamDto.getCompetitionCountry());
+        assertThat(result).containsExactly(teamDto);
     }
 
     @Test
@@ -146,8 +146,8 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void findTeamByNameTeamTest(){
         when(teamService.findByName(team.getName())).thenReturn(team);
-        TeamDTO result = teamFacade.findTeamByName(teamDTO.getName());
-        assertThat(result).isNotNull().isEqualTo(teamDTO);
+        TeamDto result = teamFacade.findTeamByName(teamDto.getName());
+        assertThat(result).isNotNull().isEqualTo(teamDto);
     }
 
     private void doAnswerSpendMoneyFromBudget() throws TeamServiceException {
@@ -158,20 +158,20 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         }).when(teamService).spendMoneyFromBudget(team, new BigDecimal("300"));
     }
 
-    TeamCreateDTO createTeamCreateDTO() {
-        TeamCreateDTO teamCreateDTO = new TeamCreateDTO();
-        teamCreateDTO.setName("teamTest");
-        teamCreateDTO.setBudget(BigDecimal.valueOf(3000));
-        teamCreateDTO.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-        teamCreateDTO.setHumanPlayerId(1L);
-        return teamCreateDTO;
+    TeamCreateDto createTeamCreateDto() {
+        TeamCreateDto teamCreateDto = new TeamCreateDto();
+        teamCreateDto.setName("teamTest");
+        teamCreateDto.setBudget(BigDecimal.valueOf(3000));
+        teamCreateDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
+        teamCreateDto.setHumanPlayerId(1L);
+        return teamCreateDto;
     }
 
-    TeamDTO createTeamDTO() {
-        TeamDTO teamDTO = new TeamDTO();
-        teamDTO.setName("teamTest");
-        teamDTO.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-        return teamDTO;
+    TeamDto createTeamDto() {
+        TeamDto teamDto = new TeamDto();
+        teamDto.setName("teamTest");
+        teamDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
+        return teamDto;
     }
 
     Team createTeam() {
@@ -181,5 +181,4 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
         return team;
     }
-
 }

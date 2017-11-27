@@ -1,12 +1,13 @@
 package cz.muni.fi.pa165.service.facade;
 
 import cz.muni.fi.pa165.dto.HockeyPlayerDto;
-import cz.muni.fi.pa165.dto.TeamDTO;
+import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.facade.HockeyPlayerFacade;
 import cz.muni.fi.pa165.service.HockeyPlayerService;
 import cz.muni.fi.pa165.service.TeamService;
+import cz.muni.fi.pa165.service.TeamServiceImpl;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,8 @@ public class HockeyPlayerFacadeImpl implements HockeyPlayerFacade {
 	@Override
 	public Long create(HockeyPlayerDto hockeyPlayerDto) {
 		HockeyPlayer mappedPlayer = bms.mapTo(hockeyPlayerDto, HockeyPlayer.class);
-		HockeyPlayer newPlayer = playerService.create(mappedPlayer);
-		return newPlayer.getId();
+		Long id = playerService.create(mappedPlayer);
+		return id;
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public class HockeyPlayerFacadeImpl implements HockeyPlayerFacade {
 	}
 
 	@Override
-	public Collection<HockeyPlayerDto> findByTeam(TeamDTO team) {
+	public Collection<HockeyPlayerDto> findByTeam(TeamDto team) {
 		return bms.mapTo(playerService.findByTeam(teamService.findByName(team.getName())), HockeyPlayerDto.class);
 	}
 

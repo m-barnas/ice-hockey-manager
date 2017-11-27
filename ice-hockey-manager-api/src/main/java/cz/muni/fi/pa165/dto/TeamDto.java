@@ -10,13 +10,13 @@ import java.util.Set;
 /**
  * @author Lukáš Kotol
  */
-public class TeamDTO {
+public class TeamDto {
 
     private String name;
 
     private CompetitionCountry competitionCountry;
 
-    private HumanPlayerDTO humanPlayer;
+    private HumanPlayerDto humanPlayer;
 
     private Set<HockeyPlayerDto> hockeyPlayers = new HashSet<>();
 
@@ -38,11 +38,11 @@ public class TeamDTO {
         this.competitionCountry = competitionCountry;
     }
 
-    public HumanPlayerDTO getHumanPlayer() {
+    public HumanPlayerDto getHumanPlayer() {
         return humanPlayer;
     }
 
-    public void setHumanPlayer(HumanPlayerDTO humanPlayer) {
+    public void setHumanPlayer(HumanPlayerDto humanPlayer) {
         this.humanPlayer = humanPlayer;
     }
 
@@ -65,9 +65,9 @@ public class TeamDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TeamDTO)) return false;
+        if (!(o instanceof TeamDto)) return false;
 
-        TeamDTO teamDTO = (TeamDTO) o;
+        TeamDto teamDTO = (TeamDto) o;
 
         return Objects.equals(getName(), teamDTO.getName());
     }
@@ -79,7 +79,7 @@ public class TeamDTO {
 
     @Override
     public String toString() {
-        return "TeamDTO{" +
+        return "TeamDto{" +
                 "name='" + name + '\'' +
                 ", competitionCountry=" + competitionCountry +
                 ", humanPlayer=" + humanPlayer +

@@ -16,6 +16,9 @@ public class HockeyPlayerDto {
 	/**
 	 * Attributes
 	 */
+
+	private Long id;
+
 	@NotNull
 	private String name;
 
@@ -30,7 +33,7 @@ public class HockeyPlayerDto {
 	@Max(99)
 	private int defenseSkill;
 
-	private TeamDTO team;
+	private TeamDto team;
 
 	@Min(0)
 	private BigDecimal price;
@@ -38,6 +41,10 @@ public class HockeyPlayerDto {
 	/**
 	 * Getters
 	 */
+	public Long getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -54,7 +61,7 @@ public class HockeyPlayerDto {
 		return defenseSkill;
 	}
 
-	public TeamDTO getTeam() {
+	public TeamDto getTeam() {
 		return team;
 	}
 
@@ -65,6 +72,10 @@ public class HockeyPlayerDto {
 	/**
 	 * Setters
 	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -81,7 +92,7 @@ public class HockeyPlayerDto {
 		this.defenseSkill = defenseSkill;
 	}
 
-	public void setTeam(TeamDTO team) {
+	public void setTeam(TeamDto team) {
 		this.team = team;
 	}
 

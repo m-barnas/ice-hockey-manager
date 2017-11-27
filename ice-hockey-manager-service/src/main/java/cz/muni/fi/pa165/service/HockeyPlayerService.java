@@ -18,9 +18,9 @@ public interface HockeyPlayerService {
 	 * Creates new {@link HockeyPlayer}.
 	 *
 	 * @param player to create.
-	 * @return Created hockey player with new id field.
+	 * @return id of new player
 	 */
-	HockeyPlayer create(HockeyPlayer player);
+	Long create(HockeyPlayer player);
 
 	/**
 	 * Updates {@link HockeyPlayer}.

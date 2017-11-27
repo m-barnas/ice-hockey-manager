@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * @author Martin Barnas 433523@mail.muni.cz
  */
-public class HumanPlayerDTO {
+public class HumanPlayerDto {
 
     private Long id;
 
@@ -57,10 +57,10 @@ public class HumanPlayerDTO {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof HumanPlayerDTO)) {
+        if (!(o instanceof HumanPlayerDto)) {
             return false;
         }
-        HumanPlayerDTO other = (HumanPlayerDTO) o;
+        HumanPlayerDto other = (HumanPlayerDto) o;
         return Objects.equals(email, other.email);
     }
 

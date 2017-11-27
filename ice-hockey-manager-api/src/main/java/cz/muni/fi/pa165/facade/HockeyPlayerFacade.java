@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.facade;
 
 import cz.muni.fi.pa165.dto.HockeyPlayerDto;
-import cz.muni.fi.pa165.dto.TeamDTO;
+import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.enums.Position;
 
 import java.math.BigDecimal;
@@ -64,7 +64,7 @@ public interface HockeyPlayerFacade {
 	 * @param team to get players from
 	 * @return collection of hockey players
 	 */
-	Collection<HockeyPlayerDto> findByTeam(TeamDTO team);
+	Collection<HockeyPlayerDto> findByTeam(TeamDto team);
 
 	/**
 	 * Returns {@link HockeyPlayerDto}s with price less or equal as the given maximal price.
