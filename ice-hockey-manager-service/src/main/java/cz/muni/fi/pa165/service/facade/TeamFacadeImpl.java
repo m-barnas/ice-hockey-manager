@@ -38,16 +38,6 @@ public class TeamFacadeImpl implements TeamFacade {
     }
 
     @Override
-    public void addHockyPlayer(Long teamId, Long hockeyPlayerId) {
-//        teamService.addHockeyPlayer(teamService.findById(teamId), hockeyPlayerService.findById(hockeyPlayerId));
-    }
-
-    @Override
-    public void removeHockeyPlayer(Long teamId, Long hockeyPlayerId) {
-
-    }
-
-    @Override
     public void deleteTeam(Long teamId) {
         teamService.deleteTeam(teamService.findById(teamId));
     }
