@@ -16,7 +16,7 @@ public class TeamDTO {
 
     private CompetitionCountry competitionCountry;
 
-    private HumanPlayerDto humanPlayer;
+    private HumanPlayerDTO humanPlayer;
 
     private Set<HockeyPlayerDto> hockeyPlayers = new HashSet<>();
 
@@ -38,11 +38,11 @@ public class TeamDTO {
         this.competitionCountry = competitionCountry;
     }
 
-    public HumanPlayerDto getHumanPlayer() {
+    public HumanPlayerDTO getHumanPlayer() {
         return humanPlayer;
     }
 
-    public void setHumanPlayer(HumanPlayerDto humanPlayer) {
+    public void setHumanPlayer(HumanPlayerDTO humanPlayer) {
         this.humanPlayer = humanPlayer;
     }
 

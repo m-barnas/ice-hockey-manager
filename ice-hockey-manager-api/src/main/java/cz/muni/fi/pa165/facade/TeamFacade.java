@@ -21,22 +21,6 @@ public interface TeamFacade {
     Long createTeam(TeamCreateDTO teamCreateDTO);
 
     /**
-     * Adds hockey player to team.
-     *
-     * @param teamId         id of team to which will be hockey player added.
-     * @param hockeyPlayerId id hockey player which will be added to team.
-     */
-    void addHockyPlayer(Long teamId, Long hockeyPlayerId);
-
-    /**
-     * Removes hockey player from team.
-     *
-     * @param teamId         id of team from which will be hockey player removed.
-     * @param hockeyPlayerId id hockey player which will be removed from team.
-     */
-    void removeHockeyPlayer(Long teamId, Long hockeyPlayerId);
-
-    /**
      * Removes team.
      *
      * @param teamId id of team which will be removed.
