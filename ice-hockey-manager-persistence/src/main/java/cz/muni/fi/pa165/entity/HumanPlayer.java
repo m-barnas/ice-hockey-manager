@@ -37,10 +37,6 @@ public class HumanPlayer {
   @Column(nullable = false)
   private Role role;
 
-  @ManyToOne
-  @JoinColumn(name= "teamID")
-  private Team team;
-
   public Long getId() {
     return id;
   }
@@ -79,14 +75,6 @@ public class HumanPlayer {
 
   public void setRole(Role role) {
     this.role = role;
-  }
-
-  public Team getTeam() {
-    return team;
-  }
-
-  public void setTeam(Team team) {
-    this.team = team;
   }
 
   @Override
