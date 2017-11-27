@@ -61,6 +61,13 @@
             <artifactId>javax.el</artifactId>
             <scope>test</scope><!-- conflicts with tomcat libraries, needed only for tests anyway -->
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>2.0.2-beta</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
 </project>
