@@ -12,10 +12,13 @@
     <artifactId>ice-hockey-manager-api</artifactId>
 
     <dependencies>
+        <!-- Spring -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
+
+        <!-- Javax -->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>

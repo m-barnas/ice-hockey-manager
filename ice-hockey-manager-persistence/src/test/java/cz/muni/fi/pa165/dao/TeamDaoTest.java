@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.dao;
 
-
 import cz.muni.fi.pa165.config.PersistenceConfiguration;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.HumanPlayer;
@@ -143,7 +142,6 @@ public class TeamDaoTest extends AbstractTestNGSpringContextTests {
 		user.setRole(Role.USER);
 		humanPlayerDao.create(user);
 		kometa.setHumanPlayer(user);
-		user.setTeam(kometa);
 
 		teamDao.create(kometa);
 		List<Team> foundTeams = teamDao.findAll();

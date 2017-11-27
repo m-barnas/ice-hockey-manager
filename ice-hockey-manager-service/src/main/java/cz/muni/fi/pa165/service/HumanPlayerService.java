@@ -1,7 +1,8 @@
 package cz.muni.fi.pa165.service;
 
 import cz.muni.fi.pa165.entity.HumanPlayer;
-import cz.muni.fi.pa165.exceptions.HumanPlayerAuthenticationException;
+import cz.muni.fi.pa165.enums.Role;
+import cz.muni.fi.pa165.exceptions.AuthenticationException;
 
 import java.util.List;
 
@@ -17,32 +18,40 @@ public interface HumanPlayerService {
      *
      * @param humanPlayer to register
      * @param unencryptedPassword human player's unencrypted password
+     * @throws AuthenticationException when 3rd party authentication algorithms fail
      */
     void register(HumanPlayer humanPlayer, String unencryptedPassword)
-            throws HumanPlayerAuthenticationException;
+            throws AuthenticationException;
 
     /**
      * Authenticate {@link HumanPlayer}.
      *
      * @return true only if hashed unencryptedPassword is equal with human player's hashed password
+     * @throws AuthenticationException when 3rd party authentication algorithms fail
      */
-    boolean authenticate(HumanPlayer humanPlayer, String unencryptedPassword) throws HumanPlayerAuthenticationException;
+    boolean authenticate(HumanPlayer humanPlayer, String unencryptedPassword)
+            throws AuthenticationException;
 
     /**
-     * Check whether {@link HumanPlayer} is admin, or not.
+     * Change {@link HumanPlayer}'s password
      *
-     * @param humanPlayer to check
-     * @return true if human player is admin, false otherwise
+     * @param humanPlayerId human player identifier
+     * @param oldUnencryptedPassword to be change
+     * @param newUnencryptedPassword to be set
+     * @return updated human player
+     * @throws AuthenticationException when 3rd party authentication algorithms fail
      */
-    boolean isAdmin(HumanPlayer humanPlayer);
+    HumanPlayer changePassword(Long humanPlayerId, String oldUnencryptedPassword, String newUnencryptedPassword)
+            throws AuthenticationException;
 
     /**
-     * Update {@link HumanPlayer}.
+     * Change {@link HumanPlayer}'s role.
      *
-     * @param humanPlayer to update
+     * @param humanPlayerId human player's identifier
+     * @param role to be set
      * @return updated human player
      */
-    HumanPlayer update(HumanPlayer humanPlayer);
+    HumanPlayer changeRole(Long humanPlayerId, Role role);
 
     /**
      * Delete {@link HumanPlayer}.

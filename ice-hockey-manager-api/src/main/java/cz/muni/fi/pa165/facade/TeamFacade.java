@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.service.facade;
+package cz.muni.fi.pa165.facade;
 
 import cz.muni.fi.pa165.dto.TeamCreateDTO;
 import cz.muni.fi.pa165.dto.TeamDTO;

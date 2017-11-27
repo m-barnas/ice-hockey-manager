@@ -173,7 +173,7 @@ public class GameServiceImpl implements GameService {
      * Magic algorithm to count score of team.
      *
      * @param attackSkill
-     * @param defenseSkill
+     * @param opponentDefenseSkill
      * @return
      */
     int countScore(double attackSkill, double opponentDefenseSkill) {

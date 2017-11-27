@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.dto.TeamDTO;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
+import cz.muni.fi.pa165.facade.TeamFacade;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.springframework.beans.factory.annotation.Autowired;

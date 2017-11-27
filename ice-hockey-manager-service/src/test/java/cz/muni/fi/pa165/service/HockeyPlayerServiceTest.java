@@ -1,14 +1,13 @@
 package cz.muni.fi.pa165.service;
 
 import cz.muni.fi.pa165.dao.HockeyPlayerDao;
-import cz.muni.fi.pa165.dao.HumanPlayerDao;
-import cz.muni.fi.pa165.dao.TeamDao;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.enums.Role;
+import cz.muni.fi.pa165.exceptions.AuthenticationException;
 import cz.muni.fi.pa165.exceptions.HockeyPlayerServiceException;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
@@ -16,29 +15,24 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = ServiceConfiguration.class)
-@TestExecutionListeners(TransactionalTestExecutionListener.class)
-@Transactional
 public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 
 	@Mock
-	private HumanPlayerService humanSevice;
-
-	@Mock
-	private TeamService teamService;
+    private HockeyPlayerDao hockeyPlayerDao;
 
 	@Autowired
 	@InjectMocks
@@ -58,7 +52,7 @@ public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@BeforeMethod
-	public void prepareTestPlayers() {
+	public void prepareTestPlayers() throws AuthenticationException {
 		hasek = createPlayer("Dominik Hašek", Position.GOALKEEPER, 1, 95, BigDecimal.valueOf(90));
 		kaberle = createPlayer("Tomáš Kaberle", Position.DEFENSEMAN, 20, 80, BigDecimal.valueOf(50));
 		zidlicky = createPlayer("Marek Židlický", Position.DEFENSEMAN, 25, 70, BigDecimal.valueOf(80));
@@ -81,9 +75,6 @@ public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 		kometa.addHockeyPlayer(kaberle);
 		kometa.addHockeyPlayer(jagr);
 
-		owner.setTeam(kometa);
-		humanSevice.register(owner, "passwd");
-		teamService.createTeam(kometa);
 		playerService.create(hasek);
 		playerService.create(kaberle);
 		playerService.create(zidlicky);
@@ -94,56 +85,58 @@ public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void findByPriceLessThanTest() {
+        when(hockeyPlayerDao.findByPriceLessOrEqualThan(BigDecimal.valueOf(69)))
+                .thenReturn(Arrays.asList(hemsky, kaberle));
 		List<HockeyPlayer> cheapPlayers = playerService.findByPriceLessOrEqualThan(BigDecimal.valueOf(69));
-		assertThat(cheapPlayers).containsExactlyInAnyOrder(kaberle, hemsky);
+		assertThat(cheapPlayers).containsExactlyInAnyOrder(hemsky, kaberle);
 	}
 
 	@Test
 	public void findByTeamTest() {
+        when(hockeyPlayerDao.findByTeam(kometa)).thenReturn(Arrays.asList(hasek, kaberle, jagr));
 		List<HockeyPlayer> kometaPlayers = playerService.findByTeam(kometa);
 		assertThat(kometaPlayers).containsExactlyInAnyOrder(hasek, kaberle, jagr);
 	}
 
 	@Test
 	public void findFreeAgentsTest() {
+        when(hockeyPlayerDao.findByTeam(null)).thenReturn(Arrays.asList(zidlicky, elias, hemsky));
 		List<HockeyPlayer> freeAgents = playerService.findFreeAgents();
 		assertThat(freeAgents).containsExactlyInAnyOrder(zidlicky, elias, hemsky);
 	}
 
 	@Test
 	public void findByPostAndPriceTest() {
+        when(hockeyPlayerDao.findByPriceLessOrEqualThan(BigDecimal.valueOf(79)))
+                .thenReturn(Collections.singletonList(kaberle));
 		List<HockeyPlayer> cheapDefenders = playerService.findByPostAndPrice(Position.DEFENSEMAN, BigDecimal.valueOf(79));
 		assertThat(cheapDefenders).containsExactlyInAnyOrder(kaberle);
 	}
 
 	@Test
 	public void findByAttSkillTest() {
-		try {
-			List<HockeyPlayer> attackers = playerService.findByAttSkill(80);
-			assertThat(attackers).containsExactlyInAnyOrder(jagr, hemsky);
-		} catch (HockeyPlayerServiceException e) {
-			e.printStackTrace();
-		}
+        when(hockeyPlayerDao.findAll()).thenReturn(Arrays.asList(hasek, kaberle, jagr, hemsky, zidlicky, elias));
+        List<HockeyPlayer> attackers = playerService.findByAttSkill(80);
+        assertThat(attackers).containsExactlyInAnyOrder(jagr, hemsky);
 	}
 
 	@Test
 	public void findByInvalidAttSkillTest() {
-		assertThatThrownBy(() -> playerService.findByAttSkill(0)).isInstanceOf(HockeyPlayerServiceException.class);
+		assertThatThrownBy(() -> playerService.findByAttSkill(0))
+                .isInstanceOf(HockeyPlayerServiceException.class);
 	}
 
 	@Test
 	public void findByDefSkillTest() {
-		try {
-			List<HockeyPlayer> defenders = playerService.findByDefSkill(80);
-			assertThat(defenders).containsExactlyInAnyOrder(hasek, kaberle);
-		} catch (HockeyPlayerServiceException e) {
-			e.printStackTrace();
-		}
+        when(hockeyPlayerDao.findAll()).thenReturn(Arrays.asList(hasek, kaberle, jagr, hemsky, zidlicky, elias));
+        List<HockeyPlayer> defenders = playerService.findByDefSkill(80);
+        assertThat(defenders).containsExactlyInAnyOrder(hasek, kaberle);
 	}
 
 	@Test
 	public void findByInvalidDefSkillTest() {
-		assertThatThrownBy(() -> playerService.findByDefSkill(0)).isInstanceOf(HockeyPlayerServiceException.class);
+		assertThatThrownBy(() -> playerService.findByDefSkill(0))
+                .isInstanceOf(HockeyPlayerServiceException.class);
 	}
 
 	private HockeyPlayer createPlayer(String name, Position post, int attSkill, int defSkill, BigDecimal price) {
