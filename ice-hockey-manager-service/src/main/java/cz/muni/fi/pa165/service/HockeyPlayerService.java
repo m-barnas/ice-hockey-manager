@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.service;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.Position;
-import cz.muni.fi.pa165.exceptions.HockeyPlayerServiceException;
 
 import java.math.BigDecimal;
 import java.util.List;
