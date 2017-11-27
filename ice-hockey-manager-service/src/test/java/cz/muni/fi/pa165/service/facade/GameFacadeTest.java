@@ -3,14 +3,13 @@ package cz.muni.fi.pa165.service.facade;
 import cz.muni.fi.pa165.dto.GameChangeStartTimeDto;
 import cz.muni.fi.pa165.dto.GameCreateDto;
 import cz.muni.fi.pa165.dto.GameDto;
+import cz.muni.fi.pa165.dto.TeamDTO;
 import cz.muni.fi.pa165.entity.Game;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.GameState;
-import cz.muni.fi.pa165.facade.GameFacade;
 import cz.muni.fi.pa165.service.GameService;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
-import cz.muni.fi.pa165.service.facade.GameFacadeImpl;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -31,6 +30,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Tests for GameFacadeImpl.
@@ -49,14 +49,18 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
     @Mock
     private BeanMappingService beanMappingService;
 
+    @Autowired
     @InjectMocks
-    private GameFacade gameFacade = new GameFacadeImpl();
+    private GameFacadeImpl gameFacade;
 
     private Team team1;
-
     private Team team2;
-
     private Game game;
+    private TeamDTO teamDto1;
+    private TeamDTO teamDto2;
+    private GameDto gameDto;
+    private List<GameDto> gameDtos;
+    private List<Game> games;
 
     @Mock
     private Clock clock;
@@ -84,126 +88,136 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
         game.setSecondTeam(team2);
         game.setStartTime(LocalDateTime.now(clock));
         game.setGameState(GameState.OK);
+        teamDto1 = new TeamDTO();
+        teamDto1.setName("team1");
+        teamDto2 = new TeamDTO();
+        teamDto2.setName("team2");
+        gameDto = new GameDto();
+        gameDto.setId(1l);
+        gameDto.setFirstTeamDto(teamDto1);
+        gameDto.setSecondTeamDto(teamDto2);
+        gameDto.setStartTime(LocalDateTime.now(clock));
+        gameDto.setGameState(GameState.OK);
+        gameDtos = new ArrayList<>();
+        gameDtos.add(gameDto);
+        games = new ArrayList<>();
+        games.add(game);
+
+        when(beanMappingService.mapTo(games, GameDto.class)).thenReturn(gameDtos);
+        when(beanMappingService.mapTo(game, GameDto.class)).thenReturn(gameDto);
     }
 
-//    @Test
-//    public void create() {
-//        when(teamService.findById(1l)).thenReturn(team1);
-//        when(teamService.findById(2l)).thenReturn(team2);
-//        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
-//            Object[] args = invocationOnMock.getArguments();
-//            Game createdGame = (Game) args[0];
-//            assertThat(createdGame.getFirstTeam()).isEqualTo(team1);
-//            assertThat(createdGame.getSecondTeam()).isEqualTo(team2);
-//            assertThat(createdGame.getStartTime()).isEqualTo(LocalDateTime.now(clock));
-//            assertThat(createdGame.getGameState()).isEqualTo(GameState.OK);
-//            return null;
-//        }).when(gameService).create(Matchers.any(Game.class));
-//
-//        GameCreateDto gameCreateDto = new GameCreateDto();
-//        gameCreateDto.setFirstTeamId(1l);
-//        gameCreateDto.setSecondTeamId(2l);
-//        gameCreateDto.setStartTime(LocalDateTime.now(clock));
-//        gameFacade.create(gameCreateDto);
-//    }
-//
-//    @Test
-//    public void cancel() {
-//        when(gameService.findById(1l)).thenReturn(game);
-//        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
-//            Object[] args = invocationOnMock.getArguments();
-//            Game createdGame = (Game) args[0];
-//            assertThat(createdGame.getGameState()).isEqualTo(GameState.CANCELED);
-//            return null;
-//        }).when(gameService).update(Matchers.any(Game.class));
-//
-//        assertThat(gameFacade.cancel(1l)).isTrue();
-//        assertThat(gameFacade.cancel(1l)).isFalse();
-//    }
-//
-//    @Test
-//    public void retrieve() {
-//        when(gameService.findById(1l)).thenReturn(game);
-//        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
-//            Object[] args = invocationOnMock.getArguments();
-//            Game createdGame = (Game) args[0];
-//            assertThat(createdGame.getGameState()).isEqualTo(GameState.OK);
-//            return null;
-//        }).when(gameService).update(Matchers.any(Game.class));
-//
-//        game.setGameState(GameState.CANCELED);
-//        assertThat(gameFacade.retrieve(1l)).isTrue();
-//        assertThat(gameFacade.retrieve(1l)).isFalse();
-//    }
-//
-//    @Test
-//    public void changeStartTime() {
-//        when(gameService.findById(1l)).thenReturn(game);
-//        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
-//            Object[] args = invocationOnMock.getArguments();
-//            Game createdGame = (Game) args[0];
-//            assertThat(createdGame.getStartTime()).isEqualTo(LocalDateTime.of(2017, 2, 2, 0, 0));
-//            return null;
-//        }).when(gameService).update(Matchers.any(Game.class));
-//
-//        GameChangeStartTimeDto gameChangeStartTimeDto = new GameChangeStartTimeDto();
-//        gameChangeStartTimeDto.setId(1l);
-//        gameChangeStartTimeDto.setStartTime(LocalDateTime.of(2017, 2, 2, 0, 0));
-//        gameFacade.changeStartTime(gameChangeStartTimeDto);
-//    }
-//
-//    @Test
-//    public void findById() {
-//        when(gameService.findById(1l)).thenReturn(game);
-//        GameDto gameDto = gameFacade.findById(1l);
-//        compareGameDtoToGame(gameDto);
-//    }
-//
-//    @Test
-//    public void findByTeam() {
-//        when(teamService.findById(1l)).thenReturn(team1);
-//        List<Game> games = new ArrayList<>();
-//        games.add(game);
-//        when(gameService.findByTeam(team1)).thenReturn(games);
-//
-//        List<GameDto> gameDtos = gameFacade.findByTeam(1l);
-//        assertThat(gameDtos.size()).isEqualTo(1);
-//        GameDto gameDto = gameDtos.get(0);
-//        compareGameDtoToGame(gameDto);
-//    }
-//
-//    @Test
-//    public void findAll() {
-//        List<Game> games = new ArrayList<>();
-//        games.add(game);
-//        when(gameService.findAll()).thenReturn(games);
-//        List<GameDto> gameDtos = gameFacade.findAll();
-//        assertThat(gameDtos.size()).isEqualTo(1);
-//        GameDto gameDto = gameDtos.get(0);
-//        compareGameDtoToGame(gameDto);
-//    }
-//
-//    @Test
-//    public void findScheduledGames() {
-//        List<Game> games = new ArrayList<>();
-//        games.add(game);
-//        when(gameService.findScheduledGames()).thenReturn(games);
-//        List<GameDto> gameDtos = gameFacade.findScheduledGames();
-//        assertThat(gameDtos.size()).isEqualTo(1);
-//        GameDto gameDto = gameDtos.get(0);
-//        compareGameDtoToGame(gameDto);
-//    }
-//
-//    @Test
-//    public void playGames() {
-//        List<Game> games = new ArrayList<>();
-//        games.add(game);
-//        when(gameService.playGames()).thenReturn(games);
-//        List<GameDto> gameDtos = gameFacade.playGames();
-//        assertThat(gameDtos.size()).isEqualTo(1);
-//        GameDto gameDto = gameDtos.get(0);
-//        compareGameDtoToGame(gameDto);
-//    }
+    @Test
+    public void create() {
+        when(teamService.findById(1l)).thenReturn(team1);
+        when(teamService.findById(2l)).thenReturn(team2);
+        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
+            Object[] args = invocationOnMock.getArguments();
+            Game createdGame = (Game) args[0];
+            assertThat(createdGame.getFirstTeam()).isEqualTo(team1);
+            assertThat(createdGame.getSecondTeam()).isEqualTo(team2);
+            assertThat(createdGame.getStartTime()).isEqualTo(LocalDateTime.now(clock));
+            assertThat(createdGame.getGameState()).isEqualTo(GameState.OK);
+            return null;
+        }).when(gameService).create(Matchers.any(Game.class));
+        GameCreateDto gameCreateDto = new GameCreateDto();
+        gameCreateDto.setFirstTeamId(1l);
+        gameCreateDto.setSecondTeamId(2l);
+        gameCreateDto.setStartTime(LocalDateTime.now(clock));
+        when(beanMappingService.mapTo(gameCreateDto, Game.class)).thenReturn(game);
+
+        gameFacade.create(gameCreateDto);
+    }
+
+    @Test
+    public void cancel() {
+        when(gameService.findById(1l)).thenReturn(game);
+        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
+            Object[] args = invocationOnMock.getArguments();
+            Game createdGame = (Game) args[0];
+            assertThat(createdGame.getGameState()).isEqualTo(GameState.CANCELED);
+            return null;
+        }).when(gameService).update(Matchers.any(Game.class));
+
+        assertThat(gameFacade.cancel(1l)).isTrue();
+        assertThat(gameFacade.cancel(1l)).isFalse();
+    }
+
+    @Test
+    public void retrieve() {
+        when(gameService.findById(1l)).thenReturn(game);
+        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
+            Object[] args = invocationOnMock.getArguments();
+            Game createdGame = (Game) args[0];
+            assertThat(createdGame.getGameState()).isEqualTo(GameState.OK);
+            return null;
+        }).when(gameService).update(Matchers.any(Game.class));
+
+        game.setGameState(GameState.CANCELED);
+        assertThat(gameFacade.retrieve(1l)).isTrue();
+        assertThat(gameFacade.retrieve(1l)).isFalse();
+    }
+
+    @Test
+    public void changeStartTime() {
+        when(gameService.findById(1l)).thenReturn(game);
+        doAnswer((Answer<Object>) (InvocationOnMock invocationOnMock) -> {
+            Object[] args = invocationOnMock.getArguments();
+            Game createdGame = (Game) args[0];
+            assertThat(createdGame.getStartTime()).isEqualTo(LocalDateTime.of(2017, 2, 2, 0, 0));
+            return null;
+        }).when(gameService).update(Matchers.any(Game.class));
+
+        GameChangeStartTimeDto gameChangeStartTimeDto = new GameChangeStartTimeDto();
+        gameChangeStartTimeDto.setId(1l);
+        gameChangeStartTimeDto.setStartTime(LocalDateTime.of(2017, 2, 2, 0, 0));
+        gameFacade.changeStartTime(gameChangeStartTimeDto);
+    }
+
+    @Test
+    public void findById() {
+        when(gameService.findById(1l)).thenReturn(game);
+        GameDto foundGameDto = gameFacade.findById(1l);
+        compareGameDtoToGame(foundGameDto);
+    }
+
+    @Test
+    public void findByTeam() {
+        when(teamService.findById(1l)).thenReturn(team1);
+        when(gameService.findByTeam(team1)).thenReturn(games);
+
+        List<GameDto> foundGameDtos = gameFacade.findByTeam(1l);
+        assertThat(foundGameDtos.size()).isEqualTo(1);
+        GameDto foundGameDto = foundGameDtos.get(0);
+        compareGameDtoToGame(foundGameDto);
+    }
+
+    @Test
+    public void findAll() {
+        when(gameService.findAll()).thenReturn(games);
+        List<GameDto> foundGameDtos = gameFacade.findAll();
+        assertThat(foundGameDtos.size()).isEqualTo(1);
+        GameDto foundGameDto = foundGameDtos.get(0);
+        compareGameDtoToGame(foundGameDto);
+    }
+
+    @Test
+    public void findScheduledGames() {
+        when(gameService.findScheduledGames()).thenReturn(games);
+        List<GameDto> foundGameDtos = gameFacade.findScheduledGames();
+        assertThat(foundGameDtos.size()).isEqualTo(1);
+        GameDto foundGameDto = foundGameDtos.get(0);
+        compareGameDtoToGame(foundGameDto);
+    }
+
+    @Test
+    public void playGames() {
+        when(gameService.playGames()).thenReturn(games);
+        List<GameDto> foundGameDtos = gameFacade.playGames();
+        assertThat(foundGameDtos.size()).isEqualTo(1);
+        GameDto foundGameDto = foundGameDtos.get(0);
+        compareGameDtoToGame(foundGameDto);
+    }
 
     private void compareGameDtoToGame(GameDto gameDto) {
         assertThat(gameDto.getId()).isEqualTo(1l);
