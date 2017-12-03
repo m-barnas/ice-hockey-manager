@@ -71,7 +71,10 @@
 
     <!-- other versions, ordered alphabetically -->
     <dozer.version>5.5.1</dozer.version>
+    <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+    <maven-war-plugin.version>3.2.0</maven-war-plugin.version>
     <mockito-all.version>2.0.2-beta</mockito-all.version>
+    <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -85,6 +88,11 @@
       <dependency>
         <groupId>cz.muni.fi.pa165</groupId>
         <artifactId>ice-hockey-manager-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cz.muni.fi.pa165</groupId>
+        <artifactId>ice-hockey-manager-service</artifactId>
         <version>${project.version}</version>
       </dependency>
 
@@ -127,6 +135,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <source>1.8</source>
             <target>1.8</target>
@@ -140,5 +149,6 @@
     <module>ice-hockey-manager-persistence</module>
     <module>ice-hockey-manager-service</module>
     <module>ice-hockey-manager-api</module>
+      <module>ice-hockey-manager-rest</module>
   </modules>
 </project>
