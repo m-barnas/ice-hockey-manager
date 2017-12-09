@@ -67,11 +67,14 @@
 
     <!-- versions not in sync with parent, ordered alphabetically -->
     <assertj.version>3.8.0</assertj.version>
-    <postgresql.version>42.1.4</postgresql.version>
+    <hibernate.version>5.2.12.Final</hibernate.version>
 
     <!-- other versions, ordered alphabetically -->
     <dozer.version>5.5.1</dozer.version>
+    <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+    <maven-war-plugin.version>3.2.0</maven-war-plugin.version>
     <mockito-all.version>2.0.2-beta</mockito-all.version>
+    <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -87,12 +90,22 @@
         <artifactId>ice-hockey-manager-api</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-      <!-- PostgreSQL -->
       <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>${postgresql.version}</version>
+        <groupId>cz.muni.fi.pa165</groupId>
+        <artifactId>ice-hockey-manager-service</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- Hibernate -->
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>${hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
       </dependency>
 
       <!-- Dozer -->
@@ -127,6 +140,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <source>1.8</source>
             <target>1.8</target>
@@ -140,5 +154,6 @@
     <module>ice-hockey-manager-persistence</module>
     <module>ice-hockey-manager-service</module>
     <module>ice-hockey-manager-api</module>
+    <module>ice-hockey-manager-rest</module>
   </modules>
 </project>

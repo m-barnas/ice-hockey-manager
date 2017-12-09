@@ -8,7 +8,8 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.instrument.classloading.LoadTimeWeaver;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -50,7 +51,7 @@ public class PersistenceConfiguration {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean jpaFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        jpaFactoryBean.setDataSource(db());
+        jpaFactoryBean.setDataSource(dataSource());
         jpaFactoryBean.setLoadTimeWeaver(instrumentationLoadTimeWeaver());
         jpaFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         jpaFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
@@ -69,13 +70,9 @@ public class PersistenceConfiguration {
     }
 
     @Bean
-    public DataSource db() {
-        DriverManagerDataSource driver = new DriverManagerDataSource();
-        driver.setDriverClassName(env.getProperty("jdbc.driver"));
-        driver.setUsername(env.getProperty("db.username"));
-        driver.setPassword(env.getProperty("db.password"));
-        driver.setUrl(env.getProperty("jdbc.url"));
-        return driver;
+    public DataSource dataSource() {
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        return builder.setType(EmbeddedDatabaseType.H2).ignoreFailedDrops(true).build();
     }
 
     private Properties hibernateProperties() {

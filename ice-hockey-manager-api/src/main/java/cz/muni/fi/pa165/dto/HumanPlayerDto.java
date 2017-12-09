@@ -15,7 +15,7 @@ public class HumanPlayerDto {
 
     private String email;
 
-    private Role role;
+    private Role role = Role.USER;
 
     public Long getId() {
         return id;
