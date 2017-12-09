@@ -155,5 +155,6 @@
     <module>ice-hockey-manager-service</module>
     <module>ice-hockey-manager-api</module>
     <module>ice-hockey-manager-rest</module>
+    <module>ice-hockey-manager-web</module>
   </modules>
 </project>
