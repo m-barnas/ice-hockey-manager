@@ -26,7 +26,7 @@ public class Initializer extends AbstractAnnotationConfigDispatcherServletInitia
 
     @Override
     protected String[] getServletMappings() {
-        return new String[]{ROOT_URI};
+        return new String[]{"/"};
     }
 
     @Override
