@@ -67,7 +67,7 @@
 
     <!-- versions not in sync with parent, ordered alphabetically -->
     <assertj.version>3.8.0</assertj.version>
-    <postgresql.version>42.1.4</postgresql.version>
+    <hibernate.version>5.2.12.Final</hibernate.version>
 
     <!-- other versions, ordered alphabetically -->
     <dozer.version>5.5.1</dozer.version>
@@ -96,11 +96,16 @@
         <version>${project.version}</version>
       </dependency>
 
-      <!-- PostgreSQL -->
+      <!-- Hibernate -->
       <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>${postgresql.version}</version>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>${hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
       </dependency>
 
       <!-- Dozer -->
@@ -149,6 +154,6 @@
     <module>ice-hockey-manager-persistence</module>
     <module>ice-hockey-manager-service</module>
     <module>ice-hockey-manager-api</module>
-      <module>ice-hockey-manager-rest</module>
+    <module>ice-hockey-manager-rest</module>
   </modules>
 </project>
