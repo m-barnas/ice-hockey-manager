@@ -79,4 +79,16 @@ public class GameDto {
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
+
+    @Override
+    public String toString() {
+        return "GameDto{" +
+                "firstTeamDto=" + firstTeamDto +
+                ", secondTeamDto=" + secondTeamDto +
+                ", startTime=" + startTime +
+                ", firstTeamScore=" + firstTeamScore +
+                ", secondTeamScore=" + secondTeamScore +
+                ", gameState=" + gameState +
+                '}';
+    }
 }

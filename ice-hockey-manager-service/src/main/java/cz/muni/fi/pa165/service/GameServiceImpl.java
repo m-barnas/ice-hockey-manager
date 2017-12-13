@@ -51,6 +51,9 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game update(Game game) {
+        if (isPlayed(game)) {
+            throw new IllegalArgumentException("Game has been already played.");
+        }
         return gameDao.update(game);
     }
 
@@ -111,7 +114,7 @@ public class GameServiceImpl implements GameService {
         if (game.getGameState().equals(GameState.CANCELED)) {
             throw new IllegalArgumentException("Game is canceled.");
         }
-        if ((game.getFirstTeamScore() != null) || (game.getSecondTeamScore() != null)) {
+        if (isPlayed(game)) {
             throw new IllegalArgumentException("Game has been already played.");
         }
         if (game.getStartTime().isAfter(LocalDateTime.now(clock))) {
@@ -124,6 +127,7 @@ public class GameServiceImpl implements GameService {
         int secondTeamScore = countScore(countAverageAttackSkill(secondTeamPlayers), countAverageDefenseSkill(firstTeamPlayers));
         game.setFirstTeamScore(firstTeamScore);
         game.setSecondTeamScore(secondTeamScore);
+        gameDao.update(game);
     }
 
     private double countAverageAttackSkill(List<HockeyPlayer> players) {
@@ -185,5 +189,12 @@ public class GameServiceImpl implements GameService {
                 (attackSkill + attackSkill * percent1 / 100) /
                 (opponentDefenseSkill + opponentDefenseSkill * percent2 / 100)
                 + (fortune / 100 - 0.5));
+    }
+
+    private boolean isPlayed(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("Game is null.");
+        }
+        return (game.getFirstTeamScore() != null) || (game.getSecondTeamScore() != null);
     }
 }

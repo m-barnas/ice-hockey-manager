@@ -31,6 +31,8 @@ public interface GameService {
      *
      * @param game to update
      * @return updated game
+     * @throws IllegalArgumentException if game has been already played (has
+     * not null score)
      */
     Game update(Game game);
 

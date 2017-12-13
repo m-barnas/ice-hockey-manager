@@ -42,4 +42,13 @@ public class GameCreateDto {
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
+
+    @Override
+    public String toString() {
+        return "GameDto{" +
+                "firstTeamId=" + firstTeamId +
+                ", secondTeamId=" + secondTeamId +
+                ", startTime=" + startTime +
+                '}';
+    }
 }
