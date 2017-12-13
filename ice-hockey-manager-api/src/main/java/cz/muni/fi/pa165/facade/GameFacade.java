@@ -48,8 +48,6 @@ public interface GameFacade {
      * Change game start time.
      *
      * @param gameChangeStartTimeDto
-     * @throws IllegalArgumentException if game has been already played (has
-     * not null score)
      */
     void changeStartTime(GameChangeStartTimeDto gameChangeStartTimeDto);
 
