@@ -33,13 +33,14 @@ public class GameFacadeImpl implements GameFacade {
 	private BeanMappingService beanMappingService;
 
     @Override
-    public void create(GameCreateDto gameCreateDto) {
+    public GameDto create(GameCreateDto gameCreateDto) {
         Game game = beanMappingService.mapTo(gameCreateDto, Game.class);
         game.setFirstTeam(teamService.findById(gameCreateDto.getFirstTeamId()));
         game.setSecondTeam(teamService.findById(gameCreateDto.getSecondTeamId()));
         game.setStartTime(gameCreateDto.getStartTime());
         game.setGameState(GameState.OK);
         gameService.create(game);
+        return beanMappingService.mapTo(game, GameDto.class);
     }
 
     @Override
@@ -72,10 +73,11 @@ public class GameFacadeImpl implements GameFacade {
     }
 
     @Override
-    public void changeStartTime(GameChangeStartTimeDto gameChangeStartTimeDto) {
+    public GameDto changeStartTime(GameChangeStartTimeDto gameChangeStartTimeDto) {
         Game game = gameService.findById(gameChangeStartTimeDto.getId());
         game.setStartTime(gameChangeStartTimeDto.getStartTime());
-        gameService.update(game);
+        Game updatedGame = gameService.update(game);
+        return beanMappingService.mapTo(updatedGame, GameDto.class);
     }
 
     @Override

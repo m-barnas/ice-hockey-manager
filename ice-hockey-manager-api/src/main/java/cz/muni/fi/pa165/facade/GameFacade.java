@@ -16,8 +16,9 @@ public interface GameFacade {
      * Create new game.
      *
      * @param gameCreateDto game to create
+     * @return new game
      */
-    void create(GameCreateDto gameCreateDto);
+    GameDto create(GameCreateDto gameCreateDto);
 
     /**
      * Delete game from system.
@@ -31,8 +32,6 @@ public interface GameFacade {
      *
      * @param gameId id of game to cancel
      * @return true if game state was changed
-     * @throws IllegalArgumentException if game has been already played (has
-     * not null score)
      */
     boolean cancel(Long gameId);
 
@@ -48,8 +47,9 @@ public interface GameFacade {
      * Change game start time.
      *
      * @param gameChangeStartTimeDto
+     * @return updated game
      */
-    void changeStartTime(GameChangeStartTimeDto gameChangeStartTimeDto);
+    GameDto changeStartTime(GameChangeStartTimeDto gameChangeStartTimeDto);
 
     /**
      * Find {@link GameDto} by id.
