@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.muni.fi.pa165.enums.Position;
 
 import javax.validation.constraints.Max;
@@ -33,6 +34,7 @@ public class HockeyPlayerDto {
 	@Max(99)
 	private int defenseSkill;
 
+	@JsonIgnore
 	private TeamDto team;
 
 	@Min(0)
