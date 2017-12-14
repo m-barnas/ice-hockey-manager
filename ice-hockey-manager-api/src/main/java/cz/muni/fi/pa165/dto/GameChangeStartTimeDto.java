@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -29,5 +30,34 @@ public class GameChangeStartTimeDto {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.startTime);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof GameChangeStartTimeDto)) {
+            return false;
+        }
+        final GameChangeStartTimeDto other = (GameChangeStartTimeDto) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.startTime, other.startTime)) {
+            return false;
+        }
+        return true;
     }
 }

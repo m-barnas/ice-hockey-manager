@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.dto;
 
 import cz.muni.fi.pa165.enums.GameState;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * DTO for game.
@@ -78,6 +79,55 @@ public class GameDto {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.firstTeamDto);
+        hash = 37 * hash + Objects.hashCode(this.secondTeamDto);
+        hash = 37 * hash + Objects.hashCode(this.startTime);
+        hash = 37 * hash + Objects.hashCode(this.firstTeamScore);
+        hash = 37 * hash + Objects.hashCode(this.secondTeamScore);
+        hash = 37 * hash + Objects.hashCode(this.gameState);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof GameDto)) {
+            return false;
+        }
+        final GameDto other = (GameDto) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstTeamDto, other.firstTeamDto)) {
+            return false;
+        }
+        if (!Objects.equals(this.secondTeamDto, other.secondTeamDto)) {
+            return false;
+        }
+        if (!Objects.equals(this.startTime, other.startTime)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstTeamScore, other.firstTeamScore)) {
+            return false;
+        }
+        if (!Objects.equals(this.secondTeamScore, other.secondTeamScore)) {
+            return false;
+        }
+        if (this.gameState != other.gameState) {
+            return false;
+        }
+        return true;
     }
 
     @Override
