@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +62,7 @@ public class GameServiceTest extends AbstractTestNGSpringContextTests {
         MockitoAnnotations.initMocks(this);
         clock = Clock.fixed(
                 LocalDateTime.of(2017, 9, 1, 14, 30).toInstant(OffsetDateTime.now().getOffset()),
-                Clock.systemDefaultZone().getZone()
+                ZoneId.of("Europe/Paris")
         );
         gameService.setClock(clock);
 
