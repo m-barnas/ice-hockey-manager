@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.facade;
 
+import cz.muni.fi.pa165.dto.HockeyPlayerDto;
 import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
@@ -90,4 +91,8 @@ public interface TeamFacade {
      * @return Team.
      */
     TeamDto findTeamByName(String name);
+
+    void addHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto);
+
+    void removeHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto);
 }

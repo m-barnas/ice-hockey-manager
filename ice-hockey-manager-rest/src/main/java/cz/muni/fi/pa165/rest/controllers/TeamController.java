@@ -38,16 +38,21 @@ public class TeamController {
     }
 
 
+    @RequestMapping(path = "/getByName/{name}", method = RequestMethod.GET)
+    public TeamDto findByName(@PathVariable("name") String name) {
+        return teamFacade.findTeamByName(name);
+    }
+
     @RequestMapping(path = "/all", method = RequestMethod.GET)
     public List<TeamDto> findAll() {
         return teamFacade.getAllTeams();
     }
 
 
-//    @RequestMapping(path = "/delete", method = RequestMethod.DELETE)
-//    public void deleteById(@PathVariable("id") long id){
-//        teamFacade.deleteTeam(id);
-//    }
+    @RequestMapping(path = "/{id}/delete", method = RequestMethod.DELETE)
+    public void deleteById(@PathVariable("id") long id) {
+        teamFacade.deleteTeam(id);
+    }
 
     @RequestMapping(path = "getByCompetitionCountry/{competitionCountry}", method = RequestMethod.GET)
     public List<TeamDto> getByCountry(@PathVariable("competitionCountry") CompetitionCountry competitionCountry) {
@@ -74,6 +79,5 @@ public class TeamController {
     public int getDefense(@PathVariable("id") long id) {
         return teamFacade.getTeamDefenseSkill(id);
     }
-
 
 }

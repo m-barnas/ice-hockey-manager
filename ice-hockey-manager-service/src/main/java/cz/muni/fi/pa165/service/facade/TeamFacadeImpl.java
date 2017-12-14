@@ -1,7 +1,9 @@
 package cz.muni.fi.pa165.service.facade;
 
+import cz.muni.fi.pa165.dto.HockeyPlayerDto;
 import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
+import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
@@ -80,6 +82,20 @@ public class TeamFacadeImpl implements TeamFacade {
 
     @Override
     public TeamDto findTeamByName(String name) {
-        return beanMappingService.mapTo(teamService.findByName(name), TeamDto.class);
+        Team team = teamService.findByName(name);
+        if (team == null) {
+            return null;
+        }
+        return beanMappingService.mapTo(team, TeamDto.class);
+    }
+
+    @Override
+    public void addHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto) {
+        teamService.addHockeyPlayer(beanMappingService.mapTo(teamDto, Team.class), beanMappingService.mapTo(hockeyPlayerDto, HockeyPlayer.class));
+    }
+
+    @Override
+    public void removeHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto) {
+        teamService.removeHockeyPlayer(beanMappingService.mapTo(teamDto, Team.class), beanMappingService.mapTo(hockeyPlayerDto, HockeyPlayer.class));
     }
 }
