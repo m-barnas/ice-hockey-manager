@@ -16,10 +16,10 @@ public interface TeamFacade {
     /**
      * Created new Team.
      *
-     * @param teamCreateDTO team which will be created.
+     * @param teamDto team which will be created.
      * @return id of created team.
      */
-    Long createTeam(TeamCreateDto teamCreateDTO);
+    Long createTeam(TeamDto teamDto);
 
     /**
      * Removes team.

@@ -18,6 +18,7 @@ import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
@@ -40,13 +41,14 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = ServiceConfiguration.class)
 public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
+    @Autowired
     @InjectMocks
-    private TeamFacade teamFacade = new TeamFacadeImpl();
+    private TeamFacade teamFacade;
 
     @Mock
     private TeamService teamService;
 
-    @Mock
+    @Autowired
     private HumanPlayerFacade humanPlayerFacade;
 
     @Mock
@@ -56,14 +58,12 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
     private TeamDto teamDto;
 
-    private TeamCreateDto teamCreateDto;
-
     private List<Team> teams;
 
     private List<TeamDto> teamDtoS;
 
     @BeforeClass
-    public void setup() {
+    public void setup() throws AuthenticationException {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -77,19 +77,16 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         teamDtoS = new ArrayList<>();
         teamDtoS.add(teamDto);
 
-        teamCreateDto = createTeamCreateDto();
-
         HumanPlayerDto humanPlayerDto = new HumanPlayerDto();
-        humanPlayerDto.setEmail("test");
-        humanPlayerDto.setRole(Role.ADMIN);
+        humanPlayerDto.setEmail("test@test.cz");
+        humanPlayerDto.setRole(Role.USER);
         humanPlayerDto.setUsername("test");
-        humanPlayerFacade.register(humanPlayerDto, "hash");
+        humanPlayerFacade.register(humanPlayerDto, "hashhash");
+
+
 
         when(beanMappingService.mapTo(team, TeamDto.class)).thenReturn(teamDto);
         when(beanMappingService.mapTo(teamDto, Team.class)).thenReturn(team);
-
-        when(beanMappingService.mapTo(team, TeamCreateDto.class)).thenReturn(teamCreateDto);
-        when(beanMappingService.mapTo(teamCreateDto, Team.class)).thenReturn(team);
 
         when(beanMappingService.mapTo(teams, TeamDto.class)).thenReturn(teamDtoS);
         when(beanMappingService.mapTo(teamDtoS, Team.class)).thenReturn(teams);
@@ -99,9 +96,9 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void createTeamTest() {
         when(teamService.createTeam(team)).thenReturn(team);
-        List<HumanPlayerDto> humanPlayerDtos = humanPlayerFacade.findAll();
-        teamFacade.createTeam(teamCreateDto);
-        verify(teamService).createTeam(team);
+        teamFacade.createTeam(teamDto);
+        System.out.println(teamFacade.getTeamById(1L).toString());
+        assertThat(teamFacade.getTeamById(1L)).isEqualToComparingFieldByField(teamDto);
     }
 
     @Test
@@ -174,27 +171,31 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         }).when(teamService).spendMoneyFromBudget(team, new BigDecimal("300"));
     }
 
-    TeamCreateDto createTeamCreateDto() {
-        TeamCreateDto teamCreateDto = new TeamCreateDto();
-        teamCreateDto.setName("teamTest");
-        teamCreateDto.setBudget(BigDecimal.valueOf(3000));
-        teamCreateDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-        teamCreateDto.setHumanPlayerId(0L);
-        return teamCreateDto;
-    }
+//    TeamCreateDto createTeamCreateDto() {
+//        TeamCreateDto teamCreateDto = new TeamCreateDto();
+//        teamCreateDto.setName("teamTest");
+//        teamCreateDto.setBudget(BigDecimal.valueOf(3000));
+//        teamCreateDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
+//        teamCreateDto.setHumanPlayerId(1L);
+//        return teamCreateDto;
+//    }
 
-    TeamDto createTeamDto() {
+    private TeamDto createTeamDto() {
         TeamDto teamDto = new TeamDto();
         teamDto.setName("teamTest");
         teamDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
+        teamDto.setBudget(BigDecimal.valueOf(3000.00));
+        teamDto.setHumanPlayerId(1L);
         return teamDto;
     }
 
-    Team createTeam() {
+    private Team createTeam() {
         Team team = new Team();
+        team.setId(1L);
         team.setName("teamTest");
-        team.setBudget(BigDecimal.valueOf(3000));
+        team.setBudget(BigDecimal.valueOf(3000.00));
         team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
+        team.setHumanPlayer(beanMappingService.mapTo(humanPlayerFacade.findById(1L), HumanPlayer.class));
         return team;
     }
 }
