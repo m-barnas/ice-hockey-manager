@@ -14,6 +14,7 @@ import cz.muni.fi.pa165.rest.exceptions.InternalServerErrorException;
 import cz.muni.fi.pa165.rest.exceptions.InvalidParameterException;
 import cz.muni.fi.pa165.rest.exceptions.ResourceNotFoundException;
 import java.util.List;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +40,9 @@ public class GameController {
      * @throws InvalidParameterException if game is invalid
      * @throws InternalServerErrorException if some other error occurs
      */
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public final GameDto createGame(@RequestBody GameCreateDto gameCreateDto)
             throws InvalidParameterException, InternalServerErrorException {
         try {
@@ -59,11 +62,13 @@ public class GameController {
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public final void deleteGame(@PathVariable("id") long id)
-            throws ResourceNotFoundException {
+            throws ResourceNotFoundException, InternalServerErrorException {
         try {
             gameFacade.delete(id);
-        } catch (Exception ex) {
+        } catch (DataAccessException ex) {
             throw new ResourceNotFoundException(ex);
+        } catch (Exception ex) {
+            throw new InternalServerErrorException(ex);
         }
     }
 
@@ -71,7 +76,8 @@ public class GameController {
      * Set game state to CANCELED.
      *
      * @param id of game to be canceled
-     * @throws InvalidParameterException if game has been already played
+     * @throws InvalidParameterException if game with given id does not exist
+     * or it has been already played
      * @throws InternalServerErrorException if some other error occurs
      */
     @RequestMapping(value = "/cancel/{id}", method = RequestMethod.PUT)
@@ -90,13 +96,16 @@ public class GameController {
      * Set game state to OK.
      *
      * @param id of game to be retrieved
+     * @throws InvalidParameterException if game with given id does not exist
      * @throws InternalServerErrorException if some error occurs
      */
     @RequestMapping(value = "/retrieve/{id}", method = RequestMethod.PUT)
     public final void retrieveGame(@PathVariable("id") long id)
-            throws InternalServerErrorException {
+            throws InvalidParameterException, InternalServerErrorException {
         try {
             gameFacade.retrieve(id);
+        } catch(IllegalArgumentException ex) {
+            throw new InvalidParameterException(ex);
         } catch (Exception ex) {
             throw new InternalServerErrorException(ex);
         }
@@ -108,10 +117,13 @@ public class GameController {
      * @param id of game to be changed
      * @param gameChangeStartTimeDto with information about new start time
      * @return updated {@link GameDto}
-     * @throws InvalidParameterException if game has been already played
+     * @throws InvalidParameterException if game with given id does not exist
+     * or it has been already played
      * @throws InternalServerErrorException if some other error occurs
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public final GameDto changeStartTime(@PathVariable("id") long id,
             @RequestBody GameChangeStartTimeDto gameChangeStartTimeDto)
             throws InvalidParameterException, InternalServerErrorException {
@@ -133,7 +145,8 @@ public class GameController {
      * @throws ResourceNotFoundException if game with given id does not exists
      * @throws InternalServerErrorException if some other error occurs
      */
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public GameDto findById(@PathVariable("id") long id)
             throws ResourceNotFoundException {
         GameDto foundGame;
@@ -153,13 +166,17 @@ public class GameController {
      *
      * @param teamId id of the team
      * @return list of {@link GameDto}s
+     * @throws ResourceNotFoundException if team with given id does not exists
      * @throws InternalServerErrorException if some error occurs
      */
-    @RequestMapping(path = "/byteam", method = RequestMethod.GET)
+    @RequestMapping(path = "/byteam", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public List<GameDto> findByTeam(@RequestParam("teamId") Long teamId)
-            throws InternalServerErrorException {
+            throws ResourceNotFoundException, InternalServerErrorException {
         try {
             return gameFacade.findByTeam(teamId);
+        } catch(IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex);
         } catch (Exception ex) {
             throw new InternalServerErrorException(ex);
         }
@@ -171,7 +188,8 @@ public class GameController {
      * @return list of {@link GameDto}s
      * @throws InternalServerErrorException if some error occurs
      */
-    @RequestMapping(path = "/all", method = RequestMethod.GET)
+    @RequestMapping(path = "/all", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public List<GameDto> findAll()
             throws InternalServerErrorException {
         try {
@@ -187,7 +205,8 @@ public class GameController {
      * @return list of {@link GameDto}s
      * @throws InternalServerErrorException if some error occurs
      */
-    @RequestMapping(path = "/scheduled", method = RequestMethod.GET)
+    @RequestMapping(path = "/scheduled", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public List<GameDto> findScheduledGames()
             throws InternalServerErrorException {
         try {
@@ -203,7 +222,8 @@ public class GameController {
      * @return number of just played games
      * @throws InternalServerErrorException if some error occurs
      */
-    @RequestMapping(value = "/play", method = RequestMethod.PUT)
+    @RequestMapping(value = "/play", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public final int playGames()
             throws InternalServerErrorException {
         List<GameDto> playedGames;
