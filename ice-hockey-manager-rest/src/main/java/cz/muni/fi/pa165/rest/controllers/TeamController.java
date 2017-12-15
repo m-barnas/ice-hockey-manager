@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.rest.controllers;
 import static cz.muni.fi.pa165.rest.ApiUri.*;
 
 import cz.muni.fi.pa165.dto.HumanPlayerDto;
+import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
@@ -36,7 +37,6 @@ public class TeamController {
     public TeamDto findById(@PathVariable("id") long id) {
         return teamFacade.getTeamById(id);
     }
-
 
     @RequestMapping(path = "/getByName/{name}", method = RequestMethod.GET)
     public TeamDto findByName(@PathVariable("name") String name) {
@@ -80,4 +80,8 @@ public class TeamController {
         return teamFacade.getTeamDefenseSkill(id);
     }
 
+    @RequestMapping(path = "/create", method = RequestMethod.PUT)
+    public void create(@RequestBody TeamCreateDto teamCreateDto){
+        teamFacade.createTeam(teamCreateDto);
+    }
 }

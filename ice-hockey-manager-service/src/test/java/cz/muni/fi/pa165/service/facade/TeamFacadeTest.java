@@ -1,11 +1,17 @@
 package cz.muni.fi.pa165.service.facade;
 
+import cz.muni.fi.pa165.dto.HumanPlayerDto;
 import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
+import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
+import cz.muni.fi.pa165.enums.Role;
+import cz.muni.fi.pa165.exceptions.AuthenticationException;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
+import cz.muni.fi.pa165.facade.HumanPlayerFacade;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.service.HumanPlayerService;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
@@ -41,6 +47,9 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     private TeamService teamService;
 
     @Mock
+    private HumanPlayerFacade humanPlayerFacade;
+
+    @Mock
     private BeanMappingService beanMappingService;
 
     private Team team;
@@ -59,7 +68,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @BeforeMethod
-    public void prepareTestTeam() {
+    public void prepareTestTeam() throws AuthenticationException {
         team = createTeam();
         teams = new ArrayList<>();
         teams.add(team);
@@ -69,6 +78,12 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         teamDtoS.add(teamDto);
 
         teamCreateDto = createTeamCreateDto();
+
+        HumanPlayerDto humanPlayerDto = new HumanPlayerDto();
+        humanPlayerDto.setEmail("test");
+        humanPlayerDto.setRole(Role.ADMIN);
+        humanPlayerDto.setUsername("test");
+        humanPlayerFacade.register(humanPlayerDto, "hash");
 
         when(beanMappingService.mapTo(team, TeamDto.class)).thenReturn(teamDto);
         when(beanMappingService.mapTo(teamDto, Team.class)).thenReturn(team);
@@ -84,6 +99,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void createTeamTest() {
         when(teamService.createTeam(team)).thenReturn(team);
+        List<HumanPlayerDto> humanPlayerDtos = humanPlayerFacade.findAll();
         teamFacade.createTeam(teamCreateDto);
         verify(teamService).createTeam(team);
     }
@@ -120,7 +136,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getTeamPriceTeamTest(){
+    public void getTeamPriceTeamTest() {
         when(teamService.getTeamPrice(team)).thenReturn(new BigDecimal("30"));
         when(teamService.findById(team.getId())).thenReturn(team);
         BigDecimal price = teamFacade.getTeamPrice(team.getId());
@@ -128,7 +144,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getTeamAttackSkillTeamTest(){
+    public void getTeamAttackSkillTeamTest() {
         when(teamService.getTeamAttackSkill(team)).thenReturn(50);
         when(teamService.findById(team.getId())).thenReturn(team);
         int attackSkill = teamFacade.getTeamAttackSkill(team.getId());
@@ -136,7 +152,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getTeamDefenseSkillTeamTest(){
+    public void getTeamDefenseSkillTeamTest() {
         when(teamService.getTeamDefenseSkill(team)).thenReturn(50);
         when(teamService.findById(team.getId())).thenReturn(team);
         int defenseSkill = teamFacade.getTeamDefenseSkill(team.getId());
@@ -144,7 +160,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void findTeamByNameTeamTest(){
+    public void findTeamByNameTeamTest() {
         when(teamService.findByName(team.getName())).thenReturn(team);
         TeamDto result = teamFacade.findTeamByName(teamDto.getName());
         assertThat(result).isNotNull().isEqualTo(teamDto);
@@ -163,7 +179,7 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         teamCreateDto.setName("teamTest");
         teamCreateDto.setBudget(BigDecimal.valueOf(3000));
         teamCreateDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-        teamCreateDto.setHumanPlayerId(1L);
+        teamCreateDto.setHumanPlayerId(0L);
         return teamCreateDto;
     }
 

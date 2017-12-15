@@ -4,10 +4,12 @@ import cz.muni.fi.pa165.dto.HockeyPlayerDto;
 import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
+import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.service.HumanPlayerService;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +31,21 @@ public class TeamFacadeImpl implements TeamFacade {
     private TeamService teamService;
 
     @Autowired
+    private HumanPlayerService humanPlayerService;
+
+    @Autowired
     private BeanMappingService beanMappingService;
 
 
     @Override
     public Long createTeam(TeamCreateDto teamCreateDTO) {
         Team mappedTeam = beanMappingService.mapTo(teamCreateDTO, Team.class);
-        Team newTeam = teamService.createTeam(mappedTeam);
-        return newTeam.getId();
+        HumanPlayer humanPlayer = humanPlayerService.findById(teamCreateDTO.getHumanPlayerId());
+        if (humanPlayer == null) {
+            throw new IllegalArgumentException();
+        }
+        mappedTeam.setHumanPlayer(humanPlayerService.findById(teamCreateDTO.getHumanPlayerId()));
+        return teamService.createTeam(mappedTeam).getId();
     }
 
     @Override
