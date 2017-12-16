@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.facade;
 
 import cz.muni.fi.pa165.dto.HockeyPlayerDto;
-import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
@@ -92,7 +91,19 @@ public interface TeamFacade {
      */
     TeamDto findTeamByName(String name);
 
-    void addHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto);
+    /**
+     * Adds hockey player to team.
+     *
+     * @param teamId of team to which player will be added.
+     * @param hockeyPlayerId of player which will be added to player.
+     */
+    void addHockeyPlayer(Long teamId, Long hockeyPlayerId);
 
-    void removeHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto);
+    /**
+     * Removes hockey player from team.
+     *
+     * @param teamId of team from which player will be removed.
+     * @param hockeyPlayerId of player which will be removed from team.
+     */
+    void removeHockeyPlayer(Long teamId, Long hockeyPlayerId);
 }

@@ -1,29 +1,32 @@
 package cz.muni.fi.pa165.service.facade;
 
-import cz.muni.fi.pa165.dto.HumanPlayerDto;
-import cz.muni.fi.pa165.dto.TeamCreateDto;
+
+import cz.muni.fi.pa165.dto.HockeyPlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
+import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
+import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.facade.HumanPlayerFacade;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.service.HockeyPlayerService;
 import cz.muni.fi.pa165.service.HumanPlayerService;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.mockito.MockitoAnnotations;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -41,15 +44,17 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = ServiceConfiguration.class)
 public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
-    @Autowired
     @InjectMocks
-    private TeamFacade teamFacade;
+    private TeamFacade teamFacade = new TeamFacadeImpl();
 
     @Mock
     private TeamService teamService;
 
-    @Autowired
-    private HumanPlayerFacade humanPlayerFacade;
+    @Mock
+    private HumanPlayerService humanPlayerService;
+
+    @Mock
+    private HockeyPlayerService hockeyPlayerService;
 
     @Mock
     private BeanMappingService beanMappingService;
@@ -58,17 +63,21 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
     private TeamDto teamDto;
 
-    private List<Team> teams;
+    private HumanPlayer humanPlayer;
+
+    private HockeyPlayer hockeyPlayer;
 
     private List<TeamDto> teamDtoS;
 
+    private List<Team> teams;
+
     @BeforeClass
-    public void setup() throws AuthenticationException {
+    public void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @BeforeMethod
-    public void prepareTestTeam() throws AuthenticationException {
+    public void prepareTestTeam() {
         team = createTeam();
         teams = new ArrayList<>();
         teams.add(team);
@@ -77,13 +86,9 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         teamDtoS = new ArrayList<>();
         teamDtoS.add(teamDto);
 
-        HumanPlayerDto humanPlayerDto = new HumanPlayerDto();
-        humanPlayerDto.setEmail("test@test.cz");
-        humanPlayerDto.setRole(Role.USER);
-        humanPlayerDto.setUsername("test");
-        humanPlayerFacade.register(humanPlayerDto, "hashhash");
+        humanPlayer = createHumanPlayer();
 
-
+        hockeyPlayer = createHockeyPlayer();
 
         when(beanMappingService.mapTo(team, TeamDto.class)).thenReturn(teamDto);
         when(beanMappingService.mapTo(teamDto, Team.class)).thenReturn(team);
@@ -95,18 +100,23 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void createTeamTest() {
-        when(teamService.createTeam(team)).thenReturn(team);
-        teamFacade.createTeam(teamDto);
-        System.out.println(teamFacade.getTeamById(1L).toString());
-        assertThat(teamFacade.getTeamById(1L)).isEqualToComparingFieldByField(teamDto);
+        when(teamService.createTeam(Mockito.any(Team.class))).thenReturn(team);
+        when(humanPlayerService.findById(Mockito.anyLong())).thenReturn(humanPlayer);
+
+        assertThat(teamFacade.createTeam(teamDto)).isEqualTo(1L);
+
+        verify(teamService).createTeam(team);
     }
 
     @Test
     public void deleteTeamTest() {
         doNothing().when(teamService).deleteTeam(team);
-        when(teamService.findById(team.getId())).thenReturn(team);
-        teamFacade.deleteTeam(team.getId());
+        when(teamService.findById(Mockito.anyLong())).thenReturn(team);
+
+        teamFacade.deleteTeam(teamDto.getId());
+
         verify(teamService).deleteTeam(team);
+
     }
 
     @Test
@@ -163,6 +173,29 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         assertThat(result).isNotNull().isEqualTo(teamDto);
     }
 
+    @Test
+    public void addHockeyPlayerTest() {
+        when(teamService.findById(Mockito.anyLong())).thenReturn(team);
+        when(hockeyPlayerService.findById(Mockito.anyLong())).thenReturn(hockeyPlayer);
+        doNothing().when(teamService).addHockeyPlayer(Mockito.any(Team.class), Mockito.any(HockeyPlayer.class));
+
+        teamFacade.addHockeyPlayer(team.getId(), hockeyPlayer.getId());
+
+        verify(teamService).addHockeyPlayer(team, hockeyPlayer);
+    }
+
+
+    @Test
+    public void removeHockeyPlayerTest() {
+        when(teamService.findById(Mockito.anyLong())).thenReturn(team);
+        when(hockeyPlayerService.findById(Mockito.anyLong())).thenReturn(hockeyPlayer);
+        doNothing().when(teamService).removeHockeyPlayer(Mockito.any(Team.class), Mockito.any(HockeyPlayer.class));
+
+        teamFacade.removeHockeyPlayer(team.getId(), hockeyPlayer.getId());
+
+        verify(teamService).removeHockeyPlayer(team, hockeyPlayer);
+    }
+
     private void doAnswerSpendMoneyFromBudget() throws TeamServiceException {
         doAnswer((Answer<Void>) invocationOnMock -> {
             Team t = (Team) invocationOnMock.getArguments()[0];
@@ -171,20 +204,11 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         }).when(teamService).spendMoneyFromBudget(team, new BigDecimal("300"));
     }
 
-//    TeamCreateDto createTeamCreateDto() {
-//        TeamCreateDto teamCreateDto = new TeamCreateDto();
-//        teamCreateDto.setName("teamTest");
-//        teamCreateDto.setBudget(BigDecimal.valueOf(3000));
-//        teamCreateDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-//        teamCreateDto.setHumanPlayerId(1L);
-//        return teamCreateDto;
-//    }
-
     private TeamDto createTeamDto() {
         TeamDto teamDto = new TeamDto();
         teamDto.setName("teamTest");
         teamDto.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-        teamDto.setBudget(BigDecimal.valueOf(3000.00));
+        teamDto.setBudget(BigDecimal.valueOf(3000.00).setScale(2));
         teamDto.setHumanPlayerId(1L);
         return teamDto;
     }
@@ -193,9 +217,32 @@ public class TeamFacadeTest extends AbstractTestNGSpringContextTests {
         Team team = new Team();
         team.setId(1L);
         team.setName("teamTest");
-        team.setBudget(BigDecimal.valueOf(3000.00));
+        team.setBudget(BigDecimal.valueOf(3000.00).setScale(2));
         team.setCompetitionCountry(CompetitionCountry.CZECH_REPUBLIC);
-        team.setHumanPlayer(beanMappingService.mapTo(humanPlayerFacade.findById(1L), HumanPlayer.class));
         return team;
     }
+
+    private HumanPlayer createHumanPlayer() {
+        HumanPlayer humanPlayer = new HumanPlayer();
+        humanPlayer.setRole(Role.USER);
+        humanPlayer.setPasswordHash("asdoaskdoaksd");
+        humanPlayer.setEmail("x@x.com");
+        humanPlayer.setUsername("User");
+        humanPlayer.setId(1L);
+        return humanPlayer;
+    }
+
+    private HockeyPlayer createHockeyPlayer() {
+        HockeyPlayer hockeyPlayer = new HockeyPlayer();
+        hockeyPlayer.setAttackSkill(10);
+        hockeyPlayer.setDefenseSkill(50);
+        hockeyPlayer.setPost(Position.DEFENSEMAN);
+        hockeyPlayer.setName("Defender");
+        hockeyPlayer.setTeam(team);
+        hockeyPlayer.setPrice(BigDecimal.valueOf(100));
+        hockeyPlayer.setId(1L);
+        return  hockeyPlayer;
+    }
+
+
 }

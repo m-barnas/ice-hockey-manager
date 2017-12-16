@@ -1,9 +1,5 @@
 package cz.muni.fi.pa165.rest.controllers;
 
-import static cz.muni.fi.pa165.rest.ApiUri.*;
-
-import cz.muni.fi.pa165.dto.HumanPlayerDto;
-import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
@@ -17,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static cz.muni.fi.pa165.rest.ApiUri.*;
+import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI_TEAMS;
 
 
 /**
@@ -81,7 +77,7 @@ public class TeamController {
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.PUT)
-    public void create(@RequestBody TeamCreateDto teamCreateDto){
-        teamFacade.createTeam(teamCreateDto);
+    public void create(@RequestBody TeamDto teamDto){
+        teamFacade.createTeam(teamDto);
     }
 }

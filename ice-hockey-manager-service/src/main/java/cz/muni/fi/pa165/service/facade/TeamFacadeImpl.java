@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.service.facade;
 
 import cz.muni.fi.pa165.dto.HockeyPlayerDto;
-import cz.muni.fi.pa165.dto.TeamCreateDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.entity.HumanPlayer;
@@ -9,6 +8,7 @@ import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.service.HockeyPlayerService;
 import cz.muni.fi.pa165.service.HumanPlayerService;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
@@ -34,18 +34,22 @@ public class TeamFacadeImpl implements TeamFacade {
     private HumanPlayerService humanPlayerService;
 
     @Autowired
+    private HockeyPlayerService hockeyPlayerService;
+
+    @Autowired
     private BeanMappingService beanMappingService;
 
 
     @Override
     public Long createTeam(TeamDto teamDto) {
         Team mappedTeam = beanMappingService.mapTo(teamDto, Team.class);
-        HumanPlayer humanPlayer = humanPlayerService.findById(teamDto.getHumanPlayerId());
-        if (humanPlayer == null) {
-            throw new IllegalArgumentException();
+        if (teamDto.getHumanPlayerId() != null) {
+            HumanPlayer humanPlayer = humanPlayerService.findById(teamDto.getHumanPlayerId());
+            if (humanPlayer == null) {
+                throw new IllegalArgumentException();
+            }
+            mappedTeam.setHumanPlayer(humanPlayer);
         }
-        mappedTeam.setHumanPlayer(humanPlayerService.findById(teamDto.getHumanPlayerId()));
-
         Team team = teamService.createTeam(mappedTeam);
         teamDto.setBudget(team.getBudget());
         teamDto.setId(team.getId());
@@ -105,12 +109,12 @@ public class TeamFacadeImpl implements TeamFacade {
     }
 
     @Override
-    public void addHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto) {
-        teamService.addHockeyPlayer(beanMappingService.mapTo(teamDto, Team.class), beanMappingService.mapTo(hockeyPlayerDto, HockeyPlayer.class));
+    public void addHockeyPlayer(Long teamId, Long hockeyPlayerId) {
+        teamService.addHockeyPlayer(teamService.findById(teamId), hockeyPlayerService.findById(hockeyPlayerId));
     }
 
     @Override
-    public void removeHockeyPlayer(TeamDto teamDto, HockeyPlayerDto hockeyPlayerDto) {
-        teamService.removeHockeyPlayer(beanMappingService.mapTo(teamDto, Team.class), beanMappingService.mapTo(hockeyPlayerDto, HockeyPlayer.class));
+    public void removeHockeyPlayer(Long teamId, Long hockeyPlayerId) {
+        teamService.removeHockeyPlayer(teamService.findById(teamId), hockeyPlayerService.findById(hockeyPlayerId));
     }
 }
