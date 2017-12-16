@@ -1,11 +1,15 @@
 package cz.muni.fi.pa165.service.facade;
 
-import cz.muni.fi.pa165.dto.TeamCreateDto;
+import cz.muni.fi.pa165.dto.HockeyPlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
+import cz.muni.fi.pa165.entity.HockeyPlayer;
+import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.service.HockeyPlayerService;
+import cz.muni.fi.pa165.service.HumanPlayerService;
 import cz.muni.fi.pa165.service.TeamService;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +31,29 @@ public class TeamFacadeImpl implements TeamFacade {
     private TeamService teamService;
 
     @Autowired
+    private HumanPlayerService humanPlayerService;
+
+    @Autowired
+    private HockeyPlayerService hockeyPlayerService;
+
+    @Autowired
     private BeanMappingService beanMappingService;
 
 
     @Override
-    public Long createTeam(TeamCreateDto teamCreateDTO) {
-        Team mappedTeam = beanMappingService.mapTo(teamCreateDTO, Team.class);
-        Team newTeam = teamService.createTeam(mappedTeam);
-        return newTeam.getId();
+    public Long createTeam(TeamDto teamDto) {
+        Team entityTeam = beanMappingService.mapTo(teamDto, Team.class);
+        if (teamDto.getHumanPlayerId() != null) {
+            HumanPlayer humanPlayer = humanPlayerService.findById(teamDto.getHumanPlayerId());
+            if (humanPlayer == null) {
+                throw new IllegalArgumentException();
+            }
+            entityTeam.setHumanPlayer(humanPlayer);
+        }
+        Team team = teamService.createTeam(entityTeam);
+        teamDto.setBudget(team.getBudget());
+        teamDto.setId(team.getId());
+        return team.getId();
     }
 
     @Override
@@ -44,7 +63,9 @@ public class TeamFacadeImpl implements TeamFacade {
 
     @Override
     public List<TeamDto> getAllTeams() {
-        return beanMappingService.mapTo(teamService.findAll(), TeamDto.class);
+        List<Team> teams = teamService.findAll();
+        List<TeamDto> teamDtos = beanMappingService.mapTo(teams, TeamDto.class);
+        return teamDtos;
     }
 
     @Override
@@ -55,7 +76,14 @@ public class TeamFacadeImpl implements TeamFacade {
     @Override
     public TeamDto getTeamById(Long id) {
         Team team = teamService.findById(id);
-        return (team == null) ? null : beanMappingService.mapTo(team, TeamDto.class);
+        if (team == null) {
+            return null;
+        }
+        TeamDto teamDto = beanMappingService.mapTo(team, TeamDto.class);
+        if (team.getHumanPlayer() != null) {
+            teamDto.setHumanPlayerId(team.getHumanPlayer().getId());
+        }
+        return teamDto;
     }
 
     @Override
@@ -80,6 +108,20 @@ public class TeamFacadeImpl implements TeamFacade {
 
     @Override
     public TeamDto findTeamByName(String name) {
-        return beanMappingService.mapTo(teamService.findByName(name), TeamDto.class);
+        Team team = teamService.findByName(name);
+        if (team == null) {
+            return null;
+        }
+        return beanMappingService.mapTo(team, TeamDto.class);
+    }
+
+    @Override
+    public void addHockeyPlayer(Long teamId, Long hockeyPlayerId) {
+        teamService.addHockeyPlayer(teamService.findById(teamId), hockeyPlayerService.findById(hockeyPlayerId));
+    }
+
+    @Override
+    public void removeHockeyPlayer(Long teamId, Long hockeyPlayerId) {
+        teamService.removeHockeyPlayer(teamService.findById(teamId), hockeyPlayerService.findById(hockeyPlayerId));
     }
 }

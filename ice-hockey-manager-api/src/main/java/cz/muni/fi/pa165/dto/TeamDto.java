@@ -12,15 +12,25 @@ import java.util.Set;
  */
 public class TeamDto {
 
+    private Long id;
+
     private String name;
 
     private CompetitionCountry competitionCountry;
 
-    private HumanPlayerDto humanPlayer;
+    private Long humanPlayerId;
 
     private Set<HockeyPlayerDto> hockeyPlayers = new HashSet<>();
 
     private BigDecimal budget;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -38,12 +48,12 @@ public class TeamDto {
         this.competitionCountry = competitionCountry;
     }
 
-    public HumanPlayerDto getHumanPlayer() {
-        return humanPlayer;
+    public Long getHumanPlayerId() {
+        return humanPlayerId;
     }
 
-    public void setHumanPlayer(HumanPlayerDto humanPlayer) {
-        this.humanPlayer = humanPlayer;
+    public void setHumanPlayerId(Long humanPlayerId) {
+        this.humanPlayerId = humanPlayerId;
     }
 
     public Set<HockeyPlayerDto> getHockeyPlayers() {
@@ -82,7 +92,7 @@ public class TeamDto {
         return "TeamDto{" +
                 "name='" + name + '\'' +
                 ", competitionCountry=" + competitionCountry +
-                ", humanPlayer=" + humanPlayer +
+                ", humanPlayer=" + humanPlayerId +
                 ", hockeyPlayers=" + hockeyPlayers +
                 ", budget=" + budget +
                 '}';
