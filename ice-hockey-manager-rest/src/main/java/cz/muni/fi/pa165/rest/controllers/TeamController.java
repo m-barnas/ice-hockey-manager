@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.rest.controllers;
 
+import cz.muni.fi.pa165.dto.TeamAddRemovePlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
@@ -44,8 +45,7 @@ public class TeamController {
         return teamFacade.getAllTeams();
     }
 
-
-    @RequestMapping(path = "/{id}/delete", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public void deleteById(@PathVariable("id") long id) {
         teamFacade.deleteTeam(id);
     }
@@ -56,9 +56,8 @@ public class TeamController {
     }
 
     @RequestMapping(path = "/spendMoneyFromBudget", method = RequestMethod.POST)
-    public TeamDto spendMoneyFromBudget(@RequestBody TeamSpendMoneyDto teamSpendMoneyDto) throws TeamServiceException {
-        teamFacade.spendMoneyFromBudget(teamSpendMoneyDto.getId(), teamSpendMoneyDto.getAmount());
-        return teamFacade.getTeamById(teamSpendMoneyDto.getId());
+    public void spendMoneyFromBudget(@RequestBody TeamSpendMoneyDto teamSpendMoneyDto) throws TeamServiceException {
+        teamFacade.spendMoneyFromBudget(teamSpendMoneyDto.getTeamId(), teamSpendMoneyDto.getAmount());
     }
 
     @RequestMapping(path = "/{id}/price", method = RequestMethod.GET)
@@ -77,7 +76,17 @@ public class TeamController {
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.PUT)
-    public void create(@RequestBody TeamDto teamDto){
+    public void create(@RequestBody TeamDto teamDto) {
         teamFacade.createTeam(teamDto);
+    }
+
+    @RequestMapping(path = "/addHockeyPlayer", method = RequestMethod.POST)
+    public void addHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
+        teamFacade.addHockeyPlayer(teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
+    }
+
+    @RequestMapping(path = "/removeHockeyPlayer", method = RequestMethod.POST)
+    public void removeHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
+        teamFacade.removeHockeyPlayer(teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
     }
 }

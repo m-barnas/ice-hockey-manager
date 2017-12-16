@@ -19,6 +19,5 @@ public class ApiUri {
         public static final String UPDATE = "/update";
         public static final String ALL = "/**";
         public static final String ONE_SEGMENT = "/*";
-        public static final String DELETE = "/delete";
     }
 }

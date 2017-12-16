@@ -76,16 +76,25 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public BigDecimal getTeamPrice(Team team) {
+        if (team.getHockeyPlayers().isEmpty()) {
+            return BigDecimal.ZERO;
+        }
         return team.getHockeyPlayers().stream().map(HockeyPlayer::getPrice).reduce(BigDecimal::add).get();
     }
 
     @Override
     public int getTeamAttackSkill(Team team) {
+        if (team.getHockeyPlayers().isEmpty()) {
+            return 0;
+        }
         return team.getHockeyPlayers().stream().mapToInt(HockeyPlayer::getAttackSkill).sum();
     }
 
     @Override
     public int getTeamDefenseSkill(Team team) {
+        if (team.getHockeyPlayers().isEmpty()) {
+            return 0;
+        }
         return team.getHockeyPlayers().stream().mapToInt(HockeyPlayer::getDefenseSkill).sum();
     }
 }

@@ -42,15 +42,15 @@ public class TeamFacadeImpl implements TeamFacade {
 
     @Override
     public Long createTeam(TeamDto teamDto) {
-        Team mappedTeam = beanMappingService.mapTo(teamDto, Team.class);
+        Team entityTeam = beanMappingService.mapTo(teamDto, Team.class);
         if (teamDto.getHumanPlayerId() != null) {
             HumanPlayer humanPlayer = humanPlayerService.findById(teamDto.getHumanPlayerId());
             if (humanPlayer == null) {
                 throw new IllegalArgumentException();
             }
-            mappedTeam.setHumanPlayer(humanPlayer);
+            entityTeam.setHumanPlayer(humanPlayer);
         }
-        Team team = teamService.createTeam(mappedTeam);
+        Team team = teamService.createTeam(entityTeam);
         teamDto.setBudget(team.getBudget());
         teamDto.setId(team.getId());
         return team.getId();
@@ -63,7 +63,9 @@ public class TeamFacadeImpl implements TeamFacade {
 
     @Override
     public List<TeamDto> getAllTeams() {
-        return beanMappingService.mapTo(teamService.findAll(), TeamDto.class);
+        List<Team> teams = teamService.findAll();
+        List<TeamDto> teamDtos = beanMappingService.mapTo(teams, TeamDto.class);
+        return teamDtos;
     }
 
     @Override
@@ -74,8 +76,13 @@ public class TeamFacadeImpl implements TeamFacade {
     @Override
     public TeamDto getTeamById(Long id) {
         Team team = teamService.findById(id);
-        TeamDto teamDto = (team == null) ? null : beanMappingService.mapTo(team, TeamDto.class);
-        teamDto.setHumanPlayerId(team.getHumanPlayer().getId());
+        if (team == null) {
+            return null;
+        }
+        TeamDto teamDto = beanMappingService.mapTo(team, TeamDto.class);
+        if (team.getHumanPlayer() != null) {
+            teamDto.setHumanPlayerId(team.getHumanPlayer().getId());
+        }
         return teamDto;
     }
 
