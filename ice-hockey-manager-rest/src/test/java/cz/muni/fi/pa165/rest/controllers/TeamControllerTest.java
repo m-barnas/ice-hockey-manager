@@ -30,6 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -75,9 +76,65 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
         mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.[?(@.id==1)].name").value("Team 1"));
-
+                .andExpect(jsonPath("$.[?(@.id==1)].name").value("Team 1"))
+                .andExpect(jsonPath("$.[?(@.id==1)].budget").value(100))
+                .andExpect(jsonPath("$.[?(@.id==2)].name").value("Team 2"));
     }
+
+    @Test
+    public void findByIdTest() throws Exception {
+        doReturn(createTeams().get(0))
+                .when(teamFacade)
+                .getTeamById(1L);
+
+        mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.name").value("Team 1"))
+                .andExpect(jsonPath("$.budget").value(100))
+                .andExpect(jsonPath("$.competitionCountry").value("CZECH_REPUBLIC"));
+    }
+
+    @Test
+    public void getByNameTest() throws Exception {
+        doReturn(createTeams().get(0))
+                .when(teamFacade)
+                .findTeamByName("Team 1");
+
+        mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/getByName/Team 1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.name").value("Team 1"))
+                .andExpect(jsonPath("$.budget").value(100))
+                .andExpect(jsonPath("$.competitionCountry").value("CZECH_REPUBLIC"));
+    }
+
+    @Test
+    public void getByCompetitionCountryTest() throws Exception {
+        doReturn(Collections.unmodifiableList(createTeams().subList(0, 1)))
+                .when(teamFacade)
+                .getTeamsByCountry(CompetitionCountry.CZECH_REPUBLIC);
+
+        mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/getByCompetitionCountry/CZECH_REPUBLIC"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.[?(@.id==1)].name").value("Team 1"))
+                .andExpect(jsonPath("$.[?(@.id==1)].budget").value(100))
+                .andExpect(jsonPath("$.[?(@.id==1)].competitionCountry").value("CZECH_REPUBLIC"));
+    }
+
+//    @Test
+//    public void spendMoneyFromBudgetTest() throws Exception {
+//        doNothing().when(teamFacade).spendMoneyFromBudget(1L, BigDecimal.valueOf(20));
+//
+//        Map<String, String> map = new HashMap<>();
+//
+//        MvcResult result = mockMvc.perform(post("http://localhost:8080/pa165/ice-hockey-manager/teams/spendMoneyFromBudget")
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                .param("teamId", String.valueOf(1))
+//                .param("amount", String.valueOf(20))).andReturn();
+//        String res = result.getResponse().getContentAsString();
+//    }
 
     private List<TeamDto> createTeams() {
         TeamDto teamDto1 = new TeamDto();
