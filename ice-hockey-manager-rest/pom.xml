@@ -89,6 +89,12 @@
             <artifactId>javax.el</artifactId>
             <scope>test</scope><!-- conflicts with tomcat libraries, needed only for tests anyway -->
         </dependency>
+
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${json-path.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
