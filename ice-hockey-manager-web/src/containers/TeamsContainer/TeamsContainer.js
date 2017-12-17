@@ -13,22 +13,14 @@ class TeamsContainer extends Component {
     componentDidMount() {
         axios.get('/teams/all')
             .then(response => {
-                this.setState(this.processResponse(response.data));
+                this.setState({
+                    teams: response.data,
+                    loading: false
+                });
             })
             .catch(error => {
                 console.log(error);
             });
-    }
-
-    processResponse(data) {
-        let teamsIterable = data;
-        for (let team of teamsIterable) {
-            team.hockeyPlayersSize = team.hockeyPlayers.length;
-        }
-        return {
-            teams: teamsIterable,
-            loading: false
-        };
     }
 
     columns = [{
@@ -43,8 +35,16 @@ class TeamsContainer extends Component {
         },
     }, {
         title: 'Number of players',
-        dataIndex: 'hockeyPlayersSize',
         key: 'hockeyPlayersSize',
+        render: (value, row, index) => {
+            return value.hockeyPlayers.length;
+        }
+    }, {
+        title: 'Action',
+        render: (value, row, index) => {
+            return <a href={'/teams/' + value.id}>view</a>;
+        }
+
     }];
 
     render() {
