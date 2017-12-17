@@ -14,7 +14,7 @@ import java.util.Collection;
 import static cz.muni.fi.pa165.rest.ApiUri.*;
 
 /**
- * @author JAkub Hruska jhruska@mail.muni.cz
+ * @author Jakub Hruska jhruska@mail.muni.cz
  */
 @RestController
 @RequestMapping(path = ROOT_URI_HOCKEY_PLAYERS, produces = MediaType.APPLICATION_JSON_VALUE)
