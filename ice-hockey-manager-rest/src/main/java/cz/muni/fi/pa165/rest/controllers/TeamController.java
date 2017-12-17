@@ -96,14 +96,16 @@ public class TeamController {
     }
 
     @RequestMapping(path = "/addHockeyPlayer", method = RequestMethod.POST)
-    public void addHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
+    public TeamDto addHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
         teamFacade.addHockeyPlayer(teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
         log.debug("addHockeyPlayer(teamId = {}, hockeyPlayerId = {})", teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
+        return teamFacade.getTeamById(teamAddRemovePlayerDto.getTeamId());
     }
 
     @RequestMapping(path = "/removeHockeyPlayer", method = RequestMethod.POST)
-    public void removeHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
+    public TeamDto removeHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
         teamFacade.removeHockeyPlayer(teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
         log.debug("removeHockeyPlayer(teamId = {}, hockeyPlayerId = {})", teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
+        return teamFacade.getTeamById(teamAddRemovePlayerDto.getTeamId());
     }
 }

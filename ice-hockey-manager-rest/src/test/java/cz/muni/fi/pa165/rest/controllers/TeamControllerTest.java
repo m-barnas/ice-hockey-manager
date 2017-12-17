@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.rest.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.muni.fi.pa165.dto.HockeyPlayerDto;
+import cz.muni.fi.pa165.dto.TeamAddRemovePlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
@@ -12,6 +13,7 @@ import cz.muni.fi.pa165.rest.config.RestConfiguration;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,6 +34,7 @@ import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI;
 import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI_TEAMS;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -171,15 +174,49 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void createTest() throws Exception {
+    public void createTeamTest() throws Exception {
         List<TeamDto> teamDtos = createTeams();
         doReturn(1L).when(teamFacade).createTeam(teamDtos.get(0));
         mockMvc.perform(put(ROOT_URI_TEAMS + ApiUri.SubApiUri.CREATE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjectToJson(teamDtos.get(0))))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.name").value("Team 1"))
                 .andExpect(jsonPath("$.budget").value(100))
                 .andExpect(jsonPath("$.competitionCountry").value("CZECH_REPUBLIC"));
+    }
+
+    @Test
+    public void addHockeyPlayerTest() throws Exception {
+        doNothing().when(teamFacade).addHockeyPlayer(Mockito.anyLong(), Mockito.anyLong());
+        doReturn(createTeams().get(0)).when(teamFacade).getTeamById(1L);
+
+        TeamAddRemovePlayerDto teamAddRemovePlayerDto = new TeamAddRemovePlayerDto();
+        teamAddRemovePlayerDto.setTeamId(1L);
+        teamAddRemovePlayerDto.setHockeyPlayerId(1L);
+
+        mockMvc.perform(post(ROOT_URI_TEAMS + "/addHockeyPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJson(teamAddRemovePlayerDto)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    @Test
+    public void removeHockeyPlayerTest() throws Exception {
+        doNothing().when(teamFacade).removeHockeyPlayer(Mockito.anyLong(), Mockito.anyLong());
+        doReturn(createTeams().get(0)).when(teamFacade).getTeamById(1L);
+
+        TeamAddRemovePlayerDto teamAddRemovePlayerDto = new TeamAddRemovePlayerDto();
+        teamAddRemovePlayerDto.setTeamId(1L);
+        teamAddRemovePlayerDto.setHockeyPlayerId(1L);
+
+        mockMvc.perform(post(ROOT_URI_TEAMS + "/removeHockeyPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJson(teamAddRemovePlayerDto)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE));
     }
 
     private List<TeamDto> createTeams() {
