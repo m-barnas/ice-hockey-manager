@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.facade.HumanPlayerFacade;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.rest.ApiUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,10 +88,11 @@ public class TeamController {
         return teamFacade.getTeamDefenseSkill(id);
     }
 
-    @RequestMapping(path = "/create", method = RequestMethod.PUT)
-    public void create(@RequestBody TeamDto teamDto) {
+    @RequestMapping(path = ApiUri.SubApiUri.CREATE, method = RequestMethod.PUT)
+    public TeamDto create(@RequestBody TeamDto teamDto) {
         teamFacade.createTeam(teamDto);
         log.debug("create(createdId = {})", teamDto.getId());
+        return teamDto;
     }
 
     @RequestMapping(path = "/addHockeyPlayer", method = RequestMethod.POST)

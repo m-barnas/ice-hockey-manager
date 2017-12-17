@@ -1,30 +1,17 @@
 package cz.muni.fi.pa165.rest.controllers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.muni.fi.pa165.dto.HockeyPlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
-import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.rest.ApiUri;
 import cz.muni.fi.pa165.rest.config.RestConfiguration;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,13 +25,18 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
+
+import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI;
+import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI_TEAMS;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
  * Created by Lukas Kotol on 12/16/2017.
@@ -79,7 +71,7 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
                 .when(teamFacade)
                 .getAllTeams();
 
-        mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/all"))
+        mockMvc.perform(get(ROOT_URI_TEAMS + "/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("Team 1"))
@@ -93,7 +85,7 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
                 .when(teamFacade)
                 .getTeamById(1L);
 
-        mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/1"))
+        mockMvc.perform(get(ROOT_URI_TEAMS + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.name").value("Team 1"))
@@ -107,7 +99,7 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
                 .when(teamFacade)
                 .findTeamByName("Team 1");
 
-        mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/getByName/Team 1"))
+        mockMvc.perform(get(ROOT_URI_TEAMS + "/getByName/Team 1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.name").value("Team 1"))
@@ -121,7 +113,7 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
                 .when(teamFacade)
                 .getTeamsByCountry(CompetitionCountry.CZECH_REPUBLIC);
 
-        mockMvc.perform(get("http://localhost:8080/pa165/ice-hockey-manager/teams/getByCompetitionCountry/CZECH_REPUBLIC"))
+        mockMvc.perform(get(ROOT_URI_TEAMS + "/getByCompetitionCountry/CZECH_REPUBLIC"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("Team 1"))
@@ -132,15 +124,62 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
     @Test
     public void spendMoneyFromBudgetTest() throws Exception {
         doNothing().when(teamFacade).spendMoneyFromBudget(1L, BigDecimal.valueOf(20));
+        TeamDto teamWithLessBudget = createTeams().get(0);
+        teamWithLessBudget.setBudget(BigDecimal.valueOf(80));
+        doReturn(teamWithLessBudget).when(teamFacade).getTeamById(1L);
 
         TeamSpendMoneyDto teamSpendMoneyDto = new TeamSpendMoneyDto();
         teamSpendMoneyDto.setTeamId(1L);
         teamSpendMoneyDto.setAmount(BigDecimal.valueOf(20));
 
-        mockMvc.perform(post("http://localhost:8080/pa165/ice-hockey-manager/teams/spendMoneyFromBudget")
+        mockMvc.perform(post(ROOT_URI_TEAMS + "/spendMoneyFromBudget")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjectToJson(teamSpendMoneyDto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Team 1"))
+                .andExpect(jsonPath("$.budget").value(80));
+    }
+
+    @Test
+    public void getPriceTest() throws Exception {
+        doReturn(BigDecimal.valueOf(500)).when(teamFacade).getTeamPrice(createTeams().get(0).getId());
+
+        mockMvc.perform(get(ROOT_URI_TEAMS + "/1/price"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$").value(500));
+    }
+
+    @Test
+    public void getAttackTest() throws Exception {
+        doReturn(100).when(teamFacade).getTeamAttackSkill(createTeams().get(0).getId());
+
+        mockMvc.perform(get(ROOT_URI_TEAMS + "/1/attack")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(100));
+    }
+
+    @Test
+    public void getDefenseTest() throws Exception {
+        doReturn(50).when(teamFacade).getTeamDefenseSkill(createTeams().get(0).getId());
+
+        mockMvc.perform(get(ROOT_URI_TEAMS + "/1/defense"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$").value(50));
+    }
+
+    @Test
+    public void createTest() throws Exception {
+        List<TeamDto> teamDtos = createTeams();
+        doReturn(1L).when(teamFacade).createTeam(teamDtos.get(0));
+        mockMvc.perform(put(ROOT_URI_TEAMS + ApiUri.SubApiUri.CREATE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJson(teamDtos.get(0))))
+                .andExpect(jsonPath("$.name").value("Team 1"))
+                .andExpect(jsonPath("$.budget").value(100))
+                .andExpect(jsonPath("$.competitionCountry").value("CZECH_REPUBLIC"));
     }
 
     private List<TeamDto> createTeams() {
