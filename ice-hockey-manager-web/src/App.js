@@ -10,6 +10,8 @@ import HockeyPlayersContainer from "./containers/HockeyPlayersContainer/HockeyPl
 import TeamsContainer from "./containers/TeamsContainer/TeamsContainer";
 import HomeContainer from './containers/HomeContainer/HomeContainer';
 import GamesContainer from "./containers/GamesContainer/GamesContainer";
+import TeamDetailContainer from "./containers/TeamsContainer/TeamDetailContainer";
+
 
 // antd
 import { Layout, Menu, Icon } from 'antd';
@@ -29,8 +31,7 @@ class App extends Component {
                 <Sider
                     collapsible
                     collapsed={this.state.collapsed}
-                    onCollapse={this.onCollapse}
-                >
+                    onCollapse={this.onCollapse}>
                     <div className="logo" />
                     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                         <Menu.Item key="1">
@@ -71,6 +72,7 @@ class App extends Component {
                         <Switch>
                             <Route path="/games" component={GamesContainer} />
                             <Route path="/hockeyplayers" component={HockeyPlayersContainer} />
+                            <Route path="/teams/:id" component={TeamDetailContainer}/>
                             <Route path="/teams" component={TeamsContainer} />
                             <Route path="/managers" component={ManagersContainer} />
                             <Route path="/" exact component={HomeContainer} />
