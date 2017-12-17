@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
 import cz.muni.fi.pa165.facade.HumanPlayerFacade;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.rest.ApiUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,21 +88,24 @@ public class TeamController {
         return teamFacade.getTeamDefenseSkill(id);
     }
 
-    @RequestMapping(path = "/create", method = RequestMethod.PUT)
-    public void create(@RequestBody TeamDto teamDto) {
+    @RequestMapping(path = ApiUri.SubApiUri.CREATE, method = RequestMethod.PUT)
+    public TeamDto create(@RequestBody TeamDto teamDto) {
         teamFacade.createTeam(teamDto);
         log.debug("create(createdId = {})", teamDto.getId());
+        return teamDto;
     }
 
     @RequestMapping(path = "/addHockeyPlayer", method = RequestMethod.POST)
-    public void addHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
+    public TeamDto addHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
         teamFacade.addHockeyPlayer(teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
         log.debug("addHockeyPlayer(teamId = {}, hockeyPlayerId = {})", teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
+        return teamFacade.getTeamById(teamAddRemovePlayerDto.getTeamId());
     }
 
     @RequestMapping(path = "/removeHockeyPlayer", method = RequestMethod.POST)
-    public void removeHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
+    public TeamDto removeHockeyPlayer(@RequestBody TeamAddRemovePlayerDto teamAddRemovePlayerDto) {
         teamFacade.removeHockeyPlayer(teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
         log.debug("removeHockeyPlayer(teamId = {}, hockeyPlayerId = {})", teamAddRemovePlayerDto.getTeamId(), teamAddRemovePlayerDto.getHockeyPlayerId());
+        return teamFacade.getTeamById(teamAddRemovePlayerDto.getTeamId());
     }
 }
