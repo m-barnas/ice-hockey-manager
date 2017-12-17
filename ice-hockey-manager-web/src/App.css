@@ -1,0 +1,28 @@
+.App {
+    text-align: center;
+}
+
+.Layout {
+    minHeight: 100vh;
+}
+
+.Header {
+    background: #ffffff;
+}
+
+.Content {
+    margin: 16px;
+}
+
+.Content > * {
+    padding: 24px;
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+.logo {
+    height: 32px;
+    background: rgba(255,255,255,.2);
+    margin: 16px;
+    color: #ffffff;
+}
