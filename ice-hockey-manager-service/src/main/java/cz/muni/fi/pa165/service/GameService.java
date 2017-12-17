@@ -29,7 +29,7 @@ public interface GameService {
     /**
      * Update {@link Game}.
      *
-     * @param game to update
+     * @param game to update (game can not be already played)
      * @return updated game
      */
     Game update(Game game);

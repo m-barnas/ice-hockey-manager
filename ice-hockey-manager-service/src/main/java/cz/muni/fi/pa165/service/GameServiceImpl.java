@@ -9,6 +9,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void create(Game game) {
+        validate(game);
         gameDao.create(game);
     }
 
@@ -51,6 +53,10 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game update(Game game) {
+        validate(game);
+        if (isPlayed(game)) {
+            throw new IllegalArgumentException("Game has been already played.");
+        }
         return gameDao.update(game);
     }
 
@@ -96,9 +102,7 @@ public class GameServiceImpl implements GameService {
      * time is in future or game has been already played (has not null score)
      */
     public void playGame(Game game) {
-        if (game == null) {
-            throw new IllegalArgumentException("Game is null.");
-        }
+        validate(game);
         if (game.getGameState() == null) {
             throw new IllegalArgumentException("Game state is null.");
         }
@@ -111,7 +115,7 @@ public class GameServiceImpl implements GameService {
         if (game.getGameState().equals(GameState.CANCELED)) {
             throw new IllegalArgumentException("Game is canceled.");
         }
-        if ((game.getFirstTeamScore() != null) || (game.getSecondTeamScore() != null)) {
+        if (isPlayed(game)) {
             throw new IllegalArgumentException("Game has been already played.");
         }
         if (game.getStartTime().isAfter(LocalDateTime.now(clock))) {
@@ -124,6 +128,7 @@ public class GameServiceImpl implements GameService {
         int secondTeamScore = countScore(countAverageAttackSkill(secondTeamPlayers), countAverageDefenseSkill(firstTeamPlayers));
         game.setFirstTeamScore(firstTeamScore);
         game.setSecondTeamScore(secondTeamScore);
+        gameDao.update(game);
     }
 
     private double countAverageAttackSkill(List<HockeyPlayer> players) {
@@ -185,5 +190,20 @@ public class GameServiceImpl implements GameService {
                 (attackSkill + attackSkill * percent1 / 100) /
                 (opponentDefenseSkill + opponentDefenseSkill * percent2 / 100)
                 + (fortune / 100 - 0.5));
+    }
+
+    private boolean isPlayed(Game game) {
+        return (game.getFirstTeamScore() != null) || (game.getSecondTeamScore() != null);
+    }
+    
+    private void validate(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("Game is null.");
+        }
+        if (((game.getFirstTeamScore() != null) && (game.getSecondTeamScore() == null)) ||
+            ((game.getFirstTeamScore() == null) && (game.getSecondTeamScore() != null)) ||
+            ((game.getFirstTeam() != null) && (game.getFirstTeam().equals(game.getSecondTeam())))) {
+            throw new IllegalArgumentException("Invalid game");
+        }
     }
 }

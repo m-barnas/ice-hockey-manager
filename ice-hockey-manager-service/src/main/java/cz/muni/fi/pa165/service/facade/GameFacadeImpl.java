@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.dto.GameChangeStartTimeDto;
 import cz.muni.fi.pa165.dto.GameCreateDto;
 import cz.muni.fi.pa165.dto.GameDto;
 import cz.muni.fi.pa165.entity.Game;
+import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.GameState;
 import cz.muni.fi.pa165.facade.GameFacade;
 import cz.muni.fi.pa165.service.GameService;
@@ -33,25 +34,28 @@ public class GameFacadeImpl implements GameFacade {
 	private BeanMappingService beanMappingService;
 
     @Override
-    public void create(GameCreateDto gameCreateDto) {
+    public GameDto create(GameCreateDto gameCreateDto) {
         Game game = beanMappingService.mapTo(gameCreateDto, Game.class);
         game.setFirstTeam(teamService.findById(gameCreateDto.getFirstTeamId()));
         game.setSecondTeam(teamService.findById(gameCreateDto.getSecondTeamId()));
         game.setStartTime(gameCreateDto.getStartTime());
         game.setGameState(GameState.OK);
         gameService.create(game);
+        return beanMappingService.mapTo(game, GameDto.class);
     }
 
     @Override
     public void delete(Long gameId) {
-        Game game = new Game();
-        game.setId(gameId);
+        Game game = gameService.findById(gameId);
         gameService.delete(game);
     }
 
     @Override
     public boolean cancel(Long gameId) {
         Game game = gameService.findById(gameId);
+        if (game == null) {
+            throw new IllegalArgumentException("Game with id " + gameId + " not found");
+        }
         if (game.getGameState() == GameState.CANCELED) {
             return false;
         }
@@ -63,6 +67,9 @@ public class GameFacadeImpl implements GameFacade {
     @Override
     public boolean retrieve(Long gameId) {
         Game game = gameService.findById(gameId);
+        if (game == null) {
+            throw new IllegalArgumentException("Game with id " + gameId + " not found");
+        }
         if (game.getGameState() == GameState.OK) {
             return false;
         }
@@ -72,10 +79,14 @@ public class GameFacadeImpl implements GameFacade {
     }
 
     @Override
-    public void changeStartTime(GameChangeStartTimeDto gameChangeStartTimeDto) {
+    public GameDto changeStartTime(GameChangeStartTimeDto gameChangeStartTimeDto) {
         Game game = gameService.findById(gameChangeStartTimeDto.getId());
+        if (game == null) {
+            throw new IllegalArgumentException("Game with id " + gameChangeStartTimeDto.getId() + " not found");
+        }
         game.setStartTime(gameChangeStartTimeDto.getStartTime());
-        gameService.update(game);
+        Game updatedGame = gameService.update(game);
+        return beanMappingService.mapTo(updatedGame, GameDto.class);
     }
 
     @Override
@@ -86,7 +97,11 @@ public class GameFacadeImpl implements GameFacade {
 
     @Override
     public List<GameDto> findByTeam(Long teamId) {
-        List<Game> games = gameService.findByTeam(teamService.findById(teamId));
+        Team team = teamService.findById(teamId);
+        if (team == null) {
+            throw new IllegalArgumentException("Team with id " + teamId + " not found");
+        }
+        List<Game> games = gameService.findByTeam(team);
         return beanMappingService.mapTo(games, GameDto.class);
     }
 

@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +62,7 @@ public class GameServiceTest extends AbstractTestNGSpringContextTests {
         MockitoAnnotations.initMocks(this);
         clock = Clock.fixed(
                 LocalDateTime.of(2017, 9, 1, 14, 30).toInstant(OffsetDateTime.now().getOffset()),
-                Clock.systemDefaultZone().getZone()
+                ZoneId.of("Europe/Paris")
         );
         gameService.setClock(clock);
 
@@ -80,8 +81,10 @@ public class GameServiceTest extends AbstractTestNGSpringContextTests {
             players2.add(hp);
         }
         team1 = new Team();
+        team1.setName("team1");
         team1.setHockeyPlayers(players1);
         team2 = new Team();
+        team2.setName("team2");
         team2.setHockeyPlayers(players2);
     }
 
@@ -101,6 +104,18 @@ public class GameServiceTest extends AbstractTestNGSpringContextTests {
         }).when(gameDao).create(Matchers.any(Game.class));
 
         gameService.create(gameNow);
+    }
+
+    @Test
+    public void createGameWithBothTeamsSame() {
+        gameNow.setSecondTeam(team1);
+        assertThatThrownBy(() -> gameService.create(gameNow)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void createGameWithSetedOneScore() {
+        gameNow.setSecondTeamScore(1);
+        assertThatThrownBy(() -> gameService.create(gameNow)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -125,6 +140,25 @@ public class GameServiceTest extends AbstractTestNGSpringContextTests {
         }).when(gameDao).update(Matchers.any(Game.class));
 
         gameService.update(gameNow);
+    }
+
+    @Test
+    public void updateGameWithBothTeamsSame() {
+        gameNow.setSecondTeam(team1);
+        assertThatThrownBy(() -> gameService.update(gameNow)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void updateGameWithSetedOneScore() {
+        gameNow.setSecondTeamScore(1);
+        assertThatThrownBy(() -> gameService.update(gameNow)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void updatePlayedGame() {
+        gameNow.setFirstTeamScore(2);
+        gameNow.setSecondTeamScore(1);
+        assertThatThrownBy(() -> gameService.update(gameNow)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

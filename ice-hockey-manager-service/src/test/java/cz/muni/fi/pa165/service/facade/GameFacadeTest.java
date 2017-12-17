@@ -14,6 +14,7 @@ import cz.muni.fi.pa165.service.mappers.BeanMappingService;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import org.mockito.InjectMocks;
@@ -30,7 +31,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -71,7 +71,7 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
         MockitoAnnotations.initMocks(this);
         clock = Clock.fixed(
                 LocalDateTime.of(2017, 9, 1, 14, 30).toInstant(OffsetDateTime.now().getOffset()),
-                Clock.systemDefaultZone().getZone()
+                ZoneId.of("Europe/Paris")
         );
     }
 
@@ -107,7 +107,7 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
         when(beanMappingService.mapTo(games, GameDto.class)).thenReturn(gameDtos);
         when(beanMappingService.mapTo(game, GameDto.class)).thenReturn(gameDto);
     }
-
+    
     @Test
     public void create() {
         when(teamService.findById(1l)).thenReturn(team1);
@@ -119,15 +119,21 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
             assertThat(createdGame.getSecondTeam()).isEqualTo(team2);
             assertThat(createdGame.getStartTime()).isEqualTo(LocalDateTime.now(clock));
             assertThat(createdGame.getGameState()).isEqualTo(GameState.OK);
+            createdGame.setId(1l);
             return null;
         }).when(gameService).create(Matchers.any(Game.class));
         GameCreateDto gameCreateDto = new GameCreateDto();
         gameCreateDto.setFirstTeamId(1l);
         gameCreateDto.setSecondTeamId(2l);
         gameCreateDto.setStartTime(LocalDateTime.now(clock));
-        when(beanMappingService.mapTo(gameCreateDto, Game.class)).thenReturn(game);
+        Game g = new Game();
+        g.setFirstTeam(team1);
+        g.setSecondTeam(team2);
+        g.setStartTime(LocalDateTime.now(clock));
+        when(beanMappingService.mapTo(gameCreateDto, Game.class)).thenReturn(g);
+        when(beanMappingService.mapTo(game, GameDto.class)).thenReturn(gameDto);
 
-        gameFacade.create(gameCreateDto);
+        assertThat(gameFacade.create(gameCreateDto)).isEqualTo(gameDto);
     }
 
     @Test
