@@ -89,6 +89,11 @@
             <artifactId>javax.el</artifactId>
             <scope>test</scope><!-- conflicts with tomcat libraries, needed only for tests anyway -->
         </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${json-path.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -102,6 +107,7 @@
                 <version>${maven-war-plugin.version}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+
                 </configuration>
             </plugin>
 
@@ -113,6 +119,7 @@
                 <version>${tomcat7-maven-plugin.version}</version>
                 <configuration>
                     <path>/</path>
+                    <tomcatLoggingFile>log.txt</tomcatLoggingFile>
                 </configuration>
             </plugin>
         </plugins>
