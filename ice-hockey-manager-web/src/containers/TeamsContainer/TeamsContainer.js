@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import axios from '../../axios';
 import {Table} from 'antd';
+import {Link} from 'react-router-dom';
 
 class TeamsContainer extends Component {
 
@@ -23,33 +24,35 @@ class TeamsContainer extends Component {
             });
     }
 
-    columns = [{
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-    }, {
-        title: 'Competition country',
-        key: 'competitionCountry',
-        render: (value, row, index) => {
-            return <img src={'http://localhost:3000/assets/pics/' + value.competitionCountry + '.png'}/>;
-        },
-    }, {
-        title: 'Number of players',
-        key: 'hockeyPlayersSize',
-        render: (value, row, index) => {
-            return value.hockeyPlayers.length;
-        }
-    }, {
-        title: 'Action',
-        render: (value, row, index) => {
-            return <a href={'/teams/' + value.id}>view</a>;
-        }
+    columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
 
-    }];
+        }, {
+            title: 'Competition country',
+            render: (value, row, index) => {
+                return <img
+                    src={'http://localhost:3000/assets/pics/' + value.competitionCountry + '.png'}
+                    alt={value.competitionCountry}
+                />;
+            },
+        }, {
+            title: 'Number of players',
+            render: (value, row, index) => {
+                return value.hockeyPlayers.length;
+            }
+        }, {
+            title: 'Action',
+            render: (value, row, index) => {
+                return <Link to={'/teams/' + value.id}>view</Link>;
+            }
+
+        }];
 
     render() {
         return (
-            <Table dataSource={this.state.teams} columns={this.columns}/>
+            <Table dataSource={this.state.teams} columns={this.columns} rowKey={'id'}/>
         );
     }
 }

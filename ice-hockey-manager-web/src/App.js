@@ -80,7 +80,7 @@ class App extends Component {
                         </Switch>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
-                        Ice Hockey Manager ©2018 Created by Gold Team
+                        Ice Hockey Manager ©2018 Created by <a href={'https://github.com/m-barnas/ice-hockey-manager'}>Gold Team</a>
                     </Footer>
                 </Layout>
             </Layout>
