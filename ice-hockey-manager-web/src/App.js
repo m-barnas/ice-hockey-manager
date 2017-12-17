@@ -6,7 +6,7 @@ import './App.css';
 
 // containers
 import ManagersContainer from "./containers/ManagersContainer/ManagersContainer";
-import HockeyPlayersContainer from "./containers/HockeyPlayersContainer/HockeyPlayersContainer";
+import HockeyPlayersContainer from "./containers/PlayersContainer/PlayersContainer";
 import TeamsContainer from "./containers/TeamsContainer/TeamsContainer";
 import HomeContainer from './containers/HomeContainer/HomeContainer';
 import GamesContainer from "./containers/GamesContainer/GamesContainer";
