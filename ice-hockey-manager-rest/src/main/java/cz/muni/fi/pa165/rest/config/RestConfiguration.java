@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import cz.muni.fi.pa165.rest.interceptors.AllowOriginInterceptor;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +50,8 @@ public class RestConfiguration extends WebMvcConfigurerAdapter {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH));
+        objectMapper.registerModule(new JSR310Module());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         jsonConverter.setObjectMapper(objectMapper);
         return jsonConverter;

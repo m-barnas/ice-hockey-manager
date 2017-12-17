@@ -11,6 +11,7 @@ import cz.muni.fi.pa165.facade.GameFacade;
 import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI_GAMES;
 import cz.muni.fi.pa165.rest.config.RestConfiguration;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
+import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -18,6 +19,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.mockito.InjectMocks;
 import static org.mockito.Matchers.any;
@@ -108,17 +110,15 @@ public class GameControllerTest extends AbstractTestNGSpringContextTests {
         GameCreateDto gameCreateDto = new GameCreateDto();
         gameCreateDto.setFirstTeamId(1l);
         gameCreateDto.setSecondTeamId(2l);
-//                gameCreateDto.setStartTime(LocalDateTime.now(clock));
+        gameCreateDto.setStartTime(LocalDateTime.now(clock));
 
         when(gameFacade.create(gameCreateDto)).thenReturn(gameDto);
         String GameCreateJson = convertObjectToJson(gameCreateDto);
-//        System.out.println(GameCreateJson);
 
         MvcResult result = mockMvc.perform(post(ROOT_URI_GAMES + "/create")
                 .contentType(MediaType.APPLICATION_JSON).content(GameCreateJson))
                 .andExpect(status().isOk()).andReturn();
         String gameResultJson = result.getResponse().getContentAsString();
-//        System.out.println(gameResultJson);
         assertThat(gameResultJson).isEqualTo(convertObjectToJson(gameDto));
     }
 
@@ -193,18 +193,16 @@ public class GameControllerTest extends AbstractTestNGSpringContextTests {
     public void changeStartTime() throws Exception {
         GameChangeStartTimeDto gameChangeStartTimeDto = new GameChangeStartTimeDto();
         gameChangeStartTimeDto.setId(1l);
-//        gameChangeStartTimeDto.setStartTime(LocalDateTime.now(clock));
+        gameChangeStartTimeDto.setStartTime(LocalDateTime.now(clock));
 
         when(gameFacade.changeStartTime(gameChangeStartTimeDto)).thenReturn(gameDto);
 
         String GameChangeStartTimeJson = convertObjectToJson(gameChangeStartTimeDto);
-//        System.out.println(GameChangeStartTimeJson);
 
         MvcResult result = mockMvc.perform(put(ROOT_URI_GAMES + "/1")
                 .contentType(MediaType.APPLICATION_JSON).content(GameChangeStartTimeJson))
                 .andExpect(status().isOk()).andReturn();
         String gameResultJson = result.getResponse().getContentAsString();
-//        System.out.println(gameResultJson);
         assertThat(gameResultJson).isEqualTo(convertObjectToJson(gameDto));
     }
 
