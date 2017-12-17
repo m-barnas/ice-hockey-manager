@@ -12,12 +12,15 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.muni.fi.pa165.dto.HockeyPlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
+import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
 import cz.muni.fi.pa165.entity.HockeyPlayer;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.facade.TeamFacade;
+import cz.muni.fi.pa165.rest.config.RestConfiguration;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -47,7 +50,7 @@ import java.util.*;
  * Created by Lukas Kotol on 12/16/2017.
  */
 @WebAppConfiguration
-@ContextConfiguration(classes = ServiceConfiguration.class)
+@ContextConfiguration(classes = {ServiceConfiguration.class, RestConfiguration.class})
 public class TeamControllerTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
@@ -60,6 +63,9 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
 
     @Mock
     private TeamFacade teamFacade;
+
+    @Autowired
+    private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
 
     @BeforeClass
     public void setUp() {
@@ -123,18 +129,19 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
                 .andExpect(jsonPath("$.[?(@.id==1)].competitionCountry").value("CZECH_REPUBLIC"));
     }
 
-//    @Test
-//    public void spendMoneyFromBudgetTest() throws Exception {
-//        doNothing().when(teamFacade).spendMoneyFromBudget(1L, BigDecimal.valueOf(20));
-//
-//        Map<String, String> map = new HashMap<>();
-//
-//        MvcResult result = mockMvc.perform(post("http://localhost:8080/pa165/ice-hockey-manager/teams/spendMoneyFromBudget")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .param("teamId", String.valueOf(1))
-//                .param("amount", String.valueOf(20))).andReturn();
-//        String res = result.getResponse().getContentAsString();
-//    }
+    @Test
+    public void spendMoneyFromBudgetTest() throws Exception {
+        doNothing().when(teamFacade).spendMoneyFromBudget(1L, BigDecimal.valueOf(20));
+
+        TeamSpendMoneyDto teamSpendMoneyDto = new TeamSpendMoneyDto();
+        teamSpendMoneyDto.setTeamId(1L);
+        teamSpendMoneyDto.setAmount(BigDecimal.valueOf(20));
+
+        mockMvc.perform(post("http://localhost:8080/pa165/ice-hockey-manager/teams/spendMoneyFromBudget")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJson(teamSpendMoneyDto)))
+                .andExpect(status().isOk());
+    }
 
     private List<TeamDto> createTeams() {
         TeamDto teamDto1 = new TeamDto();
@@ -166,5 +173,10 @@ public class TeamControllerTest extends AbstractTestNGSpringContextTests {
         hockeyPlayerDto.setPrice(BigDecimal.valueOf(500));
         hockeyPlayerDto.setPost(Position.RIGHT_WING);
         return new HashSet<>(Collections.singletonList(hockeyPlayerDto));
+    }
+
+    private String convertObjectToJson(Object object) throws Exception {
+        ObjectMapper mapper = mappingJackson2HttpMessageConverter.getObjectMapper();
+        return mapper.writeValueAsString(object);
     }
 }

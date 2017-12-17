@@ -63,9 +63,10 @@ public class TeamController {
     }
 
     @RequestMapping(path = "/spendMoneyFromBudget", method = RequestMethod.POST)
-    public void spendMoneyFromBudget(@RequestBody TeamSpendMoneyDto teamSpendMoneyDto) throws TeamServiceException {
+    public TeamDto spendMoneyFromBudget(@RequestBody TeamSpendMoneyDto teamSpendMoneyDto) throws TeamServiceException {
         teamFacade.spendMoneyFromBudget(teamSpendMoneyDto.getTeamId(), teamSpendMoneyDto.getAmount());
         log.debug("spendMoneyFromBudget({}, {})", teamSpendMoneyDto.getTeamId(), teamSpendMoneyDto.getAmount());
+        return teamFacade.getTeamById(teamSpendMoneyDto.getTeamId());
     }
 
     @RequestMapping(path = "/{id}/price", method = RequestMethod.GET)
