@@ -54,15 +54,18 @@ class TeamDetailContainer extends Component {
                     hockeyPlayers: [
                         {
                             id: 1,
-                            name: 'P1'
+                            name: 'P1',
+                            price: 100
                         },
                         {
                             id: 2,
-                            name: 'P2'
+                            name: 'P2',
+                            price: 120
                         },
                         {
                             id: 3,
-                            name: 'P3'
+                            name: 'P3',
+                            price: 130
                         }
                     ]
 
@@ -87,8 +90,16 @@ class TeamDetailContainer extends Component {
                 teamId: this.props.match.params.id,
                 hockeyPlayerId: this.state.selectedHockeyPlayerToAdd
             }).then(responseAddPlayer => {
-                this.setState({
-                    team: responseAddPlayer.data
+                axios.post('/teams/spendMoneyFromBudget', {
+                    teamId: this.props.match.params.id,
+                    amount: this.state.hockeyPlayers.filter(function (player) {
+                        return player.id === this.state.selectedHockeyPlayerToAdd;
+                    }.bind(this))[0].price
+                }).then(responseAddPlayer => {
+
+                    this.setState({
+                        team: responseAddPlayer.data
+                    });
                 });
             });
         }
@@ -120,8 +131,7 @@ class TeamDetailContainer extends Component {
                 <Row><h3>Manager: {humanPlayer}</h3></Row>
                 <Row>
                     <Button type="primary" onClick={this.onAddPlayer}>Add player</Button>&nbsp;&nbsp;
-                    <Select style={{width: 200}}
-                            onChange={this.onChangeAddPlayer}>
+                    <Select style={{width: 200}} onChange={this.onChangeAddPlayer}>
                         {this.state.hockeyPlayers.map(function (player, index) {
                             return <Option value={player.id} key={index}>{player.name}</Option>;
                         })}
