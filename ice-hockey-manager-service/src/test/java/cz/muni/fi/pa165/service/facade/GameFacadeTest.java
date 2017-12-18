@@ -104,8 +104,8 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
         games = new ArrayList<>();
         games.add(game);
 
-        when(beanMappingService.mapTo(games, GameDto.class)).thenReturn(gameDtos);
-        when(beanMappingService.mapTo(game, GameDto.class)).thenReturn(gameDto);
+        when(beanMappingService.mapToGame(games, GameDto.class)).thenReturn(gameDtos);
+        when(beanMappingService.mapToGame(game, GameDto.class)).thenReturn(gameDto);
     }
     
     @Test
@@ -131,7 +131,7 @@ public class GameFacadeTest extends AbstractTestNGSpringContextTests {
         g.setSecondTeam(team2);
         g.setStartTime(LocalDateTime.now(clock));
         when(beanMappingService.mapTo(gameCreateDto, Game.class)).thenReturn(g);
-        when(beanMappingService.mapTo(game, GameDto.class)).thenReturn(gameDto);
+        when(beanMappingService.mapToGame(game, GameDto.class)).thenReturn(gameDto);
 
         assertThat(gameFacade.create(gameCreateDto)).isEqualTo(gameDto);
     }

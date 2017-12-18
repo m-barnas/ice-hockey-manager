@@ -41,7 +41,7 @@ public class GameFacadeImpl implements GameFacade {
         game.setStartTime(gameCreateDto.getStartTime());
         game.setGameState(GameState.OK);
         gameService.create(game);
-        return beanMappingService.mapTo(game, GameDto.class);
+        return beanMappingService.mapToGame(game, GameDto.class);
     }
 
     @Override
@@ -86,13 +86,13 @@ public class GameFacadeImpl implements GameFacade {
         }
         game.setStartTime(gameChangeStartTimeDto.getStartTime());
         Game updatedGame = gameService.update(game);
-        return beanMappingService.mapTo(updatedGame, GameDto.class);
+        return beanMappingService.mapToGame(updatedGame, GameDto.class);
     }
 
     @Override
     public GameDto findById(Long gameId) {
         Game game = gameService.findById(gameId);
-        return (game == null) ? null : beanMappingService.mapTo(game, GameDto.class);
+        return (game == null) ? null : beanMappingService.mapToGame(game, GameDto.class);
     }
 
     @Override
@@ -102,21 +102,21 @@ public class GameFacadeImpl implements GameFacade {
             throw new IllegalArgumentException("Team with id " + teamId + " not found");
         }
         List<Game> games = gameService.findByTeam(team);
-        return beanMappingService.mapTo(games, GameDto.class);
+        return beanMappingService.mapToGame(games, GameDto.class);
     }
 
     @Override
     public List<GameDto> findAll() {
-        return beanMappingService.mapTo(gameService.findAll(), GameDto.class);
+        return beanMappingService.mapToGame(gameService.findAll(), GameDto.class);
     }
 
     @Override
     public List<GameDto> findScheduledGames() {
-        return beanMappingService.mapTo(gameService.findScheduledGames(), GameDto.class);
+        return beanMappingService.mapToGame(gameService.findScheduledGames(), GameDto.class);
     }
 
     @Override
     public List<GameDto> playGames() {
-        return beanMappingService.mapTo(gameService.playGames(), GameDto.class);
+        return beanMappingService.mapToGame(gameService.playGames(), GameDto.class);
     }
 }
