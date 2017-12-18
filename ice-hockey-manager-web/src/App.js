@@ -12,6 +12,7 @@ import HomeContainer from './containers/HomeContainer/HomeContainer';
 import GamesContainer from "./containers/GamesContainer/GamesContainer";
 import TeamDetailContainer from "./containers/TeamsContainer/TeamDetailContainer";
 import AuthContainer from "./containers/AuthContainer/AuthContainer";
+import TeamCreateContainer from "./containers/TeamsContainer/TeamCreateContainer";
 
 // antd
 import { Layout, Menu, Icon } from 'antd';
@@ -72,6 +73,7 @@ class App extends Component {
                         <Switch>
                             <Route path="/games" component={GamesContainer} />
                             <Route path="/hockeyplayers" component={HockeyPlayersContainer} />
+                            <Route path="/teams/create" component={TeamCreateContainer}/>
                             <Route path="/teams/:id" component={TeamDetailContainer}/>
                             <Route path="/teams" component={TeamsContainer} />
                             <Route path="/managers" component={ManagersContainer} />
@@ -80,7 +82,7 @@ class App extends Component {
                         </Switch>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
-                        Ice Hockey Manager ©2018 Created by Gold Team
+                        Ice Hockey Manager ©2018 Created by <a href={'https://github.com/m-barnas/ice-hockey-manager'}>Gold Team</a>
                     </Footer>
                 </Layout>
             </Layout>
