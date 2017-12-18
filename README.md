@@ -20,11 +20,11 @@ In another terminal:
 
 ###### Frontend is accessible at: `http:/localhost:3000`
 
-### REST API (all formats are JSON)
+## REST API (all formats are JSON)
 
-#### Teams
+### Teams
 
-##### Create team 
+#### Create team 
 
 URL: `http:/localhost:8080/pa165/rest/teams/create`
 
