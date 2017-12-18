@@ -68,8 +68,8 @@ public class HockeyPlayerController {
 	}
 
 	@RequestMapping(path = "/byteam", method = RequestMethod.GET)
-	public Collection<HockeyPlayerDto> findByTeam(@RequestParam("teamName") String teamName) {
-		return hockeyPlayerFacade.findByTeam(teamFacade.findTeamByName(teamName));
+	public Collection<HockeyPlayerDto> findByTeam(@RequestParam("teamId") Long teamId) {
+		return hockeyPlayerFacade.findByTeam(teamFacade.getTeamById(teamId));
 	}
 
 	@RequestMapping(path = "/freeagents", method = RequestMethod.GET)
