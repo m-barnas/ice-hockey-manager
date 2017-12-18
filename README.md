@@ -224,3 +224,78 @@ URL: `http:/localhost:8080/pa165/rest/managers/byusername?username=username`
 
 method: GET
 
+
+### Games
+
+#### Create game 
+
+URL: `http:/localhost:8080/pa165/rest/games/create`
+
+method: POST
+
+data format: `{  
+  "firstTeamId":1,
+  "secondTeamId":2,  
+  "startTime":"2030-01-01T18:00:00"
+}`
+
+#### Delete game by Id 
+
+URL: `http:/localhost:8080/pa165/rest/games/{id}`
+
+method: DELETE
+
+#### Cancel game
+
+URL: `http:/localhost:8080/pa165/rest/games/cancel/{id}`
+
+method: PUT
+
+#### Retrieve game
+
+URL: `http:/localhost:8080/pa165/rest/games/retrieve/{id}`
+
+method: PUT
+
+##### Change start time
+
+URL: `http:/localhost:8080/pa165/rest/games/{id}`
+
+method: PUT
+
+data format: `{  
+  "id": null,
+  "startTime":"2030-01-01T18:00:00"
+}`
+
+#### Find game by Id
+
+URL: `http:/localhost:8080/pa165/rest/games/{id}`
+
+method: GET
+
+
+#### Get game by team
+
+URL: `http:/localhost:8080/pa165/rest/games/byteam?teamId={id}`
+
+method: GET
+
+#### Get all games
+
+URL: `http:/localhost:8080/pa165/rest/games/all`
+
+method: GET
+
+#### Get scheduled games (not played games with state OK)
+
+URL: `http:/localhost:8080/pa165/rest/games/scheduled`
+
+method: GET
+
+#### Play games
+
+URL: `http:/localhost:8080/pa165/rest/games/play`
+
+method: PUT
+
