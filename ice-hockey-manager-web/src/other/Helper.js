@@ -1,4 +1,4 @@
-const transformCountryLabel = (country) => {
+export const transformCountryLabel = (country) => {
     switch (country) {
         case 'FINLAND':
             return 'Finland';
@@ -15,6 +15,21 @@ const transformCountryLabel = (country) => {
         default:
             return 'Uknown team';
     }
-}
+};
 
-export default transformCountryLabel;
+export const transformPositionLabel = (position) => {
+    switch (position) {
+        case 'GOALKEEPER':
+            return 'Goalkeeper';
+        case 'DEFENSEMAN':
+            return 'Defenseman';
+        case 'LEFT_WING':
+            return 'Left wing';
+        case 'CENTER':
+            return 'Center';
+        case 'RIGHT_WING':
+            return 'Right wing';
+        default:
+            return 'Unknown post';
+    }
+};
