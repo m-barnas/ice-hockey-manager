@@ -10,6 +10,7 @@ import PlayersContainer from "./containers/PlayersContainer/PlayersContainer";
 import TeamsContainer from "./containers/TeamsContainer/TeamsContainer";
 import HomeContainer from './containers/HomeContainer/HomeContainer';
 import GamesContainer from "./containers/GamesContainer/GamesContainer";
+import GamesCreateContainer from "./containers/GamesContainer/GamesCreateContainer";
 import TeamDetailContainer from "./containers/TeamsContainer/TeamDetailContainer";
 import AuthContainer from "./containers/AuthContainer/AuthContainer";
 import TeamCreateContainer from "./containers/TeamsContainer/TeamCreateContainer";
@@ -72,9 +73,10 @@ class App extends Component {
                     <Header className="Header"/>
                     <Content className="Content">
                         <Switch>
-                            <Route path="/games" component={GamesContainer} />
                             <Route path="/players/create" component={PlayerCreateContainer}/>
                             <Route path="/players" component={PlayersContainer} />
+                            <Route path="/games" exact component={GamesContainer} />
+                            <Route path="/games/create" component={GamesCreateContainer} />
                             <Route path="/teams/create" component={TeamCreateContainer}/>
                             <Route path="/teams/:id" component={TeamDetailContainer}/>
                             <Route path="/teams" component={TeamsContainer} />
