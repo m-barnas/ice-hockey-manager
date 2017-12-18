@@ -37,17 +37,17 @@ class GameCreateContainer extends Component {
 //        e.preventDefault();
 //        this.props.form.validateFieldsAndScroll((err, values) => {
 //            if (!err) {
-                console.log("post values "+ values);
-                axios.post('/games/create', values)
-                    .then(response => {
-                        console.log("response"+ response);
-                        this.setState({
-                            redirect: true
-                        });
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
+//                console.log("post values "+ values);
+//                axios.post('/games/create', values)
+//                    .then(response => {
+//                        console.log("response"+ response);
+//                        this.setState({
+//                            redirect: true
+//                        });
+//                    })
+//                    .catch(error => {
+//                        console.log(error);
+//                    });
 //            }
 //        });
     }

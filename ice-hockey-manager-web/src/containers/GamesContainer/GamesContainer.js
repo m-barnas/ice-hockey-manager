@@ -29,7 +29,6 @@ class GamesContainer extends Component {
     }
 
     reload = (view) => {
-        console.log('===========================');
         this.setState({
             loading: true
         });
@@ -201,7 +200,7 @@ class GamesContainer extends Component {
             <Select defaultValue={"ALL"} style={{width: 200}} onChange={this.handleSelectChange}>
                 <Option value="ALL">All</Option>
                 {this.state.teams.map(team => {
-                    return <Option value={team.id}>{team.name}</Option>
+                    return <Option value={team.id} key={team.id}>{team.name}</Option>
                 })}
             </Select>
         );
@@ -224,14 +223,16 @@ class GamesContainer extends Component {
                 <Row>{select}</Row> : null
                 }
 
-                <Button
+                <Button style={{marginTop: 1 + 'em'}}
                     type="secondary"
                     onClick={() => this.changeViewHandler(this.getOtherView(this.state.view))}
                 >Show {this.getOtherView(this.state.view)} games</Button>
 
-                <Row><Link to={'/games/create'}><Button type="primary">Create game</Button></Link></Row>
+                {/*<Row><Link to={'/games/create'}><Button style={{marginTop: 1 + 'em'}}
+                    type="primary"
+                >Create game</Button></Link></Row> */}
 
-                <Table dataSource={games} columns={this.columns} loading={loading} />
+                <Table dataSource={games} columns={this.columns} loading={loading} rowKey={'id'}/>
                 <Button type="secondary" onClick={this.playGamesHandler}>Play games</Button>
             </div>
         );
