@@ -30,11 +30,9 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI;
 import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI_TEAMS;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
