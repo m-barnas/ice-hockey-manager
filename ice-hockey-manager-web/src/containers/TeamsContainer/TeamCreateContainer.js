@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
 import axios from '../../axios';
-import {Link, Redirect} from 'react-router-dom';
-import transformCountryLabel from '../../other/Helper';
+import {Redirect} from 'react-router-dom';
+import {transformCountryLabel} from '../../other/Helper';
 
 import {Form, Input, Select, Button, InputNumber} from 'antd';
 
@@ -24,6 +24,7 @@ class TeamCreateContainer extends Component {
     }
 
     componentDidMount() {
+        console.log("team - start of creating");
         axios.get('/managers/all')
             .then(response => {
                 this.setState({
@@ -36,12 +37,15 @@ class TeamCreateContainer extends Component {
     }
 
     handleSubmit(e) {
+        console.log("team - handling submitted form");
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log("values: ", values);
             if (!err) {
                 axios.put('/teams/create', values)
                     .then(response => {
-                        console.log(response);
+                        console.log("successfully added team");
+                        console.log("response: ", response);
                         this.setState({
                             redirect: true
                         });
@@ -54,6 +58,7 @@ class TeamCreateContainer extends Component {
     }
 
     handleConfirmBlur(e) {
+        console.log("blur confirm");
         const value = e.target.value;
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
     }
@@ -61,6 +66,7 @@ class TeamCreateContainer extends Component {
 
     render() {
         if(this.state.redirect){
+            console.log("redirecting from teams");
            return <Redirect to="/teams"/>;
         }
         const {getFieldDecorator} = this.props.form;

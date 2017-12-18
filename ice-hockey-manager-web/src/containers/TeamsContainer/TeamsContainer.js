@@ -4,7 +4,7 @@ import axios from '../../axios';
 import {Table, Select, Row, Button} from 'antd';
 import {Link} from 'react-router-dom';
 
-import transformCountryLabel from '../../other/Helper';
+import {transformCountryLabel} from '../../other/Helper';
 
 const Option = Select.Option;
 

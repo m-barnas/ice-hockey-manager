@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import axios from '../../axios';
 import {Row, List, Select, Button} from 'antd';
 import {Link} from 'react-router-dom';
-import transformCountryLabel from '../../other/Helper';
+import {transformCountryLabel} from '../../other/Helper';
 
 const Option = Select.Option;
 
@@ -47,36 +47,21 @@ class TeamDetailContainer extends Component {
                         loading: false
                     });
                 }
-                // axios.get('/players/all')
-                //     .then(responseHockeyPlayer => {
-                this.setState({
-                    // TODO prepsat na responseHockeyPlayer.data
-                    hockeyPlayers: [
-                        {
-                            id: 1,
-                            name: 'P1',
-                            price: 100
-                        },
-                        {
-                            id: 2,
-                            name: 'P2',
-                            price: 120
-                        },
-                        {
-                            id: 3,
-                            name: 'P3',
-                            price: 130
-                        }
-                    ]
-
-                })
-                // });
+                this.getFreeAgents();
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
+    getFreeAgents() {
+        axios.get('/players/getFreeAgents')
+            .then(responseHockeyPlayer => {
+                this.setState({
+                    hockeyPlayers: responseHockeyPlayer.data
+                });
+            });
+    }
 
     onChangeAddPlayer(playerId) {
         this.setState({
@@ -103,6 +88,7 @@ class TeamDetailContainer extends Component {
                 });
             });
         }
+        this.getFreeAgents();
     }
 
     onRemovePlayer(playerId) {
@@ -114,6 +100,7 @@ class TeamDetailContainer extends Component {
                 team: responseAddPlayer.data
             });
         });
+        this.getFreeAgents();
     }
 
     render() {
