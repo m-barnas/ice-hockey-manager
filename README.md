@@ -2,7 +2,7 @@
 Manage your favorite hockey team!
 
 ### Run the app [prod]
-`mvn clean install && cd ice-hockey-manager-web mvn jetty:run-war`
+`mvn clean install && cd ice-hockey-manager-web && mvn jetty:run-war`
 
 ###### Rest is accessible at: `http:/localhost:8080/pa165/rest`
 

@@ -25,7 +25,7 @@ class PlayerCreateContainer extends Component {
     }
 
     handleSubmit(e) {
-        console.log("handling submitted form");
+        console.log("player - handling submitted form");
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("values: ", values);

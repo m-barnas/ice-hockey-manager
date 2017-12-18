@@ -29,7 +29,7 @@ class TeamsContainer extends Component {
             render: (value, row, index) => {
                 return <img
                     src={'http://localhost:3000/assets/pics/' + value.competitionCountry + '.png'}
-                    alt={value.competitionCountry}
+                    alt={transformCountryLabel(value.competitionCountry)}
                 />;
             },
         }, {
