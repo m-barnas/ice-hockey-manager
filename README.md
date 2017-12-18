@@ -20,7 +20,7 @@ In another terminal:
 
 ###### Frontend is accessible at: `http:/localhost:3000`
 
-### REST API
+### REST API (all formats are JSON)
 
 #### Teams
 
@@ -28,11 +28,9 @@ In another terminal:
 
 URL: `http:/localhost:8080/pa165/rest/teams/create`
 
-method: POST 
+method: PUT 
 
-format: JSON
-
-data: `{  
+data format: `{  
   "name":"HC Sparta test d Praha",
   "competitionCountry":"CZECH_REPUBLIC",  
   "humanPlayerId":null,   
@@ -42,4 +40,86 @@ data: `{
 #### Get all teams
 
 URL: `http:/localhost:8080/pa165/rest/teams/all`
+
+method: GET
+
+#### Find team by Id 
+
+URL: `http:/localhost:8080/pa165/rest/teams/{id}`
+
+method: GET
+
+
+#### Get team by name 
+
+URL: `http:/localhost:8080/pa165/rest/teams/getByName/{name}`
+
+method: GET
+
+
+#### Delete team by Id 
+
+URL: `http:/localhost:8080/pa165/rest/teams/{id}`
+
+method: DELETE
+
+#### Get teams by competition country 
+
+URL: `http:/localhost:8080/pa165/rest/teams/getByCompetitionCountry/{competitionCountry}`
+
+method: GET
+
+##### Spend money from team budget 
+
+URL: `http:/localhost:8080/pa165/rest/teams/spendMoneyFromBudget`
+
+method: POST 
+
+data format: `{  
+  "teamId": 1,
+  "amount": 20
+}`
+
+#### Get price of team
+
+URL: `http:/localhost:8080/pa165/rest/teams/{id}/price`
+
+method: GET
+
+#### Get attack power of team
+
+URL: `http:/localhost:8080/pa165/rest/teams/{id}/attack`
+
+method: GET
+
+#### Get defense power of team
+
+URL: `http:/localhost:8080/pa165/rest/teams/{id}/defense`
+
+method: GET
+
+##### Add hockey player to team
+
+URL: `http:/localhost:8080/pa165/rest/teams/addHockeyPlayer`
+
+method: POST 
+
+data format: `{  
+  "teamId": 1,
+  "hockeyPlayerId": 1
+}`
+
+##### Remove hockey player from team 
+
+URL: `http:/localhost:8080/pa165/rest/teams/removeHockeyPlayer`
+
+method: POST 
+
+data format: `{  
+  "teamId": 1,
+  "hockeyPlayerId": 1
+}`
+
+
+
 
