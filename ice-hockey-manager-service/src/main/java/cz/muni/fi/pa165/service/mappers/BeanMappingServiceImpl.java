@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.service.mappers;
 
+import cz.muni.fi.pa165.dto.GameDto;
 import cz.muni.fi.pa165.dto.TeamDto;
+import cz.muni.fi.pa165.entity.Game;
 import cz.muni.fi.pa165.entity.Team;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,26 @@ public class BeanMappingServiceImpl implements BeanMappingService {
                 teamDto.setHumanPlayerId(object.getHumanPlayer().getId());
             }
             mappedCollection.add(teamDto);
+        }
+        return mappedCollection;
+    }
+    
+    @Override
+    public GameDto mapToGame(Game u, Class<GameDto> gameDtoClass) {
+        GameDto gameDto = dozer.map(u, gameDtoClass);
+        gameDto.setFirstTeamDto(this.mapTo(u.getFirstTeam(), TeamDto.class));
+        gameDto.setSecondTeamDto(this.mapTo(u.getSecondTeam(), TeamDto.class));
+        return gameDto;
+    }
+    
+    @Override
+    public List<GameDto> mapToGame(List<Game> games, Class<GameDto> gameDtoClass) {
+        List<GameDto> mappedCollection = new ArrayList<>();
+        for (Game object : games) {
+            GameDto gameDto = dozer.map(object, gameDtoClass);
+            gameDto.setFirstTeamDto(this.mapTo(object.getFirstTeam(), TeamDto.class));
+            gameDto.setSecondTeamDto(this.mapTo(object.getSecondTeam(), TeamDto.class));
+            mappedCollection.add(gameDto);
         }
         return mappedCollection;
     }
