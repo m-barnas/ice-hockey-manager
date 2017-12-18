@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
-import cz.muni.fi.pa165.rest.interceptors.AllowOriginInterceptor;
+//import cz.muni.fi.pa165.rest.interceptors.AllowOriginInterceptor;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -32,10 +32,10 @@ import java.util.Locale;
 @ComponentScan(basePackages = {"cz.muni.fi.pa165.rest.controllers"})
 public class RestConfiguration extends WebMvcConfigurerAdapter {
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AllowOriginInterceptor());
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(new AllowOriginInterceptor());
+//    }
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

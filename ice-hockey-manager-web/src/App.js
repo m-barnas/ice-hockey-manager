@@ -12,6 +12,7 @@ import HomeContainer from './containers/HomeContainer/HomeContainer';
 import GamesContainer from "./containers/GamesContainer/GamesContainer";
 import TeamDetailContainer from "./containers/TeamsContainer/TeamDetailContainer";
 import AuthContainer from "./containers/AuthContainer/AuthContainer";
+import TeamCreateContainer from "./containers/TeamsContainer/TeamCreateContainer";
 
 // antd
 import { Layout, Menu, Icon } from 'antd';
@@ -72,6 +73,7 @@ class App extends Component {
                         <Switch>
                             <Route path="/games" component={GamesContainer} />
                             <Route path="/hockeyplayers" component={HockeyPlayersContainer} />
+                            <Route path="/teams/create" component={TeamCreateContainer}/>
                             <Route path="/teams/:id" component={TeamDetailContainer}/>
                             <Route path="/teams" component={TeamsContainer} />
                             <Route path="/managers" component={ManagersContainer} />

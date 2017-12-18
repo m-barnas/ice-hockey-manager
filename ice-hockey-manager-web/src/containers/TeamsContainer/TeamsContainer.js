@@ -1,27 +1,22 @@
 import React, {Component} from 'react';
 
 import axios from '../../axios';
-import {Table} from 'antd';
+import {Table, Select, Row, Button} from 'antd';
 import {Link} from 'react-router-dom';
 
+import transformCountryLabel from '../../other/Helper';
+
+const Option = Select.Option;
+
 class TeamsContainer extends Component {
-
-    state = {
-        teams: [],
-        loading: true
-    };
-
-    componentDidMount() {
-        axios.get('/teams/all')
-            .then(response => {
-                this.setState({
-                    teams: response.data,
-                    loading: false
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    constructor(props) {
+        super(props);
+        this.state = {
+            teams: [],
+            loading: true
+        };
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.getAllTeams = this.getAllTeams.bind(this);
     }
 
     columns = [
@@ -50,9 +45,62 @@ class TeamsContainer extends Component {
 
         }];
 
+    componentDidMount() {
+        this.getAllTeams();
+    }
+
+    getAllTeams() {
+        axios.get('/teams/all')
+            .then(response => {
+                this.setState({
+                    teams: response.data,
+                    loading: false
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    handleSelectChange(selected) {
+        this.setState({
+            loading: true
+        });
+        if (selected === "ALL") {
+            this.getAllTeams();
+        } else {
+            axios.get('/teams/getByCompetitionCountry/' + selected)
+                .then(response => {
+                    this.setState({
+                        teams: response.data,
+                        loading: false
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+    }
+
     render() {
+        let select = <div>Choose teams by country  &nbsp; &nbsp;
+            <Select defaultValue={"ALL"} style={{width: 200}} onChange={this.handleSelectChange}>
+                <Option value="ALL">All</Option>
+                <Option value="CZECH_REPUBLIC">{transformCountryLabel("CZECH_REPUBLIC")}</Option>
+                <Option value="ENGLAND">{transformCountryLabel("ENGLAND")}</Option>
+                <Option value="SLOVAKIA">{transformCountryLabel("SLOVAKIA")}</Option>
+                <Option value="GERMANY">{transformCountryLabel("GERMANY")}</Option>
+                <Option value="FINLAND">{transformCountryLabel("FINLAND")}</Option>
+                <Option value="FRANCE">{transformCountryLabel("FRANCE")}</Option>
+            </Select>
+        </div>;
+
         return (
-            <Table dataSource={this.state.teams} columns={this.columns} rowKey={'id'}/>
+            <div>
+                <Row>{select}</Row>
+                <Row><Link to={'/teams/create'}><Button type="primary">Create team</Button></Link></Row>
+                <Table dataSource={this.state.teams} columns={this.columns} rowKey={'id'}/>
+            </div>
         );
     }
 }
