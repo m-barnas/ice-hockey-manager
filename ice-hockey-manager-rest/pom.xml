@@ -112,7 +112,6 @@
                 <version>${maven-war-plugin.version}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-
                 </configuration>
             </plugin>
 
@@ -123,7 +122,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>${tomcat7-maven-plugin.version}</version>
                 <configuration>
-                    <path>/</path>
+                    <path>/pa165/rest</path>
                 </configuration>
             </plugin>
         </plugins>

@@ -40,4 +40,9 @@ public class HumanPlayerController {
         return humanPlayerFacade.findByUsername(username);
     }
 
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") long id) {
+        humanPlayerFacade.delete(id);
+    }
+
 }
