@@ -38,3 +38,8 @@ data: `{
   "humanPlayerId":null,   
   "budget":7000.00    
 }`
+
+#### Get all teams
+
+URL: `http:/localhost:8080/pa165/rest/teams/all`
+
