@@ -54,7 +54,6 @@ class HockeyPlayersContainer extends Component {
     render() {
         return (
             <div>
-                <button onClick={}></button>
                 <Table dataSource={this.state.players} columns={this.columns}/>
             </div>
         );
