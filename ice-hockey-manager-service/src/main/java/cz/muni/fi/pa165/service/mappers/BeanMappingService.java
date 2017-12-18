@@ -1,7 +1,9 @@
 package cz.muni.fi.pa165.service.mappers;
 
 import cz.muni.fi.pa165.dao.TeamDao;
+import cz.muni.fi.pa165.dto.GameDto;
 import cz.muni.fi.pa165.dto.TeamDto;
+import cz.muni.fi.pa165.entity.Game;
 import cz.muni.fi.pa165.entity.Team;
 import org.dozer.Mapper;
 
@@ -22,6 +24,10 @@ public interface BeanMappingService {
     public TeamDto mapTo(Team u, Class<TeamDto> teamDtoClass);
 
     public List<TeamDto> mapTo(List<Team> teams, Class<TeamDto> teamDtoClass);
+
+    public GameDto mapToGame(Game u, Class<GameDto> gameDtoClass);
+
+    public List<GameDto> mapToGame(List<Game> games, Class<GameDto> gameDtoClass);
 
     public Mapper getMapper();
 }
