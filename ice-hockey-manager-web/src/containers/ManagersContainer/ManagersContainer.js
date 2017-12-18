@@ -38,11 +38,11 @@ class ManagersContainer extends Component {
                 loading={loading}
                 dataSource={managers}
                 renderItem={manager => (
-                    <List.Item actions={[<a>edit</a>, <a>more</a>]}>
+                    <List.Item >
                         <List.Item.Meta
                             avatar={<Avatar className="Avatar" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                             title={manager.username}
-                            description="Team Name here"
+                            description="Dummy description"
                         />
                     </List.Item>
                 )}

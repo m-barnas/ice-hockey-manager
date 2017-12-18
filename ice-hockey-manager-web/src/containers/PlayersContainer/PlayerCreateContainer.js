@@ -1,50 +1,38 @@
 import React, {Component} from 'react';
-
-import axios from '../../axios';
 import {Redirect} from 'react-router-dom';
-import {transformCountryLabel} from '../../other/Helper';
+import axios from "../../axios";
+import {transformPositionLabel} from "../../other/Helper";
 
 import {Form, Input, Select, Button, InputNumber} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-
-class TeamCreateContainer extends Component {
+class PlayerCreateContainer extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             confirmDirty: false,
-            managers: [],
             redirect: false
-
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
-        console.log("team - start of creating");
-        axios.get('/managers/all')
-            .then(response => {
-                this.setState({
-                    managers: response.data,
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        console.log("start of creating a player");
+        this.forceUpdate();
     }
 
     handleSubmit(e) {
-        console.log("team - handling submitted form");
+        console.log("player - handling submitted form");
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("values: ", values);
             if (!err) {
-                axios.put('/teams/create', values)
+                axios.put('/players/create', values)
                     .then(response => {
-                        console.log("successfully added team");
+                        console.log("successfully added player");
                         console.log("response: ", response);
                         this.setState({
                             redirect: true
@@ -53,6 +41,8 @@ class TeamCreateContainer extends Component {
                     .catch(error => {
                         console.log(error);
                     });
+            } else {
+                console.log("error during player creation");
             }
         });
     }
@@ -63,14 +53,12 @@ class TeamCreateContainer extends Component {
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
     }
 
-
     render() {
         if(this.state.redirect){
-            console.log("redirecting from teams");
-           return <Redirect to="/teams"/>;
+            console.log("redirecting from players");
+            return <Redirect to="/players"/>;
         }
         const {getFieldDecorator} = this.props.form;
-
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -93,10 +81,6 @@ class TeamCreateContainer extends Component {
                 },
             },
         };
-        let initValueManager;
-        if (this.state.managers[0] !== undefined) {
-            initValueManager = this.state.managers[0].id;
-        }
         return (
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
@@ -105,7 +89,7 @@ class TeamCreateContainer extends Component {
                 >
                     {getFieldDecorator('name', {
                         rules: [{
-                            required: true, message: 'Please input your team name!',
+                            required: true, message: 'Please input player\'s full name!',
                         }],
                     })(
                         <Input/>
@@ -113,66 +97,71 @@ class TeamCreateContainer extends Component {
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
-                    label="Country"
+                    label="Position"
                 >
-                    {getFieldDecorator('competitionCountry', {
+                    {getFieldDecorator('position', {
                         rules: [
-                            {required: true, message: 'Please select your country!'},
+                            {required: true, message: 'Please select player\'s position!'},
                         ],
-                        initialValue: 'CZECH_REPUBLIC'
+                        initialValue: 'CENTER'
                     })(
                         <Select>
-                            <Option value="CZECH_REPUBLIC">{transformCountryLabel("CZECH_REPUBLIC")}</Option>
-                            <Option value="ENGLAND">{transformCountryLabel("ENGLAND")}</Option>
-                            <Option value="SLOVAKIA">{transformCountryLabel("SLOVAKIA")}</Option>
-                            <Option value="GERMANY">{transformCountryLabel("GERMANY")}</Option>
-                            <Option value="FINLAND">{transformCountryLabel("FINLAND")}</Option>
-                            <Option value="FRANCE">{transformCountryLabel("FRANCE")}</Option>
+                            <Option value="CENTER">{transformPositionLabel("CENTER")}</Option>
+                            <Option value="LEFT_WING">{transformPositionLabel("LEFT_WING")}</Option>
+                            <Option value="RIGHT_WING">{transformPositionLabel("RIGHT_WING")}</Option>
+                            <Option value="DEFENSEMAN">{transformPositionLabel("DEFENSEMAN")}</Option>
+                            <Option value="GOALKEEPER">{transformPositionLabel("GOALKEEPER")}</Option>
                         </Select>
                     )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
-                    label="Manager"
-
+                    label="Attack Skill"
                 >
-                    {getFieldDecorator('humanPlayerId', {
+                    {getFieldDecorator('attSkill', {
                         rules: [
-                            {required: true, message: 'Please select your manager!'},
+                            {required: true, message: 'Please set player\'s attack skill!'},
                         ],
-                        initialValue: initValueManager
+                        initialValue: "50"
                     })(
-                        <Select>
-                            {this.state.managers.map(function (manager, index) {
-                                return <Option value={manager.id} key={index}>{manager.username}</Option>;
-                            })}
-                        </Select>
+                        <InputNumber min={1} max={99}/>
                     )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
-                    label="Budget"
-
+                    label="Defense Skill"
                 >
-                    {getFieldDecorator('budget', {
+                    {getFieldDecorator('defSkill', {
                         rules: [
-                            {required: true, message: 'Please set your budget!'},
+                            {required: true, message: 'Please set player\'s defense skill!'},
                         ],
-                        initialValue: "100"
+                        initialValue: "50"
+                    })(
+                        <InputNumber min={1} max={99}/>
+                    )}
+                </FormItem>
+                <FormItem
+                    {...formItemLayout}
+                    label="Price"
+                >
+                    {getFieldDecorator('price', {
+                        rules: [
+                            {required: true, message: 'Please set player\'s price!'},
+                        ],
+                        initialValue: "1"
                     })(
                         <InputNumber min={1}/>
                     )}
                 </FormItem>
-
                 <FormItem {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">Create</Button>
                 </FormItem>
             </Form>
         );
     }
-
 }
 
-const WrappedCreateTeam = Form.create()(TeamCreateContainer);
 
-export default WrappedCreateTeam;
+const WrappedCreatePlayer = Form.create()(PlayerCreateContainer);
+
+export default WrappedCreatePlayer;

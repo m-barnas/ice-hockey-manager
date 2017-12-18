@@ -6,13 +6,14 @@ import './App.css';
 
 // containers
 import ManagersContainer from "./containers/ManagersContainer/ManagersContainer";
-import HockeyPlayersContainer from "./containers/PlayersContainer/PlayersContainer";
+import PlayersContainer from "./containers/PlayersContainer/PlayersContainer";
 import TeamsContainer from "./containers/TeamsContainer/TeamsContainer";
 import HomeContainer from './containers/HomeContainer/HomeContainer';
 import GamesContainer from "./containers/GamesContainer/GamesContainer";
 import TeamDetailContainer from "./containers/TeamsContainer/TeamDetailContainer";
 import AuthContainer from "./containers/AuthContainer/AuthContainer";
 import TeamCreateContainer from "./containers/TeamsContainer/TeamCreateContainer";
+import PlayerCreateContainer from "./containers/PlayersContainer/PlayerCreateContainer";
 
 // antd
 import { Layout, Menu, Icon } from 'antd';
@@ -48,7 +49,7 @@ class App extends Component {
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="3">
-                            <Link to="/hockeyplayers">
+                            <Link to="/players">
                                 <Icon type="user-add" />
                                 <span>Hockey Players</span>
                             </Link>
@@ -72,7 +73,8 @@ class App extends Component {
                     <Content className="Content">
                         <Switch>
                             <Route path="/games" component={GamesContainer} />
-                            <Route path="/hockeyplayers" component={HockeyPlayersContainer} />
+                            <Route path="/players/create" component={PlayerCreateContainer}/>
+                            <Route path="/players" component={PlayersContainer} />
                             <Route path="/teams/create" component={TeamCreateContainer}/>
                             <Route path="/teams/:id" component={TeamDetailContainer}/>
                             <Route path="/teams" component={TeamsContainer} />

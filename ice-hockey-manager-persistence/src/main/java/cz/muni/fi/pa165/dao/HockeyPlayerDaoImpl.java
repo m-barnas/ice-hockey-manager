@@ -64,6 +64,12 @@ public class HockeyPlayerDaoImpl implements HockeyPlayerDao {
 				.getResultList();
 	}
 
+	public List<HockeyPlayer> findFreeAgents() {
+		return em.createQuery("select h from HockeyPlayer h where h.team is null",
+				HockeyPlayer.class)
+				.getResultList();
+	}
+
 	@Override
 	public List<HockeyPlayer> findByPriceLessOrEqualThan(BigDecimal price) {
 		return em.createQuery("select h from HockeyPlayer h where h.price <= :price",

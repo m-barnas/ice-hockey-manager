@@ -4,7 +4,7 @@ import axios from '../../axios';
 import {Table, Select, Row, Button} from 'antd';
 import {Link} from 'react-router-dom';
 
-import transformCountryLabel from '../../other/Helper';
+import {transformCountryLabel} from '../../other/Helper';
 
 const Option = Select.Option;
 
@@ -29,7 +29,7 @@ class TeamsContainer extends Component {
             render: (value, row, index) => {
                 return <img
                     src={'http://localhost:3000/assets/pics/' + value.competitionCountry + '.png'}
-                    alt={value.competitionCountry}
+                    alt={transformCountryLabel(value.competitionCountry)}
                 />;
             },
         }, {

@@ -71,7 +71,7 @@ public class HockeyPlayerServiceImpl implements HockeyPlayerService {
 
 	@Override
 	public List<HockeyPlayer> findFreeAgents() {
-		return playerDao.findByTeam(null);
+		return playerDao.findFreeAgents();
 	}
 
 	@Override

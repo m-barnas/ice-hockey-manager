@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author Jakub Hruska jhruska@mail.muni.cz

@@ -2,7 +2,7 @@
 Manage your favorite hockey team!
 
 ### Run the app [prod]
-`mvn clean install && cd ice-hockey-manager-web mvn jetty:run-war`
+`mvn clean install && cd ice-hockey-manager-web && mvn jetty:run-war`
 
 ###### Rest is accessible at: `http:/localhost:8080/pa165/rest`
 
@@ -120,6 +120,107 @@ data format: `{
   "hockeyPlayerId": 1
 }`
 
+### Hockey Players
+
+#### Create player 
+
+URL: `http:/localhost:8080/pa165/rest/players/create`
+
+method: PUT 
+
+data format: `{  
+  "name":"Jaromir Jagr",
+  "post":"RIGHT_WING",  
+  "attSkill":99,
+  "defSkill":15,   
+  "price":100.00    
+}`
+
+#### Get all players
+
+URL: `http:/localhost:8080/pa165/rest/players/all`
+
+method: GET
+
+##### Get player by team
+
+URL: `http:/localhost:8080/pa165/rest/players/getByTeam/{teamId}`
+
+method: GET 
+
+#### Get free agents (players without a team)
+
+URL: `http:/localhost:8080/pa165/rest/players/getFreeAgents`
+
+method: GET
+
+#### Find player by id 
+
+URL: `http:/localhost:8080/pa165/rest/players/{id}`
+
+method: GET
 
 
+#### Get player by name 
+
+URL: `http:/localhost:8080/pa165/rest/players/getByName/{name}`
+
+method: GET
+
+
+#### Delete player by Id 
+
+URL: `http:/localhost:8080/pa165/rest/players/{id}`
+
+method: DELETE
+
+#### Get player by position 
+
+URL: `http:/localhost:8080/pa165/rest/players/getByPost/{post}`
+
+method: GET
+
+#### Get player by attack skill
+
+URL: `http:/localhost:8080/pa165/rest/players/getByAttSkill/{attSkill}`
+
+method: GET
+
+#### Get player by defense skill
+
+URL: `http:/localhost:8080/pa165/rest/players/getByDefSkill/{defSkill}`
+
+method: GET
+
+#### Get player by price
+
+URL: `http:/localhost:8080/pa165/rest/players/getByPrice/{price}`
+
+method: GET
+
+### Managers
+
+#### Get all managers
+
+URL: `http:/localhost:8080/pa165/rest/managers/all`
+
+method: GET
+
+#### Find manager by Id 
+
+URL: `http:/localhost:8080/pa165/rest/managers/{id}`
+
+method: GET
+
+#### Find manager by email 
+
+URL: `http:/localhost:8080/pa165/rest/managers/byemail?email=email`
+
+method: GET
+
+#### Find manager by username
+
+URL: `http:/localhost:8080/pa165/rest/managers/byusername?username=username`
+
+method: GET
 
