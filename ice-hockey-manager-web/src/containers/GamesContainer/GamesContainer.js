@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import axios from '../../axios';
 import {Table, Select, Row, Button} from 'antd';
+import {Link} from 'react-router-dom';
 
 const Option = Select.Option;
 
@@ -157,7 +158,6 @@ class GamesContainer extends Component {
 //        console.log(numPlayedGames);
 //        if (numPlayedGames > 0) {
             this.reload(this.state.view);
-//        }
     }
 
     handleSelectChange = (selected) => {
@@ -228,6 +228,8 @@ class GamesContainer extends Component {
                     type="secondary"
                     onClick={() => this.changeViewHandler(this.getOtherView(this.state.view))}
                 >Show {this.getOtherView(this.state.view)} games</Button>
+
+                <Row><Link to={'/games/create'}><Button type="primary">Create game</Button></Link></Row>
 
                 <Table dataSource={games} columns={this.columns} loading={loading} />
                 <Button type="secondary" onClick={this.playGamesHandler}>Play games</Button>
