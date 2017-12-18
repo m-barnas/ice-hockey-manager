@@ -98,7 +98,7 @@ URL: `http:/localhost:8080/pa165/rest/teams/{id}/defense`
 
 method: GET
 
-##### Add hockey player to team
+#### Add hockey player to team
 
 URL: `http:/localhost:8080/pa165/rest/teams/addHockeyPlayer`
 
@@ -109,7 +109,7 @@ data format: `{
   "hockeyPlayerId": 1
 }`
 
-##### Remove hockey player from team 
+#### Remove hockey player from team 
 
 URL: `http:/localhost:8080/pa165/rest/teams/removeHockeyPlayer`
 
