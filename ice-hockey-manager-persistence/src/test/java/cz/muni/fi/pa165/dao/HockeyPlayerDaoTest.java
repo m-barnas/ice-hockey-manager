@@ -112,6 +112,16 @@ public class HockeyPlayerDaoTest extends AbstractTestNGSpringContextTests {
         assertThat(hockeyPlayerDao.findByTeam(team)).contains(hockeyPlayer);
     }
 
+
+    @Test
+    public void findFreeAgents() {
+        hockeyPlayer.setTeam(null);
+        hockeyPlayerDao.create(hockeyPlayer);
+
+        assertThat(hockeyPlayerDao.findFreeAgents()).contains(hockeyPlayer);
+    }
+
+
     @Test
     public void findAll() {
         hockeyPlayerDao.create(hockeyPlayer);

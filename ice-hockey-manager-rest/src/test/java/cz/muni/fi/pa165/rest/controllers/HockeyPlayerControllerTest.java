@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,12 +88,12 @@ public class HockeyPlayerControllerTest extends AbstractTestNGSpringContextTests
 
 	@BeforeMethod
 	public void prepareTestPlayers() {
-		hasek = createPlayer(1L, "Dominik Hašek", Position.GOALKEEPER, 1, 95, BigDecimal.valueOf(90));
-		kaberle = createPlayer(2L, "Tomáš Kaberle", Position.DEFENSEMAN, 20, 80, BigDecimal.valueOf(50));
-		zidlicky = createPlayer(3L, "Marek Židlický", Position.DEFENSEMAN, 25, 70, BigDecimal.valueOf(80));
-		jagr = createPlayer(4L, "Jaromír Jágr", Position.RIGHT_WING, 99, 10, BigDecimal.valueOf(100));
-		elias = createPlayer(5L, "Patrik Eliáš", Position.CENTER, 70, 65, BigDecimal.valueOf(70));
-		hemsky = createPlayer(6L, "Aleš Hemský", Position.LEFT_WING, 80, 50, BigDecimal.valueOf(60));
+		hasek = createPlayer(1L, "Dominik Hasek", Position.GOALKEEPER, 1, 95, BigDecimal.valueOf(90));
+		kaberle = createPlayer(2L, "Tomas Kaberle", Position.DEFENSEMAN, 20, 80, BigDecimal.valueOf(50));
+		zidlicky = createPlayer(3L, "Marek Zidlicky", Position.DEFENSEMAN, 25, 70, BigDecimal.valueOf(80));
+		jagr = createPlayer(4L, "Jaromir Jagr", Position.RIGHT_WING, 99, 10, BigDecimal.valueOf(100));
+		elias = createPlayer(5L, "Patrik Elias", Position.CENTER, 70, 65, BigDecimal.valueOf(70));
+		hemsky = createPlayer(6L, "Ales Hemsky", Position.LEFT_WING, 80, 50, BigDecimal.valueOf(60));
 
 		kometa = new TeamDto();
 		kometa.setId(1L);
@@ -102,8 +102,10 @@ public class HockeyPlayerControllerTest extends AbstractTestNGSpringContextTests
 		kometa.setHockeyPlayers(Stream.of(hasek, kaberle, jagr, elias).collect(Collectors.toSet()));
 		hasek.setTeam(kometa);
 		kaberle.setTeam(kometa);
+		zidlicky.setTeam(null);
 		jagr.setTeam(kometa);
 		elias.setTeam(kometa);
+		hemsky.setTeam(null);
 	}
 
 	@Test
@@ -111,7 +113,7 @@ public class HockeyPlayerControllerTest extends AbstractTestNGSpringContextTests
 		when(hockeyPlayerFacade.create(hasek)).thenReturn(1L);
 		String hasekJson = convertObjectToJson(hasek);
 
-		MvcResult result = mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/create")
+		MvcResult result = mockMvc.perform(put(ROOT_URI_HOCKEY_PLAYERS + "/create")
 				.contentType(MediaType.APPLICATION_JSON).content(hasekJson))
 				.andExpect(status().isOk()).andReturn();
 		String resultJson = result.getResponse().getContentAsString();
@@ -133,8 +135,8 @@ public class HockeyPlayerControllerTest extends AbstractTestNGSpringContextTests
 		mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/all"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Dominik Hašek"))
-				.andExpect(jsonPath("$.[?(@.id==2)].name").value("Tomáš Kaberle"))
+				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Dominik Hasek"))
+				.andExpect(jsonPath("$.[?(@.id==2)].name").value("Tomas Kaberle"))
 				.andExpect(jsonPath("$.[?(@.id==2)].price").value(50));
 
 	}
@@ -146,10 +148,10 @@ public class HockeyPlayerControllerTest extends AbstractTestNGSpringContextTests
 				.when(hockeyPlayerFacade)
 				.findByTeam(kometa);
 
-		mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/byteam?teamId=1"))
+		mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/getByTeam/1"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Dominik Hašek"))
+				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Dominik Hasek"))
 				.andExpect(jsonPath("$.[?(@.id==3)]").doesNotExist());
 	}
 
@@ -159,12 +161,14 @@ public class HockeyPlayerControllerTest extends AbstractTestNGSpringContextTests
 				.when(hockeyPlayerFacade)
 				.findFreeAgents();
 
-		mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/freeagents"))
+		mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/getFreeAgents"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$.[?(@.id==3)].name").value("Marek Židlický"))
+				.andExpect(jsonPath("$").isNotEmpty())
+				.andExpect(jsonPath("$.[?(@.id==3)].name").value("Marek Zidlicky"))
 				.andExpect(jsonPath("$.[?(@.id==3)].team").doesNotExist())
-				.andExpect(jsonPath("$.[?(@.id==6)].name").value("Aleš Hemský"))
+				.andExpect(jsonPath("$.[?(@.id==6)].name").value("Ales Hemsky"))
+				.andExpect(jsonPath("$.[?(@.id==6)].team").doesNotExist())
 				.andExpect(jsonPath("$.[?(@.id==1)]").doesNotExist())
 				.andExpect(jsonPath("$.[?(@.id==2)]").doesNotExist())
 				.andExpect(jsonPath("$.[?(@.id==4)]").doesNotExist())
@@ -173,13 +177,13 @@ public class HockeyPlayerControllerTest extends AbstractTestNGSpringContextTests
 
 	@Test
 	public void getByName() throws Exception {
-		doReturn(jagr).when(hockeyPlayerFacade).findByName("Jaromír Jágr");
+		doReturn(jagr).when(hockeyPlayerFacade).findByName("Jaromir Jagr");
 
-		mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/byname?name=Jaromír Jágr"))
+		mockMvc.perform(get(ROOT_URI_HOCKEY_PLAYERS + "/getByName/Jaromir Jagr"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$.[?(@.id==4)]").exists())
-				.andExpect(jsonPath("$.[?(@.id==4)].name").value("Jaromír Jágr"))
+				.andExpect(jsonPath("$.[?(@.id==4)].name").value("Jaromir Jagr"))
 				.andExpect(jsonPath("$.[?(@.id==4)].attackSkill").value(99));
 	}
 

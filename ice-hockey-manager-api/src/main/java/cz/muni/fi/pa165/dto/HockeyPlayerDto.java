@@ -124,13 +124,14 @@ public class HockeyPlayerDto {
 
 	@Override
 	public String toString() {
+		String teamString = (team == null) ? "null" : team.getName();
 		return "HockeyPlayerDTO{" +
 				"name='" + name + "'" +
 				", post=" + post +
 				", attSkill=" + attackSkill +
 				", defSkill=" + defenseSkill +
 				", price=" + price +
-				", team=" + team.getName() +
+				", team=" + teamString +
 				"}";
 	}
 }

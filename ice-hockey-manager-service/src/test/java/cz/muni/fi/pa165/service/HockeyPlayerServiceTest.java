@@ -100,7 +100,7 @@ public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void findFreeAgentsTest() {
-        when(hockeyPlayerDao.findByTeam(null)).thenReturn(Arrays.asList(zidlicky, elias, hemsky));
+        when(hockeyPlayerDao.findFreeAgents()).thenReturn(Arrays.asList(zidlicky, elias, hemsky));
 		List<HockeyPlayer> freeAgents = playerService.findFreeAgents();
 		assertThat(freeAgents).containsExactlyInAnyOrder(zidlicky, elias, hemsky);
 	}

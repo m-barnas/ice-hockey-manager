@@ -68,6 +68,7 @@ public interface HockeyPlayerDao {
 	 */
 	List<HockeyPlayer> findByTeam(Team team);
 
+	List<HockeyPlayer> findFreeAgents();
 	/**
 	 * Find {@link HockeyPlayer}s by price.
 	 *
