@@ -46,8 +46,10 @@ class GamesContainer extends Component {
 
     columns = [{
         title: 'Start at',
-        dataIndex: 'startTime',
-        key: 'start'
+        key: 'start',
+        render: (value, row, index) => {
+            return value.startTime.replace("T", " ");
+        }
     }, {
         title: 'First team',
         key: 'firstTeam',
