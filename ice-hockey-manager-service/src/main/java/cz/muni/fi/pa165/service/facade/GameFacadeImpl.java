@@ -84,7 +84,7 @@ public class GameFacadeImpl implements GameFacade {
         if (game == null) {
             throw new IllegalArgumentException("Game with id " + gameChangeStartTimeDto.getId() + " not found");
         }
-        game.setStartTime(gameChangeStartTimeDto.getStartTime());
+        game.setStartTime(gameChangeStartTimeDto.getStartTime().withNano(0));
         Game updatedGame = gameService.update(game);
         return beanMappingService.mapToGame(updatedGame, GameDto.class);
     }
