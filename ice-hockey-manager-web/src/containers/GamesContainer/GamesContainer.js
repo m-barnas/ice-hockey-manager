@@ -102,15 +102,22 @@ class GamesContainer extends Component {
 
     deleteHandler = (id) => {
         (axios.delete('/games/' + id))
+            .then(() => {
+                this.reload(this.state.view);
+            })
             .catch(error => {
                 console.log(error);
                 return;
             });
-        this.reload(this.state.view);
     }
 
     cancelHandler = (id) => {
         (axios.put('/games/cancel/' + id))
+            .then(() => {
+                if (this.state.view === 'scheduled') {
+                    this.reload(this.state.view);
+                }
+            })
             .catch(error => {
                 console.log(error);
                 return;
@@ -146,17 +153,15 @@ class GamesContainer extends Component {
     }
 
     playGamesHandler = () => {
-        //let numPlayedGames;
         axios.put('/games/play')
-//            .then(response => {
-//                numPlayedGames = response.data;
-//            })
+            .then((response, data) => {
+                if (response.data > 0) {
+                    this.reload(this.state.view);
+                }
+            })
             .catch(error => {
                 console.log(error);
             });
-//        console.log(numPlayedGames);
-//        if (numPlayedGames > 0) {
-            this.reload(this.state.view);
     }
 
     handleSelectChange = (selected) => {
@@ -223,7 +228,7 @@ class GamesContainer extends Component {
                 <Row>{select}</Row> : null
                 }
 
-                <Button style={{marginTop: 1 + 'em'}}
+                <Button style={{marginTop: 1 + 'em', marginBottom: 1 + 'em'}}
                     type="secondary"
                     onClick={() => this.changeViewHandler(this.getOtherView(this.state.view))}
                 >Show {this.getOtherView(this.state.view)} games</Button>
