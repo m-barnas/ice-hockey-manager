@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.service;
 import cz.muni.fi.pa165.dao.HumanPlayerDao;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import cz.muni.fi.pa165.service.exceptions.IncorrectPasswordException;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
 
     private static final String COMMON_PASSWORD = "password";
     private static final String STRONG_PASSWORD = "1aC5.Ee8-888w";
-    private static final String TOO_SHORT_PASSWORD = "Imshort";
+    private static final String TOO_SHORT_PASSWORD = "Ims";
     private static final String TOO_LONG_PASSWORD = "Imtoolongpassword";
 
     @Mock
@@ -55,7 +55,7 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void register() throws AuthenticationException {
+    public void register() throws ManagerAuthenticationException {
         // setup
         doAnswerSetIdWhenCreate(user);
 
@@ -67,42 +67,42 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void registerWithHumanPlayerNull() throws AuthenticationException {
+    public void registerWithHumanPlayerNull() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.register(null, COMMON_PASSWORD))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    public void registerWithPasswordNull() throws AuthenticationException {
+    public void registerWithPasswordNull() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.register(user, null))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    public void registerWithEmptyPassword() throws AuthenticationException {
+    public void registerWithEmptyPassword() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.register(user, ""))
                 .isInstanceOf(IncorrectPasswordException.class);
     }
 
     @Test
-    public void registerWithPasswordTooShort() throws AuthenticationException {
+    public void registerWithPasswordTooShort() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.register(user, TOO_SHORT_PASSWORD))
                 .isInstanceOf(IncorrectPasswordException.class);
     }
 
     @Test
-    public void registerWithPasswordTooLong() throws AuthenticationException {
+    public void registerWithPasswordTooLong() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.register(user, TOO_LONG_PASSWORD))
                 .isInstanceOf(IncorrectPasswordException.class);
     }
 
     @Test
-    public void authenticate() throws AuthenticationException {
+    public void authenticate() throws ManagerAuthenticationException {
         // setup
         doAnswerSetIdWhenCreate(user);
         humanPlayerService.register(user, COMMON_PASSWORD);
@@ -115,14 +115,14 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void authenticateWithHumanPlayerNull() throws AuthenticationException {
+    public void authenticateWithHumanPlayerNull() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.authenticate(null, COMMON_PASSWORD))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    public void authenticateUnencryptedPasswordNull() throws AuthenticationException {
+    public void authenticateUnencryptedPasswordNull() throws ManagerAuthenticationException {
         // exercise
         boolean authenticated = humanPlayerService.authenticate(user, null);
 
@@ -131,7 +131,7 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void authenticateWithWrongPassword() throws AuthenticationException {
+    public void authenticateWithWrongPassword() throws ManagerAuthenticationException {
         // setup
         doAnswerSetIdWhenCreate(user);
         humanPlayerService.register(user, COMMON_PASSWORD);
@@ -144,7 +144,7 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void changePassword() throws AuthenticationException {
+    public void changePassword() throws ManagerAuthenticationException {
         // setup
         doAnswerSetIdWhenCreate(user);
         humanPlayerService.register(user, COMMON_PASSWORD);
@@ -162,7 +162,7 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void changePasswordWithWrongOldUnencryptedPassword() throws AuthenticationException {
+    public void changePasswordWithWrongOldUnencryptedPassword() throws ManagerAuthenticationException {
         // setup
         doAnswerSetIdWhenCreate(user);
         humanPlayerService.register(user, COMMON_PASSWORD);
@@ -177,42 +177,42 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void changePasswordWithHumanPlayerNull() throws AuthenticationException {
+    public void changePasswordWithHumanPlayerNull() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.changePassword(null, COMMON_PASSWORD,
                 STRONG_PASSWORD)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    public void changePasswordWithOldUnencryptedPasswordNull() throws AuthenticationException {
+    public void changePasswordWithOldUnencryptedPasswordNull() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.changePassword(1L, null,
                 STRONG_PASSWORD)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    public void changePasswordWithNewUnencryptedPasswordNull() throws AuthenticationException {
+    public void changePasswordWithNewUnencryptedPasswordNull() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.changePassword(1L, COMMON_PASSWORD,
                 null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    public void changePasswordWithNewUnencryptedPasswordTooShort() throws AuthenticationException {
+    public void changePasswordWithNewUnencryptedPasswordTooShort() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.changePassword(1L, COMMON_PASSWORD,
                 TOO_SHORT_PASSWORD)).isInstanceOf(IncorrectPasswordException.class);
     }
 
     @Test
-    public void changePasswordWithNewUnencryptedPasswordTooLong() throws AuthenticationException {
+    public void changePasswordWithNewUnencryptedPasswordTooLong() throws ManagerAuthenticationException {
         // exercise + verify
         assertThatThrownBy(() -> humanPlayerService.changePassword(1L, COMMON_PASSWORD,
                 TOO_LONG_PASSWORD)).isInstanceOf(IncorrectPasswordException.class);
     }
 
     @Test
-    public void changeRole() throws AuthenticationException {
+    public void changeRole() throws ManagerAuthenticationException {
         // setup
         doAnswerSetIdWhenCreate(user);
         doAnswerSetRoleWhenUpdate(Role.ADMIN);

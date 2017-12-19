@@ -7,7 +7,7 @@ import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.exceptions.HockeyPlayerServiceException;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
@@ -52,7 +52,7 @@ public class HockeyPlayerServiceTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@BeforeMethod
-	public void prepareTestPlayers() throws AuthenticationException {
+	public void prepareTestPlayers() throws ManagerAuthenticationException {
 		hasek = createPlayer("Dominik Hašek", Position.GOALKEEPER, 1, 95, BigDecimal.valueOf(90));
 		kaberle = createPlayer("Tomáš Kaberle", Position.DEFENSEMAN, 20, 80, BigDecimal.valueOf(50));
 		zidlicky = createPlayer("Marek Židlický", Position.DEFENSEMAN, 25, 70, BigDecimal.valueOf(80));

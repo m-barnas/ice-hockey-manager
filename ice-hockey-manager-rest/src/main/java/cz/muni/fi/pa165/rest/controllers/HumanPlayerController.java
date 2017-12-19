@@ -1,11 +1,16 @@
 package cz.muni.fi.pa165.rest.controllers;
 
 import cz.muni.fi.pa165.dto.HumanPlayerDto;
+import cz.muni.fi.pa165.entity.HumanPlayer;
+import cz.muni.fi.pa165.enums.Role;
 import cz.muni.fi.pa165.facade.HumanPlayerFacade;
+import cz.muni.fi.pa165.rest.ApiUri;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static cz.muni.fi.pa165.rest.ApiUri.*;
@@ -43,6 +48,11 @@ public class HumanPlayerController {
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") long id) {
         humanPlayerFacade.delete(id);
+    }
+
+    @RequestMapping(path = ApiUri.SubApiUri.UPDATE, method = RequestMethod.POST)
+    public HumanPlayerDto update(@RequestParam Long id, @RequestParam String oldPasswd, @RequestParam String newPasswd) {
+        return humanPlayerFacade.changePassword(id, oldPasswd, newPasswd);
     }
 
 }

@@ -27,7 +27,7 @@ import java.util.Locale;
 @Configuration
 @EnableWebMvc
 @Import(ServiceConfiguration.class)
-@ComponentScan(basePackages = {"cz.muni.fi.pa165.rest.controllers"})
+@ComponentScan(basePackages = {"cz.muni.fi.pa165.rest"})
 public class RestConfiguration extends WebMvcConfigurerAdapter {
 
     @Override

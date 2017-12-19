@@ -2,7 +2,7 @@ package cz.muni.fi.pa165.service;
 
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 
 import java.util.List;
 
@@ -18,19 +18,19 @@ public interface HumanPlayerService {
      *
      * @param humanPlayer to register
      * @param unencryptedPassword human player's unencrypted password
-     * @throws AuthenticationException when 3rd party authentication algorithms fail
+     * @throws ManagerAuthenticationException when 3rd party authentication algorithms fail
      */
     void register(HumanPlayer humanPlayer, String unencryptedPassword)
-            throws AuthenticationException;
+            throws ManagerAuthenticationException;
 
     /**
      * Authenticate {@link HumanPlayer}.
      *
      * @return true only if hashed unencryptedPassword is equal with human player's hashed password
-     * @throws AuthenticationException when 3rd party authentication algorithms fail
+     * @throws ManagerAuthenticationException when 3rd party authentication algorithms fail
      */
     boolean authenticate(HumanPlayer humanPlayer, String unencryptedPassword)
-            throws AuthenticationException;
+            throws ManagerAuthenticationException;
 
     /**
      * Change {@link HumanPlayer}'s password
@@ -39,10 +39,10 @@ public interface HumanPlayerService {
      * @param oldUnencryptedPassword to be change
      * @param newUnencryptedPassword to be set
      * @return updated human player
-     * @throws AuthenticationException when 3rd party authentication algorithms fail
+     * @throws ManagerAuthenticationException when 3rd party authentication algorithms fail
      */
     HumanPlayer changePassword(Long humanPlayerId, String oldUnencryptedPassword, String newUnencryptedPassword)
-            throws AuthenticationException;
+            throws ManagerAuthenticationException;
 
     /**
      * Change {@link HumanPlayer}'s role.

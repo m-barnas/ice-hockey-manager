@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import cz.muni.fi.pa165.dao.HumanPlayerDao;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.service.exceptions.NoSuchHumanPlayerException;
 import cz.muni.fi.pa165.service.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class HumanPlayerServiceImpl implements HumanPlayerService {
 
     @Override
     public void register(HumanPlayer humanPlayer, String unencryptedPassword)
-            throws AuthenticationException {
+            throws ManagerAuthenticationException {
         // preconditions
         Preconditions.checkNotNull(humanPlayer, "Human player must not be null.");
         Preconditions.checkNotNull(unencryptedPassword, "Unencrypted password must not be null.");
@@ -38,7 +38,7 @@ public class HumanPlayerServiceImpl implements HumanPlayerService {
 
     @Override
     public boolean authenticate(HumanPlayer humanPlayer, String unencryptedPassword)
-            throws AuthenticationException {
+            throws ManagerAuthenticationException {
         // preconditions
         Preconditions.checkNotNull(humanPlayer, "Human player must not be null.");
 
@@ -48,7 +48,7 @@ public class HumanPlayerServiceImpl implements HumanPlayerService {
 
     @Override
     public HumanPlayer changePassword(Long humanPlayerId, String oldUnencryptedPassword, String newUnencryptedPassword)
-        throws AuthenticationException {
+        throws ManagerAuthenticationException {
         // preconditions
         Preconditions.checkNotNull(humanPlayerId, "Human player's id must not be null.");
         Preconditions.checkNotNull(oldUnencryptedPassword, "Old unencrypted password must not be null.");
