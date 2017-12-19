@@ -92,7 +92,17 @@ class GamesContainer extends Component {
                 default:
                     break;
             }
-            return value.played ? '' : <Button type="secondary" onClick={ref}>{label}</Button>
+            return value.played ? '' :
+                    <Button type="secondary" onClick={ref}>{label}</Button>
+        }
+    }, {
+        title: '',
+        key: 'changeStartTime',
+        render: (value, row, index) => {
+            return value.played ? '' :
+                    <Link to={'/games/edit/' + value.id}>
+                        <Button type="secondary">Edit</Button>
+                    </Link>
         }
     }, {
         title: '',
