@@ -209,7 +209,7 @@ class GamesContainer extends Component {
                 })}
             </Select>
         );
-        return options
+        return options;
     }
 
     render() {
@@ -233,9 +233,9 @@ class GamesContainer extends Component {
                     onClick={() => this.changeViewHandler(this.getOtherView(this.state.view))}
                 >Show {this.getOtherView(this.state.view)} games</Button>
 
-                {/*<Row><Link to={'/games/create'}><Button style={{marginTop: 1 + 'em'}}
+                <Row><Link to={'/games/create'}><Button style={{marginBottom: 1 + 'em'}}
                     type="primary"
-                >Create game</Button></Link></Row> */}
+                >Create game</Button></Link></Row>
 
                 <Table dataSource={games} columns={this.columns} loading={loading} rowKey={'id'}/>
                 <Button type="secondary" onClick={this.playGamesHandler}>Play games</Button>
