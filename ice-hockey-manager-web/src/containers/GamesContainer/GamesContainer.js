@@ -52,13 +52,15 @@ class GamesContainer extends Component {
         title: 'First team',
         key: 'firstTeam',
         render: (value, row, index) => {
-            return value.firstTeamDto === null ? '' : value.firstTeamDto.name;
+            return value.firstTeamDto === null ? '' :
+                    <Link to={'/teams/' + value.firstTeamDto.id}>{value.firstTeamDto.name}</Link>;
         }
     }, {
         title: 'Second team',
         key: 'secondTeam',
         render: (value, row, index) => {
-            return value.secondTeamDto === null ? '' : value.secondTeamDto.name;
+            return value.secondTeamDto === null ? '' :
+                    <Link to={'/teams/' + value.secondTeamDto.id}>{value.secondTeamDto.name}</Link>;
         }
     }, {
         title: 'State',
