@@ -38,7 +38,7 @@ public class GameFacadeImpl implements GameFacade {
         Game game = beanMappingService.mapTo(gameCreateDto, Game.class);
         game.setFirstTeam(teamService.findById(gameCreateDto.getFirstTeamId()));
         game.setSecondTeam(teamService.findById(gameCreateDto.getSecondTeamId()));
-        game.setStartTime(gameCreateDto.getStartTime());
+        game.setStartTime(gameCreateDto.getStartTime().withNano(0));
         game.setGameState(GameState.OK);
         gameService.create(game);
         return beanMappingService.mapToGame(game, GameDto.class);
