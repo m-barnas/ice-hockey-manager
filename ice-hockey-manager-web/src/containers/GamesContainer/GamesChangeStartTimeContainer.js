@@ -3,29 +3,30 @@ import React, {Component} from 'react';
 import axios from '../../axios';
 import {Link, Redirect} from 'react-router-dom';
 
-import {Form, Select, Button, DatePicker} from 'antd';
+import {Form, Button, DatePicker} from 'antd';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 
-class GameCreateContainer extends Component {
+class GamesChangeStartTimeContainer extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             confirmDirty: false,
-            teams: [],
-            redirect: false
+            game: {},
+            redirect: false,
+            loaded: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        axios.get('/teams/all')
+    componentWillMount() {
+        axios.get('/games/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
-                    teams: response.data,
+                    game: response.data,
+                    loaded: true,
                 });
             })
             .catch(error => {
@@ -38,7 +39,7 @@ class GameCreateContainer extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
             console.log("values: ", values);
-                axios.post('/games/create', values)
+                axios.put('/games/' + this.props.match.params.id, values)
                     .then(response => {
                         this.setState({
                             redirect: true
@@ -54,15 +55,6 @@ class GameCreateContainer extends Component {
     handleConfirmBlur(e) {
         const value = e.target.value;
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
-    }
-
-    checkVariousTeams = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && form.getFieldValue('secondTeamId') === form.getFieldValue('firstTeamId')) {
-          callback('First and second team must be different!');
-        } else {
-          callback();
-        }
     }
 
     render() {
@@ -94,12 +86,15 @@ class GameCreateContainer extends Component {
             },
         };
 
+        if (!this.state.loaded) return <div />;
+
         return (
             <div>
+            <h3>Hockey game {this.state.game.firstTeamDto.name} vs {this.state.game.secondTeamDto.name}</h3>
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
                     {...formItemLayout}
-                    label="Start time"
+                    label="New start time"
                 >
                     {getFieldDecorator('startTime', {
                         rules: [
@@ -111,47 +106,11 @@ class GameCreateContainer extends Component {
 
                 </FormItem>
 
-                <FormItem
-                    {...formItemLayout}
-                    label="First team"
-                >
-                    {getFieldDecorator('firstTeamId', {
-                        rules: [
-                            {required: true, message: 'Please select team.'},
-                            {validator: this.checkVariousTeams}
-                        ],
-                    })(
-                        <Select placeholder="Select team">
-                            {this.state.teams.map((team, index) => {
-                                return <Option value={team.id} key={team.id}>{team.name}</Option>;
-                            })}
-                        </Select>
-                    )}
-                </FormItem>
-
-                <FormItem
-                    {...formItemLayout}
-                    label="Second team"
-                >
-                    {getFieldDecorator('secondTeamId', {
-                        rules: [
-                            {required: true, message: 'Please select team.'},
-                            {validator: this.checkVariousTeams}
-                        ],
-                    })(
-                        <Select placeholder="Select team">
-                            {this.state.teams.map((team, index) => {
-                                return <Option value={team.id} key={team.id}>{team.name}</Option>;
-                            })}
-                        </Select>
-                    )}
-                </FormItem>
-
                 <FormItem {...tailFormItemLayout}>
                     <Link to={'/games'}><Button style={{marginRight: 1 + 'em'}}
                             type="secondary"
                     >Back</Button></Link>
-                    <Button type="primary" htmlType="submit">Create</Button>
+                    <Button type="primary" htmlType="submit">Save</Button>
                 </FormItem>
             </Form>
 
@@ -160,6 +119,6 @@ class GameCreateContainer extends Component {
     }
 }
 
-const WrappedCreateGame = Form.create()(GameCreateContainer);
+const WrappedChangeGame = Form.create()(GamesChangeStartTimeContainer);
 
-export default WrappedCreateGame;
+export default WrappedChangeGame;
