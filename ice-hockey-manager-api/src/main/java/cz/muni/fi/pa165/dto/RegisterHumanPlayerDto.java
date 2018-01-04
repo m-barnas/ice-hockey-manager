@@ -10,8 +10,6 @@ public class RegisterHumanPlayerDto {
 
     private String email;
 
-    private Role role = Role.USER;
-
     private String password;
 
     public String getPassword() {
@@ -36,14 +34,6 @@ public class RegisterHumanPlayerDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     @Override
@@ -74,7 +64,6 @@ public class RegisterHumanPlayerDto {
         return "User{" +
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", role=" + role +
                 '}';
     }
 
