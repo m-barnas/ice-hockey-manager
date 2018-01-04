@@ -46,19 +46,23 @@ class GamesContainer extends Component {
 
     columns = [{
         title: 'Start at',
-        dataIndex: 'startTime',
-        key: 'start'
+        key: 'start',
+        render: (value, row, index) => {
+            return value.startTime.replace("T", " ");
+        }
     }, {
         title: 'First team',
         key: 'firstTeam',
         render: (value, row, index) => {
-            return value.firstTeamDto === null ? '' : value.firstTeamDto.name;
+            return value.firstTeamDto === null ? '' :
+                    <Link to={'/teams/' + value.firstTeamDto.id}>{value.firstTeamDto.name}</Link>;
         }
     }, {
         title: 'Second team',
         key: 'secondTeam',
         render: (value, row, index) => {
-            return value.secondTeamDto === null ? '' : value.secondTeamDto.name;
+            return value.secondTeamDto === null ? '' :
+                    <Link to={'/teams/' + value.secondTeamDto.id}>{value.secondTeamDto.name}</Link>;
         }
     }, {
         title: 'State',
@@ -90,7 +94,17 @@ class GamesContainer extends Component {
                 default:
                     break;
             }
-            return value.played ? '' : <Button type="secondary" onClick={ref}>{label}</Button>
+            return value.played ? '' :
+                    <Button type="secondary" onClick={ref}>{label}</Button>
+        }
+    }, {
+        title: '',
+        key: 'changeStartTime',
+        render: (value, row, index) => {
+            return value.played ? '' :
+                    <Link to={'/games/edit/' + value.id}>
+                        <Button type="secondary">Edit</Button>
+                    </Link>
         }
     }, {
         title: '',
@@ -102,15 +116,22 @@ class GamesContainer extends Component {
 
     deleteHandler = (id) => {
         (axios.delete('/games/' + id))
+            .then(() => {
+                this.reload(this.state.view);
+            })
             .catch(error => {
                 console.log(error);
                 return;
             });
-        this.reload(this.state.view);
     }
 
     cancelHandler = (id) => {
         (axios.put('/games/cancel/' + id))
+            .then(() => {
+                if (this.state.view === 'scheduled') {
+                    this.reload(this.state.view);
+                }
+            })
             .catch(error => {
                 console.log(error);
                 return;
@@ -146,17 +167,15 @@ class GamesContainer extends Component {
     }
 
     playGamesHandler = () => {
-        //let numPlayedGames;
         axios.put('/games/play')
-//            .then(response => {
-//                numPlayedGames = response.data;
-//            })
+            .then((response, data) => {
+                if (response.data > 0) {
+                    this.reload(this.state.view);
+                }
+            })
             .catch(error => {
                 console.log(error);
             });
-//        console.log(numPlayedGames);
-//        if (numPlayedGames > 0) {
-            this.reload(this.state.view);
     }
 
     handleSelectChange = (selected) => {
@@ -204,7 +223,7 @@ class GamesContainer extends Component {
                 })}
             </Select>
         );
-        return options
+        return options;
     }
 
     render() {
@@ -223,14 +242,14 @@ class GamesContainer extends Component {
                 <Row>{select}</Row> : null
                 }
 
-                <Button style={{marginTop: 1 + 'em'}}
+                <Button style={{marginTop: 1 + 'em', marginBottom: 1 + 'em'}}
                     type="secondary"
                     onClick={() => this.changeViewHandler(this.getOtherView(this.state.view))}
                 >Show {this.getOtherView(this.state.view)} games</Button>
 
-                {/*<Row><Link to={'/games/create'}><Button style={{marginTop: 1 + 'em'}}
+                <Row><Link to={'/games/create'}><Button style={{marginBottom: 1 + 'em'}}
                     type="primary"
-                >Create game</Button></Link></Row> */}
+                >Create game</Button></Link></Row>
 
                 <Table dataSource={games} columns={this.columns} loading={loading} rowKey={'id'}/>
                 <Button type="secondary" onClick={this.playGamesHandler}>Play games</Button>
