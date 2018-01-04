@@ -2,8 +2,9 @@ package cz.muni.fi.pa165.facade;
 
 import cz.muni.fi.pa165.dto.HumanPlayerAuthenticateDto;
 import cz.muni.fi.pa165.dto.HumanPlayerDto;
+import cz.muni.fi.pa165.dto.RegisterHumanPlayerDto;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 
 import java.util.List;
 
@@ -14,20 +15,20 @@ public interface HumanPlayerFacade {
      *
      * @param humanPlayerDto to register
      * @param unencryptedPassword human player's unencrypted password
-     * @throws AuthenticationException when 3rd party authentication algorithms fail
+     * @throws ManagerAuthenticationException when 3rd party authentication algorithms fail
      */
-    void register(HumanPlayerDto humanPlayerDto, String unencryptedPassword)
-            throws AuthenticationException;
+    void register(RegisterHumanPlayerDto humanPlayerDto, String unencryptedPassword)
+            throws ManagerAuthenticationException;
 
     /**
      * Authenticate {@link HumanPlayerDto}.
      *
      * @param authenticateDTO human player's credentials to authenticate
      * @return true only if hashed unencryptedPassword is equal with human player's hashed password
-     * @throws AuthenticationException when 3rd party authentication algorithms fail
+     * @throws ManagerAuthenticationException when 3rd party authentication algorithms fail
      */
     boolean authenticate(HumanPlayerAuthenticateDto authenticateDTO)
-            throws AuthenticationException;
+            throws ManagerAuthenticationException;
 
     /**
      * Change {@link HumanPlayerDto}'s password
@@ -36,10 +37,10 @@ public interface HumanPlayerFacade {
      * @param oldUnencryptedPassword to be change
      * @param newUnencryptedPassword to be set
      * @return updated human player
-     * @throws AuthenticationException when 3rd party authentication algorithms fail
+     * @throws ManagerAuthenticationException when 3rd party authentication algorithms fail
      */
     HumanPlayerDto changePassword(Long humanPlayerId, String oldUnencryptedPassword, String newUnencryptedPassword)
-            throws AuthenticationException;
+            throws ManagerAuthenticationException;
 
     /**
      * Change {@link HumanPlayerDto}'s role.

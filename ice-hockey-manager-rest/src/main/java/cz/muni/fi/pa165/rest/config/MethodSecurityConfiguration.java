@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecur
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
-@ComponentScan
+@ComponentScan(basePackages = {"cz.muni.fi.pa165.rest"})
 public class MethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @SuppressWarnings("unused")

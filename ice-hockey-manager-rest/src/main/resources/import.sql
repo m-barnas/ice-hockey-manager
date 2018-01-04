@@ -1,5 +1,5 @@
--- create admin with password: adminpass
-INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (1,'admin@icehockeymanager.com','1000:0FhmwmqxciKTK4hvh1gCzzKktfTXzMUb:e0QFC0HKrbQUm57DaJHCb7S/','ADMIN','admin');
+-- create admin with password: test
+INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (1,'admin@icehockeymanager.com','1000:1Iv2U5Y7GKIRZUCA0h4OLotmiVe/d5uM:5BerC98I42mDrt7UAgtjpFKH','ADMIN','admin');
 -- create admin with password: userpass
 INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (2,'user@icehockeymanager.com','1000:7oHkZicdye0Sn4pWj+ttQhc0ZmOghWwd:6wBBhr9OvhsQswaP196YgzgF','USER','user');
 -- create HC Kometa Brno with manager user

@@ -19,8 +19,8 @@ class AuthContainer extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.props.onAuth(values.email, values.pasword);
-                console.log('Received values of form: ', values);
+                this.props.onAuth(values.email, values.password);
+                console.log('Received values of form: ', values.email, values.password);
             }
         });
     };

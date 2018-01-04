@@ -2,9 +2,10 @@ package cz.muni.fi.pa165.service.facade;
 
 import cz.muni.fi.pa165.dto.HumanPlayerAuthenticateDto;
 import cz.muni.fi.pa165.dto.HumanPlayerDto;
+import cz.muni.fi.pa165.dto.RegisterHumanPlayerDto;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.facade.HumanPlayerFacade;
 import cz.muni.fi.pa165.service.HumanPlayerService;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
@@ -79,19 +80,23 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void register() throws AuthenticationException {
+    public void register() throws ManagerAuthenticationException {
+        RegisterHumanPlayerDto registerHumanPlayerDto = new RegisterHumanPlayerDto();
+        registerHumanPlayerDto.setUsername("admin");
+        registerHumanPlayerDto.setEmail("admin@admin.com");
+        registerHumanPlayerDto.setPassword(COMMON_PASSWORD);
         // setup
         doNothing().when(humanPlayerService).register(humanPlayer, COMMON_PASSWORD);
 
         // exercise
-        humanPlayerFacade.register(humanPlayerDto, COMMON_PASSWORD);
+        humanPlayerFacade.register(registerHumanPlayerDto, COMMON_PASSWORD);
 
         // verify
         verify(humanPlayerService).register(humanPlayer, authenticateDto.getPassword());
     }
 
     @Test
-    public void changePassword() throws AuthenticationException {
+    public void changePassword() throws ManagerAuthenticationException {
         // setup
         doAnswerSetPasswordHashWhenUpdate(STRONG_PASSWORD);
         when(humanPlayerService.findById(humanPlayer.getId())).thenReturn(humanPlayer);
@@ -165,7 +170,7 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         assertThat(result).isEqualTo(humanPlayerDtoS);
     }
 
-    private void doAnswerSetPasswordHashWhenUpdate(String passwordHash) throws AuthenticationException {
+    private void doAnswerSetPasswordHashWhenUpdate(String passwordHash) throws ManagerAuthenticationException {
         doAnswer((Answer<Void>) invocationOnMock -> {
             humanPlayer.setPasswordHash(passwordHash);
             return null;
@@ -176,7 +181,7 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         HumanPlayer humanPlayer = new HumanPlayer();
         humanPlayer.setId(1L);
         humanPlayer.setUsername("admin");
-        humanPlayer.setRole(Role.ADMIN);
+        humanPlayer.setRole(Role.USER);
         humanPlayer.setEmail("admin@admin.com");
         return humanPlayer;
     }
@@ -185,7 +190,7 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
         HumanPlayerDto humanPlayerDto = new HumanPlayerDto();
         humanPlayerDto.setId(1L);
         humanPlayerDto.setUsername("admin");
-        humanPlayerDto.setRole(Role.ADMIN);
+        humanPlayerDto.setRole(Role.USER);
         humanPlayerDto.setEmail("admin@admin.com");
         return humanPlayerDto;
     }

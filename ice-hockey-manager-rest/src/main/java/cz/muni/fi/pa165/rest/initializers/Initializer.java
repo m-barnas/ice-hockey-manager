@@ -1,7 +1,8 @@
 package cz.muni.fi.pa165.rest.initializers;
 
 import cz.muni.fi.pa165.rest.config.RestConfiguration;
-import cz.muni.fi.pa165.rest.filters.CorsFilter;
+import cz.muni.fi.pa165.rest.filters.CORSFilter;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -11,6 +12,7 @@ import javax.servlet.Filter;
 /**
  * @author Martin Barnas 433523@mail.muni.cz
  */
+@WebAppConfiguration
 public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
@@ -25,7 +27,7 @@ public class Initializer extends AbstractAnnotationConfigDispatcherServletInitia
 
     @Override
     protected String[] getServletMappings() {
-        return new String[]{"/*"};
+        return new String[]{"/"};
     }
 
     @Override
@@ -37,6 +39,6 @@ public class Initializer extends AbstractAnnotationConfigDispatcherServletInitia
 
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[]{new CorsFilter()};
+        return new Filter[]{new CORSFilter()};
     }
 }

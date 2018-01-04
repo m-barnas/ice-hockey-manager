@@ -2,9 +2,10 @@ package cz.muni.fi.pa165.service.facade;
 
 import cz.muni.fi.pa165.dto.HumanPlayerAuthenticateDto;
 import cz.muni.fi.pa165.dto.HumanPlayerDto;
+import cz.muni.fi.pa165.dto.RegisterHumanPlayerDto;
 import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.enums.Role;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.facade.HumanPlayerFacade;
 import cz.muni.fi.pa165.service.HumanPlayerService;
 import cz.muni.fi.pa165.service.mappers.BeanMappingService;
@@ -25,22 +26,27 @@ public class  HumanPlayerFacadeImpl implements HumanPlayerFacade {
     private BeanMappingService beanMappingService;
 
     @Override
-    public void register(HumanPlayerDto humanPlayerDto, String unencryptedPassword) throws AuthenticationException {
-        HumanPlayer humanPlayer = beanMappingService.mapTo(humanPlayerDto, HumanPlayer.class);
+    public void register(RegisterHumanPlayerDto registerHumanPlayerDto, String unencryptedPassword) throws ManagerAuthenticationException {
+        HumanPlayer humanPlayer = null;
+        if (registerHumanPlayerDto != null) {
+            humanPlayer = new HumanPlayer();
+            humanPlayer.setUsername(registerHumanPlayerDto.getUsername());
+            humanPlayer.setEmail(registerHumanPlayerDto.getEmail());
+            humanPlayer.setRole(Role.USER);
+        }
         humanPlayerService.register(humanPlayer, unencryptedPassword);
-        humanPlayerDto.setId(humanPlayer.getId());
     }
 
     @Override
     public boolean authenticate(HumanPlayerAuthenticateDto authenticateDTO)
-            throws AuthenticationException {
+            throws ManagerAuthenticationException {
         return humanPlayerService.authenticate(
                 humanPlayerService.findByEmail(authenticateDTO.getEmail()), authenticateDTO.getPassword());
     }
 
     @Override
     public HumanPlayerDto changePassword(Long humanPlayerId, String oldUnencryptedPassword,
-                                         String newUnencryptedPassword) throws AuthenticationException {
+                                         String newUnencryptedPassword) throws ManagerAuthenticationException {
         HumanPlayer humanPlayer = humanPlayerService.changePassword(humanPlayerId, oldUnencryptedPassword,
                 newUnencryptedPassword);
         return beanMappingService.mapTo(humanPlayer, HumanPlayerDto.class);

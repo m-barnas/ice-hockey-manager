@@ -2,8 +2,10 @@ package cz.muni.fi.pa165.service.mappers;
 
 import cz.muni.fi.pa165.dao.TeamDao;
 import cz.muni.fi.pa165.dto.GameDto;
+import cz.muni.fi.pa165.dto.RegisterHumanPlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.entity.Game;
+import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import org.dozer.Mapper;
 

@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.service.utils;
 
 import com.google.common.base.Preconditions;
-import cz.muni.fi.pa165.exceptions.AuthenticationException;
+import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.service.exceptions.IncorrectPasswordException;
 
 import javax.crypto.SecretKeyFactory;
@@ -28,9 +28,9 @@ public class AuthenticationUtils {
      *
      * @param unencryptedPassword to hash
      * @return hash of given unencryptedPassword
-     * @throws AuthenticationException when using invalid entries for pbkdf2 algorithm
+     * @throws ManagerAuthenticationException when using invalid entries for pbkdf2 algorithm
      */
-    public static String createHash(String unencryptedPassword) throws AuthenticationException {
+    public static String createHash(String unencryptedPassword) throws ManagerAuthenticationException {
         // define constants
         final int SALT_BYTE_SIZE = 24;
         final int HASH_BYTE_SIZE = 18;
@@ -54,10 +54,10 @@ public class AuthenticationUtils {
      * @param unencryptedPassword to verify
      * @param correctHash to be compared with given password
      * @return true if unencryptedPassword's hash matches correctHash
-     * @throws AuthenticationException when using invalid entries for pbkdf2 algorithm
+     * @throws ManagerAuthenticationException when using invalid entries for pbkdf2 algorithm
      */
     public static boolean verifyPassword(String unencryptedPassword, String correctHash)
-            throws AuthenticationException {
+            throws ManagerAuthenticationException {
         // preconditions
         Preconditions.checkNotNull(correctHash, "Correct hash must not be null.");
         if (unencryptedPassword == null) {
@@ -78,18 +78,18 @@ public class AuthenticationUtils {
     }
 
     public static void checkPasswordLength(String password) {
-        if (password.length() < 8 || password.length() > 16) {
-            throw new IncorrectPasswordException("Password must be 8-16 characters.");
+        if (password.length() < 4 || password.length() > 16) {
+            throw new IncorrectPasswordException("Password must be 4-16 characters.");
         }
     }
 
     private static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int bytes)
-            throws AuthenticationException {
+            throws ManagerAuthenticationException {
         try {
             PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
             return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1").generateSecret(spec).getEncoded();
         } catch (NoSuchAlgorithmException|InvalidKeySpecException ex) {
-            throw new AuthenticationException("Invalid entries for pbkdf2 algorithm.", ex);
+            throw new ManagerAuthenticationException("Invalid entries for pbkdf2 algorithm.", ex);
         }
     }
 
