@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.dao;
 
+import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 
@@ -43,6 +44,13 @@ public interface TeamDao {
      * @return team with given name
      */
     Team findByName(String name);
+
+    /**
+     *
+     * @param humanPlayer to find
+     * @return team with given human player
+     */
+    Team findByHumanPlayer(HumanPlayer humanPlayer);
 
     /**
      *

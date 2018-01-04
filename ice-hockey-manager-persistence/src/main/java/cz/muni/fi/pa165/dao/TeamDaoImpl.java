@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.dao;
 
+import cz.muni.fi.pa165.entity.HumanPlayer;
 import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import java.util.List;
 
 @Repository
 public class TeamDaoImpl implements TeamDao {
-
 
     @Autowired
     private EntityManager entityManager;
@@ -41,6 +41,18 @@ public class TeamDaoImpl implements TeamDao {
                 return null;
             }
             return teams.get(0);
+    }
+
+    @Override
+    public Team findByHumanPlayer(HumanPlayer humanPlayer) {
+        if (humanPlayer == null || humanPlayer.getId() == null) {
+            return null;
+        }
+        List<Team> teams =  entityManager.createQuery("SELECT team FROM Team team WHERE team.humanPlayer = :humanPlayer").setParameter("humanPlayer", humanPlayer).getResultList();
+        if(teams.isEmpty()){
+            return null;
+        }
+        return teams.get(0);
     }
 
     @Override
