@@ -15,6 +15,7 @@ public class ApiUri {
     public static class SubApiUri {
         public static final String CREATE = "/create";
         public static final String UPDATE = "/update";
+        public static final String CHANGE_PASSWD = "/changepassword";
         public static final String ALL = "/**";
         public static final String ONE_SEGMENT = "/*";
     }

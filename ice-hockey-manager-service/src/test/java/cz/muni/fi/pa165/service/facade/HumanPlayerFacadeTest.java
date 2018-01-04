@@ -83,7 +83,6 @@ public class HumanPlayerFacadeTest extends AbstractTestNGSpringContextTests {
     public void register() throws ManagerAuthenticationException {
         RegisterHumanPlayerDto registerHumanPlayerDto = new RegisterHumanPlayerDto();
         registerHumanPlayerDto.setUsername("admin");
-        registerHumanPlayerDto.setRole(Role.USER);
         registerHumanPlayerDto.setEmail("admin@admin.com");
         registerHumanPlayerDto.setPassword(COMMON_PASSWORD);
         // setup

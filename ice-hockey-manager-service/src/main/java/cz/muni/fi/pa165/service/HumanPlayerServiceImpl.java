@@ -2,7 +2,9 @@ package cz.muni.fi.pa165.service;
 
 import com.google.common.base.Preconditions;
 import cz.muni.fi.pa165.dao.HumanPlayerDao;
+import cz.muni.fi.pa165.dao.TeamDao;
 import cz.muni.fi.pa165.entity.HumanPlayer;
+import cz.muni.fi.pa165.entity.Team;
 import cz.muni.fi.pa165.enums.Role;
 import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.service.exceptions.NoSuchHumanPlayerException;
@@ -22,6 +24,9 @@ public class HumanPlayerServiceImpl implements HumanPlayerService {
 
     @Autowired
     private HumanPlayerDao humanPlayerDao;
+
+    @Autowired
+    private TeamDao teamDao;
 
     @Override
     public void register(HumanPlayer humanPlayer, String unencryptedPassword)
@@ -87,6 +92,11 @@ public class HumanPlayerServiceImpl implements HumanPlayerService {
 
     @Override
     public void delete(HumanPlayer humanPlayer) {
+        Team team = teamDao.findByHumanPlayer(humanPlayer);
+        if (team != null) {
+            team.setHumanPlayer(null);
+            teamDao.update(team);
+        }
         humanPlayerDao.delete(humanPlayer);
     }
 

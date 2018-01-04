@@ -20,11 +20,15 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     private static final String RESOURCE_ID = "rest_api";
 
-    private static final String[] updateHumanPlayer = new String[]{
+    private static final String[] changePassword = new String[]{
+            ROOT_URI_MANAGERS + SubApiUri.CHANGE_PASSWD + SubApiUri.ALL
+    };
+
+    private static final String[] changeRole = new String[]{
             ROOT_URI_MANAGERS + SubApiUri.UPDATE + SubApiUri.ALL
     };
 
-    private static final String[] deleteHumanPlayer = new String[]{
+    private static final String[] deleteManager = new String[]{
             ROOT_URI_MANAGERS + SubApiUri.ONE_SEGMENT
     };
 
@@ -36,8 +40,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, updateHumanPlayer).authenticated()
-                .antMatchers(HttpMethod.DELETE, deleteHumanPlayer).hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, changePassword).authenticated()
+                .antMatchers(HttpMethod.POST, changeRole).hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, deleteManager).hasRole(Role.ADMIN.name())
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
