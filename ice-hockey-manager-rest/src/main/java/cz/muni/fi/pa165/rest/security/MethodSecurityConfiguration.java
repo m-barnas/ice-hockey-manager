@@ -1,7 +1,6 @@
-package cz.muni.fi.pa165.rest.config;
+package cz.muni.fi.pa165.rest.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,7 +12,6 @@ import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecur
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
-@ComponentScan(basePackages = {"cz.muni.fi.pa165.rest"})
 public class MethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @SuppressWarnings("unused")

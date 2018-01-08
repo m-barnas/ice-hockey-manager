@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ice-hockey-manager-rest</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- This project -->
@@ -53,6 +53,11 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
         </dependency>
 
         <!-- Jackson -->
@@ -118,31 +123,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <!-- what to do when only "mvn" is run -->
-        <defaultGoal>tomcat7:run</defaultGoal>
-        <plugins>
-            <!-- Maven War Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${maven-war-plugin.version}</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-
-            <!-- Tomcat 7 plugin -->
-            <!--  embedded tomcat -->
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>${tomcat7-maven-plugin.version}</version>
-                <configuration>
-                    <path>/pa165/rest</path>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

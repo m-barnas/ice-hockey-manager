@@ -1,26 +1,26 @@
-package cz.muni.fi.pa165.rest.config;
+package cz.muni.fi.pa165.rest.security;
 
-import cz.muni.fi.pa165.rest.security.HumanPlayerTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+
+import javax.inject.Inject;
 
 /**
  * @author Martin Barnas 433523@mail.muni.cz
  */
 @Configuration
 @EnableAuthorizationServer
-@ComponentScan(basePackages = {"cz.muni.fi.pa165.rest"})
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private static final String WEB_CLIENT_ID = "web-client";
@@ -64,7 +64,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     }
 
     @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.allowFormAuthenticationForClients();
+    }
+
+    @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        System.err.println("AuthorizationServerEndpointsConfigurer called");
         endpoints.tokenStore(tokenStore)
                 .userApprovalHandler(userApprovalHandler)
                 .authenticationManager(authenticationManager)
@@ -75,4 +81,5 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public TokenEnhancer tokenEnhancer() {
         return new HumanPlayerTokenEnhancer();
     }
+
 }

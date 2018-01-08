@@ -35,7 +35,7 @@ public class GameController {
     /**
      * Create a new game.
      *
-     * @param gameCreateDto {@link gameCreateDto} with required fields for creation
+     * @param gameCreateDto {@link GameCreateDto} with required fields for creation
      * @return created {@link GameDto}
      * @throws InvalidParameterException if game is invalid
      * @throws InternalServerErrorException if some other error occurs

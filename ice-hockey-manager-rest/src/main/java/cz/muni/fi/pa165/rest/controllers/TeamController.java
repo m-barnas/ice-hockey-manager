@@ -5,7 +5,6 @@ import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
 import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.exceptions.TeamServiceException;
-import cz.muni.fi.pa165.facade.HumanPlayerFacade;
 import cz.muni.fi.pa165.facade.TeamFacade;
 import cz.muni.fi.pa165.rest.ApiUri;
 import org.slf4j.Logger;

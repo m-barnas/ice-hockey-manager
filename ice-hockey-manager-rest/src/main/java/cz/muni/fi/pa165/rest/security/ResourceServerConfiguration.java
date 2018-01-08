@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.rest.config;
+package cz.muni.fi.pa165.rest.security;
 
 import cz.muni.fi.pa165.enums.Role;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.rest.controllers;
 
-import cz.muni.fi.pa165.dto.HumanPlayerDto;
 import cz.muni.fi.pa165.dto.RegisterHumanPlayerDto;
 import cz.muni.fi.pa165.exceptions.ManagerAuthenticationException;
 import cz.muni.fi.pa165.facade.HumanPlayerFacade;
@@ -10,20 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI;
+
 
 /**
- *
+ * @author Martin Barnas 433523@mail.muni.cz
  */
 @RestController
-public class SecurityController {
+public class AuthController {
 
     @Autowired
     private HumanPlayerFacade humanPlayerFacade;
 
-    @RequestMapping(path = "/register", method = RequestMethod.POST)
+    @RequestMapping(path = ROOT_URI + "/register", method = RequestMethod.POST)
     public void registerHunter(@RequestBody RegisterHumanPlayerDto registerHumanPlayerDto)
             throws ManagerAuthenticationException {
-//        ResourceAccess.verify(registrateHunterDTO);
         humanPlayerFacade.register(registerHumanPlayerDto, registerHumanPlayerDto.getPassword());
     }
 }

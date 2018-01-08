@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.rest.initializers;
+package cz.muni.fi.pa165;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

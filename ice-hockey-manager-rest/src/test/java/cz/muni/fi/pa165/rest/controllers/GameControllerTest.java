@@ -9,7 +9,6 @@ import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.enums.GameState;
 import cz.muni.fi.pa165.facade.GameFacade;
 import static cz.muni.fi.pa165.rest.ApiUri.ROOT_URI_GAMES;
-import cz.muni.fi.pa165.rest.config.RestConfiguration;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
