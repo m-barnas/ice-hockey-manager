@@ -89,6 +89,10 @@ Please follows these steps if you run prod build after fetching the most recent 
 7) `cd ice-hockey-manager-web`
 8) `mvn tomcat7:run`
 
+###### Rest is accessible at: `http:/localhost:8080/pa165/rest`
+
+###### Frontend is accessible at: `http:/localhost:8080/pa165`
+
 Later, when you made some changes only in web module and wanna check it out at prod, just run:
 
 1) `cd ice-hockey-manager-web`
@@ -96,12 +100,9 @@ Later, when you made some changes only in web module and wanna check it out at p
 3) `npm install`
 4) `npm run build`
 5) `mvn install`
-6) `cd ice-hockey-manager-web`
-7) `mvn tomcat7:run`
+6) `mvn tomcat7:run`
 
-###### Rest is accessible at: `http:/localhost:8080/pa165/rest`
-
-###### Frontend is accessible at: `http:/localhost:8080/pa165`
+This saves some time for you since only web module is cleaned and installed.
 
 ### Run the app [dev]
 
