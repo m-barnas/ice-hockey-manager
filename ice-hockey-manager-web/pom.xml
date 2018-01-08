@@ -18,98 +18,250 @@
         <npm.executable>npm</npm.executable>
     </properties>
 
+    <dependencies>
+        <!-- This project -->
+        <dependency>
+            <groupId>cz.muni.fi.pa165</groupId>
+            <artifactId>ice-hockey-manager-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cz.muni.fi.pa165</groupId>
+            <artifactId>ice-hockey-manager-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cz.muni.fi.pa165</groupId>
+            <artifactId>ice-hockey-manager-rest</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.hateoas</groupId>
+            <artifactId>spring-hateoas</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+
+        <!-- Javax Servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <!--            <version>2.4.0</version>-->
+        </dependency>
+
+        <!-- TestNG -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- AssertJ -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+
+        <!-- Javax EL -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <scope>test</scope><!-- conflicts with tomcat libraries, needed only for tests anyway -->
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${json-path.version}</version>
+        </dependency>
+
+        <!-- JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <!--<build>-->
+        <!--<finalName>${project.artifactId}</finalName>-->
+        <!--<plugins>-->
+            <!--&lt;!&ndash; Standard plugin to generate WAR &ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-war-plugin</artifactId>-->
+                <!--<version>${maven-war-plugin.version}</version>-->
+                <!--<configuration>-->
+                    <!--<webResources>-->
+                        <!--<resource>-->
+                            <!--<directory>${npm.output.directory}</directory>-->
+                        <!--</resource>-->
+                    <!--</webResources>-->
+                    <!--<webXml>${basedir}/web.xml</webXml>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>exec-maven-plugin</artifactId>-->
+                <!--<version>${exec-maven-plugin.version}</version>-->
+                <!--<executions>-->
+                    <!--&lt;!&ndash; Required: The following will ensure `npm install` is called-->
+                         <!--before anything else during the 'Default Lifecycle' &ndash;&gt;-->
+                    <!--<execution>-->
+                        <!--<id>npm install (initialize)</id>-->
+                        <!--<goals>-->
+                            <!--<goal>exec</goal>-->
+                        <!--</goals>-->
+                        <!--<phase>initialize</phase>-->
+                        <!--<configuration>-->
+                            <!--<executable>${npm.executable}</executable>-->
+                            <!--<arguments>-->
+                                <!--<argument>install</argument>-->
+                            <!--</arguments>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!-- Required: The following will ensure `npm install` is called
+                         before anything else during the 'Clean Lifecycle' -->
+                    <!--<execution>-->
+                        <!--<id>npm install (clean)</id>-->
+                        <!--<goals>-->
+                            <!--<goal>exec</goal>-->
+                        <!--</goals>-->
+                        <!--<phase>pre-clean</phase>-->
+                        <!--<configuration>-->
+                            <!--<executable>${npm.executable}</executable>-->
+                            <!--<arguments>-->
+                                <!--<argument>install</argument>-->
+                            <!--</arguments>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+
+                    <!--&lt;!&ndash; Required: This following calls `npm run build` where 'build' is-->
+                         <!--the script name I used in my project, change this if yours is-->
+                             <!--different &ndash;&gt;-->
+                    <!--<execution>-->
+                        <!--<id>npm run build (compile)</id>-->
+                        <!--<goals>-->
+                            <!--<goal>exec</goal>-->
+                        <!--</goals>-->
+                        <!--<phase>compile</phase>-->
+                        <!--<configuration>-->
+                            <!--<executable>${npm.executable}</executable>-->
+                            <!--<arguments>-->
+                                <!--<argument>run</argument>-->
+                                <!--<argument>build</argument>-->
+                            <!--</arguments>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+
+                <!--</executions>-->
+            <!--</plugin>-->
+
+            <!--<plugin>-->
+                <!--<groupId>org.eclipse.jetty</groupId>-->
+                <!--<artifactId>jetty-maven-plugin</artifactId>-->
+                <!--<version>9.2.6.v20141205</version>-->
+                <!--<configuration>-->
+                    <!--<scanIntervalSeconds>0</scanIntervalSeconds>-->
+                    <!--<webApp>-->
+                        <!--<contextPath>/</contextPath>-->
+                    <!--</webApp>-->
+                    <!--<contextHandlers>-->
+                        <!--<contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">-->
+                            <!--<war>${project.parent.basedir}/ice-hockey-manager-rest/target/ice-hockey-manager-rest-1.0-SNAPSHOT.war</war>-->
+                            <!--<contextPath>/pa165/rest</contextPath>-->
+                        <!--</contextHandler>-->
+                    <!--</contextHandlers>-->
+                    <!--<stopPort>9999</stopPort>-->
+                    <!--<stopKey>STOP</stopKey>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
+
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <!-- what to do when only "mvn" is run -->
+        <defaultGoal>tomcat7:run</defaultGoal>
         <plugins>
+            <!-- Servlet 3.0 allows no web.xml deployment descriptor -->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-war-plugin</artifactId>-->
+                <!--<version>${maven-war-plugin.version}</version>-->
+                <!--<configuration>-->
+                    <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
+                    <!--<warSourceDirectory>${basedir}/build</warSourceDirectory>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
             <!-- Standard plugin to generate WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${maven-war-plugin.version}</version>
                 <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>${npm.output.directory}</directory>
-                        </resource>
-                    </webResources>
-                    <webXml>${basedir}/web.xml</webXml>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <!--<webResources>-->
+                        <!--<resource>-->
+                            <!--<directory>${npm.output.directory}</directory>-->
+                        <!--</resource>-->
+                    <!--</webResources>-->
+                    <!--<webappDirectory>${npm.output.directory}</webappDirectory>-->
+                    <!--<webXml>${basedir}/web.xml</webXml>-->
                 </configuration>
             </plugin>
-
+            <!--  embedded tomcat -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec-maven-plugin.version}</version>
-                <executions>
-                    <!-- Required: The following will ensure `npm install` is called
-                         before anything else during the 'Default Lifecycle' -->
-                    <execution>
-                        <id>npm install (initialize)</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>initialize</phase>
-                        <configuration>
-                            <executable>${npm.executable}</executable>
-                            <arguments>
-                                <argument>install</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <!-- Required: The following will ensure `npm install` is called
-                         before anything else during the 'Clean Lifecycle' -->
-                    <execution>
-                        <id>npm install (clean)</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>pre-clean</phase>
-                        <configuration>
-                            <executable>${npm.executable}</executable>
-                            <arguments>
-                                <argument>install</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                    <!-- Required: This following calls `npm run build` where 'build' is
-                         the script name I used in my project, change this if yours is
-                             different -->
-                    <execution>
-                        <id>npm run build (compile)</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>compile</phase>
-                        <configuration>
-                            <executable>${npm.executable}</executable>
-                            <arguments>
-                                <argument>run</argument>
-                                <argument>build</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.2.6.v20141205</version>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat7-maven-plugin.version}</version>
                 <configuration>
-                    <scanIntervalSeconds>0</scanIntervalSeconds>
-                    <webApp>
-                        <contextPath>/pa165</contextPath>
-                    </webApp>
-                    <contextHandlers>
-                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                            <war>${project.parent.basedir}/ice-hockey-manager-rest/target/ice-hockey-manager-rest-1.0-SNAPSHOT.war</war>
-                            <contextPath>/pa165/rest</contextPath>
-                        </contextHandler>
-                    </contextHandlers>
-                    <stopPort>9999</stopPort>
-                    <stopKey>STOP</stopKey>
+                    <path>/pa165</path>
                 </configuration>
             </plugin>
         </plugins>
@@ -117,22 +269,110 @@
 
     <profiles>
         <profile>
-            <id>local</id>
+            <id>clean-webapp</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!preservewebapp</name>
+                </property>
             </activation>
             <build>
                 <plugins>
+                    <!-- clean webapp -->
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin.version}</version>
-                        <configuration>
-                            <environmentVariables>
-                                <PUBLIC_URL>http://localhost:8080/pa165</PUBLIC_URL>
-                                <REACT_APP_ROUTER_BASE>/pa165</REACT_APP_ROUTER_BASE>
-                            </environmentVariables>
-                        </configuration>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <delete dir="${basedir}/src/main/webapp" includeemptydirs="true"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>copy-build-to-webapp</id>
+            <activation>
+                <property>
+                    <name>!manualcopy</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+
+                    <!-- npm install and npm run build -->
+                    <!--<plugin>-->
+                        <!--<groupId>org.codehaus.mojo</groupId>-->
+                        <!--<artifactId>exec-maven-plugin</artifactId>-->
+                        <!--<version>${exec-maven-plugin.version}</version>-->
+                        <!--<executions>-->
+                            <!--&lt;!&ndash; npm install &ndash;&gt;-->
+                            <!--<execution>-->
+                                <!--<id>npm install (generate-sources)</id>-->
+                                <!--<goals>-->
+                                    <!--<goal>exec</goal>-->
+                                <!--</goals>-->
+                                <!--<phase>generate-sources</phase>-->
+                                <!--<configuration>-->
+                                    <!--<executable>${npm.executable}</executable>-->
+                                    <!--<arguments>-->
+                                        <!--<argument>install</argument>-->
+                                    <!--</arguments>-->
+                                <!--</configuration>-->
+                            <!--</execution>-->
+                            <!--&lt;!&ndash; npm run build &ndash;&gt;-->
+                            <!--<execution>-->
+                                <!--<id>npm run build (generate-resources)</id>-->
+                                <!--<goals>-->
+                                    <!--<goal>exec</goal>-->
+                                <!--</goals>-->
+                                <!--<phase>generate-resources</phase>-->
+                                <!--<configuration>-->
+                                    <!--<executable>${npm.executable}</executable>-->
+                                    <!--<arguments>-->
+                                        <!--<argument>run</argument>-->
+                                        <!--<argument>build</argument>-->
+                                    <!--</arguments>-->
+                                <!--</configuration>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                        <!--<configuration>-->
+                            <!--<environmentVariables>-->
+                                <!--<PUBLIC_URL>http://localhost:8080/</PUBLIC_URL>-->
+                                <!--<REACT_APP_ROUTER_BASE>/pa165</REACT_APP_ROUTER_BASE>-->
+                            <!--</environmentVariables>-->
+                        <!--</configuration>-->
+                    <!--</plugin>-->
+                    <!-- copy build content into webapp -->
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <id>copy build into webapp</id>
+                                <configuration>
+                                    <outputDirectory>${basedir}/src/main/webapp</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>build</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

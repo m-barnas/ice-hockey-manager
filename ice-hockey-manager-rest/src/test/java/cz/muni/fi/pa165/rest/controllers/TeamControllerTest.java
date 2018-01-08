@@ -9,7 +9,6 @@ import cz.muni.fi.pa165.enums.CompetitionCountry;
 import cz.muni.fi.pa165.enums.Position;
 import cz.muni.fi.pa165.facade.TeamFacade;
 import cz.muni.fi.pa165.rest.ApiUri;
-import cz.muni.fi.pa165.rest.config.RestConfiguration;
 import cz.muni.fi.pa165.service.config.ServiceConfiguration;
 import org.junit.Ignore;
 import org.mockito.InjectMocks;
@@ -44,7 +43,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  * Created by Lukas Kotol on 12/16/2017.
  */
 @WebAppConfiguration
-@ContextConfiguration(classes = {ServiceConfiguration.class, RestConfiguration.class})
+@ContextConfiguration(classes = {ServiceConfiguration.class})
 public class TeamControllerTest extends AbstractTestNGSpringContextTests {
 
 //    @Autowired

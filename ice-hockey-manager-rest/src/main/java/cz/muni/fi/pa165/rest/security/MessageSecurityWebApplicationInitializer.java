@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.rest.initializers;
+package cz.muni.fi.pa165.rest.security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

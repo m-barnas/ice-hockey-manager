@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.rest.config;
+package cz.muni.fi.pa165;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -13,9 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -27,8 +25,13 @@ import java.util.Locale;
 @Configuration
 @EnableWebMvc
 @Import(ServiceConfiguration.class)
-@ComponentScan(basePackages = {"cz.muni.fi.pa165.rest"})
+@ComponentScan(basePackageClasses = {MainController.class}, basePackages = {"cz.muni.fi.pa165.rest.controllers"})
 public class RestConfiguration extends WebMvcConfigurerAdapter {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("/").setCachePeriod(31556926);
+    }
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

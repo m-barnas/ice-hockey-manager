@@ -76,7 +76,28 @@ curl -X POST -H 'Content-Type: application/json' -d '{
   * You can call step 3 again to also check the remaining time
 
 ### Run the app [prod]
-`mvn clean install && cd ice-hockey-manager-web && mvn jetty:run-war`
+
+Please follows these steps if you run prod build after fetching the most recent changes from master:
+- Note: (be careful and do not interchange **npm** install with **mvn** install, the order of each command is important)
+
+1) `mvn clean`
+2) `cd ice-hockey-manager-web`
+3) `npm install`
+4) `npm run build`
+5) `cd ..`
+6) `mvn install`
+7) `cd ice-hockey-manager-web`
+8) `mvn tomcat7:run`
+
+Later, when you made some changes only in web module and wanna check it out at prod, just run:
+
+1) `cd ice-hockey-manager-web`
+2) `mvn clean`
+3) `npm install`
+4) `npm run build`
+5) `mvn install`
+6) `cd ice-hockey-manager-web`
+7) `mvn tomcat7:run`
 
 ###### Rest is accessible at: `http:/localhost:8080/pa165/rest`
 
@@ -84,7 +105,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 
 ### Run the app [dev]
 
-`mvn clean install && cd ice-hockey-manager-rest mvn tomcat7:run`
+`mvn clean install && cd ice-hockey-manager-web mvn tomcat7:run`
 
 In another terminal:
 
@@ -92,7 +113,7 @@ In another terminal:
 
 ###### Rest is accessible at: `http:/localhost:8080/pa165/rest`
 
-###### Frontend is accessible at: `http:/localhost:3000`
+###### Frontend is accessible at: `http:/localhost:3000/pa165`
 
 ## REST API (all formats are JSON)
 
