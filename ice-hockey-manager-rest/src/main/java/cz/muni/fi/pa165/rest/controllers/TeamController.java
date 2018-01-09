@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.rest.controllers;
 
+import cz.muni.fi.pa165.dto.ErrorDto;
 import cz.muni.fi.pa165.dto.TeamAddRemovePlayerDto;
 import cz.muni.fi.pa165.dto.TeamDto;
 import cz.muni.fi.pa165.dto.TeamSpendMoneyDto;
@@ -63,9 +64,14 @@ public class TeamController {
     }
 
     @RequestMapping(path = "/spendMoneyFromBudget", method = RequestMethod.POST)
-    public TeamDto spendMoneyFromBudget(@RequestBody TeamSpendMoneyDto teamSpendMoneyDto) throws TeamServiceException {
+    public Object spendMoneyFromBudget(@RequestBody TeamSpendMoneyDto teamSpendMoneyDto) throws TeamServiceException {
+        try {
+
         teamFacade.spendMoneyFromBudget(teamSpendMoneyDto.getTeamId(), teamSpendMoneyDto.getAmount());
         log.debug("spendMoneyFromBudget({}, {})", teamSpendMoneyDto.getTeamId(), teamSpendMoneyDto.getAmount());
+        } catch (TeamServiceException e){
+            return new ErrorDto(e.getMessage());
+        }
         return teamFacade.getTeamById(teamSpendMoneyDto.getTeamId());
     }
 

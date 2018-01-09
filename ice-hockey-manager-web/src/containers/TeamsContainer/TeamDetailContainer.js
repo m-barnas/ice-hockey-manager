@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import axios from '../../axios';
 import {Row, List, Select, Button} from 'antd';
-import {Link} from 'react-router-dom';
 import {transformCountryLabel} from '../../other/Helper';
 
 const Option = Select.Option;
@@ -13,13 +12,18 @@ class TeamDetailContainer extends Component {
         super(props);
         this.state = {
             team: {
-                hockeyPlayers: []
+                hockeyPlayers:  this.getFreeAgents()
             },
             humanPlayer: {},
             loading: true,
             isHumanPlayer: false,
-            selectedHockeyPlayerToAdd: null,
-            hockeyPlayers: []
+            selectedHockeyPlayerToAdd: {
+                label: '',
+                key: ''
+            },
+
+            hockeyPlayers: [],
+            firstHockeyPlayerId: null
         };
         this.onChangeAddPlayer = this.onChangeAddPlayer.bind(this);
         this.onAddPlayer = this.onAddPlayer.bind(this);
@@ -30,7 +34,6 @@ class TeamDetailContainer extends Component {
     componentDidMount() {
         axios.get('/teams/' + this.props.match.params.id)
             .then(responseTeam => {
-                console.log(responseTeam.data);
                 if (responseTeam.data.humanPlayerId != null) {
                     axios.get('/managers/' + responseTeam.data.humanPlayerId)
                         .then(responseHumanPlayer => {
@@ -47,7 +50,7 @@ class TeamDetailContainer extends Component {
                         loading: false
                     });
                 }
-                this.getFreeAgents();
+
             })
             .catch(error => {
                 console.log(error);
@@ -57,15 +60,33 @@ class TeamDetailContainer extends Component {
     getFreeAgents() {
         axios.get('/players/getFreeAgents')
             .then(responseHockeyPlayer => {
-                this.setState({
-                    hockeyPlayers: responseHockeyPlayer.data
-                });
+                let player = responseHockeyPlayer.data[0];
+                if(player !== undefined){
+                    this.setState({
+                        hockeyPlayers: responseHockeyPlayer.data,
+                        selectedHockeyPlayerToAdd: {
+                            key: player.id,
+                            label:<div>{player.name} ({player.price})</div>
+                        }
+                    });
+                } else {
+                    this.setState({
+                        hockeyPlayers: responseHockeyPlayer.data,
+                    });
+                }
             });
     }
 
-    onChangeAddPlayer(playerId) {
+    onChangeAddPlayer(playerLabel) {
+        let player = this.state.hockeyPlayers.filter(function (player) {
+            return player.id === playerLabel.key;
+        })[0];
+
         this.setState({
-            selectedHockeyPlayerToAdd: playerId
+            selectedHockeyPlayerToAdd: {
+                key:player.id,
+                label:<div>{player.name} ({player.price})</div>
+            }
         });
     }
 
@@ -74,22 +95,27 @@ class TeamDetailContainer extends Component {
             axios.post('/teams/spendMoneyFromBudget', {
                 teamId: this.props.match.params.id,
                 amount: this.state.hockeyPlayers.filter(function (player) {
-                    return player.id === this.state.selectedHockeyPlayerToAdd;
+                    return player.id === this.state.selectedHockeyPlayerToAdd.key;
                 }.bind(this))[0].price
-            }).then(responseAddPlayer => {
+            }).then(spendMoneyResp => {
+                if(spendMoneyResp.data.errorName){
+                    alert(spendMoneyResp.data.errorName);
+                    return;
+                }
                 axios.post('/teams/addHockeyPlayer', {
                     teamId: this.props.match.params.id,
-                    hockeyPlayerId: this.state.selectedHockeyPlayerToAdd
+                    hockeyPlayerId: this.state.selectedHockeyPlayerToAdd.key
                 }).then(responseAddPlayer => {
                     this.setState({
                         team: responseAddPlayer.data
                     });
+                    this.getFreeAgents();
+
                 });
 
             });
 
         }
-        this.getFreeAgents();
     }
 
     onRemovePlayer(playerId) {
@@ -109,6 +135,7 @@ class TeamDetailContainer extends Component {
             ? <span>{this.state.humanPlayer.username}</span>
             : 'Not added yet';
 
+
         return (
             <div>
                 <Row><h2>{this.state.team.name}</h2></Row>
@@ -119,9 +146,10 @@ class TeamDetailContainer extends Component {
                 <Row><h3>Manager: {humanPlayer}</h3></Row>
                 <Row>
                     <Button type="primary" onClick={this.onAddPlayer}>Add player</Button>&nbsp;&nbsp;
-                    <Select style={{width: 200}} onChange={this.onChangeAddPlayer}>
+
+                    <Select style={{width: 200}} onChange={this.onChangeAddPlayer} value={this.state.selectedHockeyPlayerToAdd} labelInValue={true}>
                         {this.state.hockeyPlayers.map(function (player, index) {
-                            return <Option value={player.id} key={index}>{player.name}</Option>;
+                            return <Option value={player.id} key={index}>{player.name} ({player.price})</Option>;
                         })}
                     </Select>
                 </Row>
