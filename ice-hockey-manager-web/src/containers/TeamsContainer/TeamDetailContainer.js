@@ -71,22 +71,23 @@ class TeamDetailContainer extends Component {
 
     onAddPlayer() {
         if (this.state.selectedHockeyPlayerToAdd !== null) {
-            axios.post('/teams/addHockeyPlayer', {
+            axios.post('/teams/spendMoneyFromBudget', {
                 teamId: this.props.match.params.id,
-                hockeyPlayerId: this.state.selectedHockeyPlayerToAdd
+                amount: this.state.hockeyPlayers.filter(function (player) {
+                    return player.id === this.state.selectedHockeyPlayerToAdd;
+                }.bind(this))[0].price
             }).then(responseAddPlayer => {
-                axios.post('/teams/spendMoneyFromBudget', {
+                axios.post('/teams/addHockeyPlayer', {
                     teamId: this.props.match.params.id,
-                    amount: this.state.hockeyPlayers.filter(function (player) {
-                        return player.id === this.state.selectedHockeyPlayerToAdd;
-                    }.bind(this))[0].price
+                    hockeyPlayerId: this.state.selectedHockeyPlayerToAdd
                 }).then(responseAddPlayer => {
-
                     this.setState({
                         team: responseAddPlayer.data
                     });
                 });
+
             });
+
         }
         this.getFreeAgents();
     }
@@ -105,7 +106,7 @@ class TeamDetailContainer extends Component {
 
     render() {
         let humanPlayer = this.state.isHumanPlayer
-            ? <Link to={'/managers/' + this.state.humanPlayer.id}>{this.state.humanPlayer.username}</Link>
+            ? <span>{this.state.humanPlayer.username}</span>
             : 'Not added yet';
 
         return (
@@ -129,7 +130,7 @@ class TeamDetailContainer extends Component {
                     dataSource={this.state.team.hockeyPlayers}
                     renderItem={player => (
                         <List.Item actions={[<a onClick={() => this.onRemovePlayer(player.id)}>remove</a>]}>
-                            <Link to={'/players/' + player.id}>{player.name}</Link>
+                            {player.name}
                         </List.Item>)}
                 />
             </div>

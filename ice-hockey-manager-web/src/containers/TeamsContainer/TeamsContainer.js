@@ -28,7 +28,7 @@ class TeamsContainer extends Component {
             title: 'Competition country',
             render: (value, row, index) => {
                 return <img
-                    src={'http://localhost:3000/assets/pics/' + value.competitionCountry + '.png'}
+                    src={'/assets/pics/' + value.competitionCountry + '.png'}
                     alt={transformCountryLabel(value.competitionCountry)}
                 />;
             },
