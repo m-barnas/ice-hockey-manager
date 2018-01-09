@@ -80,7 +80,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 Please follows these steps if you run prod build after fetching the most recent changes from master:
 - Note: (be careful and do not interchange **npm** install with **mvn** install, the order of each command is important)
 
-1) `mvn clean`
+1) `mvn clean install`
 2) `cd ice-hockey-manager-web`
 3) `npm install`
 4) `npm run build`
