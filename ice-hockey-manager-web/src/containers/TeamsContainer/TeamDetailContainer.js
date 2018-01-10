@@ -23,7 +23,6 @@ class TeamDetailContainer extends Component {
             },
 
             hockeyPlayers: [],
-            firstHockeyPlayerId: null
         };
         this.onChangeAddPlayer = this.onChangeAddPlayer.bind(this);
         this.onAddPlayer = this.onAddPlayer.bind(this);
@@ -60,8 +59,8 @@ class TeamDetailContainer extends Component {
     getFreeAgents() {
         axios.get('/players/getFreeAgents')
             .then(responseHockeyPlayer => {
-                let player = responseHockeyPlayer.data[0];
-                if(player !== undefined){
+                if(responseHockeyPlayer.data.length > 0){
+                    let player = responseHockeyPlayer.data[0];
                     this.setState({
                         hockeyPlayers: responseHockeyPlayer.data,
                         selectedHockeyPlayerToAdd: {
@@ -72,6 +71,10 @@ class TeamDetailContainer extends Component {
                 } else {
                     this.setState({
                         hockeyPlayers: responseHockeyPlayer.data,
+                        selectedHockeyPlayerToAdd: {
+                            key: 0,
+                            label:<div/>
+                        }
                     });
                 }
             });
@@ -91,7 +94,7 @@ class TeamDetailContainer extends Component {
     }
 
     onAddPlayer() {
-        if (this.state.selectedHockeyPlayerToAdd !== null) {
+        if (this.state.selectedHockeyPlayerToAdd !== null && this.state.hockeyPlayers.length > 0) {
             axios.post('/teams/spendMoneyFromBudget', {
                 teamId: this.props.match.params.id,
                 amount: this.state.hockeyPlayers.filter(function (player) {
@@ -123,11 +126,12 @@ class TeamDetailContainer extends Component {
             teamId: this.props.match.params.id,
             hockeyPlayerId: playerId
         }).then(responseAddPlayer => {
+            this.getFreeAgents();
             this.setState({
                 team: responseAddPlayer.data
             });
         });
-        this.getFreeAgents();
+
     }
 
     render() {
