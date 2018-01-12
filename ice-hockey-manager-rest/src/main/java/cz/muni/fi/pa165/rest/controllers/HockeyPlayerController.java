@@ -43,11 +43,13 @@ public class HockeyPlayerController {
 		hockeyPlayerFacade.delete(id);
 	}
 
-	@RequestMapping(path = ApiUri.SubApiUri.CREATE, method = RequestMethod.PUT)
+	@RequestMapping(value = "/create", method = RequestMethod.PUT,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	public HockeyPlayerDto create(@RequestBody HockeyPlayerDto hockeyPlayerDto) {
-		hockeyPlayerFacade.create(hockeyPlayerDto);
-		log.debug("create(createdId = {})", hockeyPlayerDto.getId());
-		return hockeyPlayerDto;
+		Long id = hockeyPlayerFacade.create(hockeyPlayerDto);
+		log.debug("create(createdId = {})", id);
+		return hockeyPlayerFacade.findById(id);
 	}
 
 	@RequestMapping(path = "/all", method = RequestMethod.GET)

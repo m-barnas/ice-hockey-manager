@@ -99,7 +99,7 @@ class PlayerCreateContainer extends Component {
                     {...formItemLayout}
                     label="Position"
                 >
-                    {getFieldDecorator('position', {
+                    {getFieldDecorator('post', {
                         rules: [
                             {required: true, message: 'Please select player\'s position!'},
                         ],
@@ -118,7 +118,7 @@ class PlayerCreateContainer extends Component {
                     {...formItemLayout}
                     label="Attack Skill"
                 >
-                    {getFieldDecorator('attSkill', {
+                    {getFieldDecorator('attackSkill', {
                         rules: [
                             {required: true, message: 'Please set player\'s attack skill!'},
                         ],
@@ -131,7 +131,7 @@ class PlayerCreateContainer extends Component {
                     {...formItemLayout}
                     label="Defense Skill"
                 >
-                    {getFieldDecorator('defSkill', {
+                    {getFieldDecorator('defenseSkill', {
                         rules: [
                             {required: true, message: 'Please set player\'s defense skill!'},
                         ],
