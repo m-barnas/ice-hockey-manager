@@ -43,7 +43,7 @@ public class HockeyPlayerController {
 		hockeyPlayerFacade.delete(id);
 	}
 
-	@RequestMapping(path = "/create", method = RequestMethod.PUT)
+	@RequestMapping(path = ApiUri.SubApiUri.CREATE, method = RequestMethod.PUT)
 	public HockeyPlayerDto create(@RequestBody HockeyPlayerDto hockeyPlayerDto) {
 		hockeyPlayerFacade.create(hockeyPlayerDto);
 		log.debug("create(createdId = {})", hockeyPlayerDto.getId());
