@@ -57,7 +57,7 @@ class TeamDetailContainer extends Component {
     }
 
     getFreeAgents() {
-        axios.get('/players/getFreeAgents')
+        axios.get('/players/get-free-agents')
             .then(responseHockeyPlayer => {
                 if(responseHockeyPlayer.data.length > 0){
                     let player = responseHockeyPlayer.data[0];
