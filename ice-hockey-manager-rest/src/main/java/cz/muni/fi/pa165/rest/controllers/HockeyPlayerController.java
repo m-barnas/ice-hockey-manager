@@ -56,43 +56,43 @@ public class HockeyPlayerController {
 		return hockeyPlayerFacade.findAll();
 	}
 
-	@RequestMapping(path = "/getByName/{name}", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-by-name/{name}", method = RequestMethod.GET)
 	public HockeyPlayerDto findByName(@PathVariable("name") String name) {
 		log.debug("findByName({})", name);
 		return hockeyPlayerFacade.findByName(name);
 	}
 
-	@RequestMapping(path = "/getByTeam/{teamId}", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-by-team/{teamId}", method = RequestMethod.GET)
 	public Collection<HockeyPlayerDto> findByTeam(@PathVariable("teamId") Long teamId) {
 		log.debug("findByTeam({})", teamId);
 		return hockeyPlayerFacade.findByTeam(teamFacade.getTeamById(teamId));
 	}
 
-	@RequestMapping(path = "/getFreeAgents", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-free-agents", method = RequestMethod.GET)
 	public Collection<HockeyPlayerDto> findFreeAgents() {
 		log.debug("findFreeAgents");
 		return hockeyPlayerFacade.findFreeAgents();
 	}
 
-	@RequestMapping(path = "/getByAttSkill/{attSkill}", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-by-att-skill/{attSkill}", method = RequestMethod.GET)
 	public Collection<HockeyPlayerDto> findByAttSkill(@PathVariable("attSkill") int attSkill) {
 		log.debug("findByAttackSkill({})", attSkill);
 		return hockeyPlayerFacade.findByAttSkill(attSkill);
 	}
 
-	@RequestMapping(path = "/getByDefSkill/{defSkill}", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-by-def-skill/{defSkill}", method = RequestMethod.GET)
 	public Collection<HockeyPlayerDto> findByDefSkill(@PathVariable("defSkill") int defSkill) {
 		log.debug("findByDefenseSkill({})", defSkill);
 		return hockeyPlayerFacade.findByDefSkill(defSkill);
 	}
 
-	@RequestMapping(path = "/getByPost/{post}", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-by-post/{post}", method = RequestMethod.GET)
 	public Collection<HockeyPlayerDto> findByPost(@PathVariable("post") Position post) {
 		log.debug("findByPost({})", post);
 		return hockeyPlayerFacade.findByPost(post);
 	}
 
-	@RequestMapping(path = "/getByPrice/{price}", method = RequestMethod.GET)
+	@RequestMapping(path = "/get-by-price/{price}", method = RequestMethod.GET)
 	public Collection<HockeyPlayerDto> findByPrice(@PathVariable("price") BigDecimal price) {
 		log.debug("findByPrice({})", price);
 		return hockeyPlayerFacade.findByPriceLessOrEqualThan(price);

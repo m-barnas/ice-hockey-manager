@@ -106,11 +106,11 @@ This saves some time for you since only web module is cleaned and installed.
 
 ### Run the app [dev]
 
-`mvn clean install && cd ice-hockey-manager-web mvn tomcat7:run`
+`mvn clean install && cd ice-hockey-manager-web && mvn tomcat7:run`
 
 In another terminal:
 
-`cd ice-hockey-manager-web npm run start`
+`cd ice-hockey-manager-web && npm run start`
 
 ###### Rest is accessible at: `http:/localhost:8080/pa165/rest`
 
@@ -240,13 +240,13 @@ method: GET
 
 ##### Get player by team
 
-URL: `http:/localhost:8080/pa165/rest/players/getByTeam/{teamId}`
+URL: `http:/localhost:8080/pa165/rest/players/get-by-team/{teamId}`
 
 method: GET 
 
 #### Get free agents (players without a team)
 
-URL: `http:/localhost:8080/pa165/rest/players/getFreeAgents`
+URL: `http:/localhost:8080/pa165/rest/players/get-free-agents`
 
 method: GET
 
@@ -259,7 +259,7 @@ method: GET
 
 #### Get player by name 
 
-URL: `http:/localhost:8080/pa165/rest/players/getByName/{name}`
+URL: `http:/localhost:8080/pa165/rest/players/get-by-name/{name}`
 
 method: GET
 
@@ -272,25 +272,25 @@ method: DELETE
 
 #### Get player by position 
 
-URL: `http:/localhost:8080/pa165/rest/players/getByPost/{post}`
+URL: `http:/localhost:8080/pa165/rest/players/get-by-post/{post}`
 
 method: GET
 
 #### Get player by attack skill
 
-URL: `http:/localhost:8080/pa165/rest/players/getByAttSkill/{attSkill}`
+URL: `http:/localhost:8080/pa165/rest/players/get-by-att-skill/{attSkill}`
 
 method: GET
 
 #### Get player by defense skill
 
-URL: `http:/localhost:8080/pa165/rest/players/getByDefSkill/{defSkill}`
+URL: `http:/localhost:8080/pa165/rest/players/get-by-deff-skill/{defSkill}`
 
 method: GET
 
 #### Get player by price
 
-URL: `http:/localhost:8080/pa165/rest/players/getByPrice/{price}`
+URL: `http:/localhost:8080/pa165/rest/players/get-by-price/{price}`
 
 method: GET
 
