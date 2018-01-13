@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 
+// css
+import './HomeContainer.css';
+
 class HomeContainer extends Component {
     render() {
         return (
-            <React.Fragment>
-                <p>Home Container</p>
-            </React.Fragment>
+            <div>
+                <h1>Ice Hockey Manager</h1>
+                <h3>Manage your favorite hockey team!</h3>
+                <img
+                    src={'../../assets/pics/hockeyplayer.png'}
+                    alt={'hockey player'}
+                />
+            </div>
         );
     }
 }
