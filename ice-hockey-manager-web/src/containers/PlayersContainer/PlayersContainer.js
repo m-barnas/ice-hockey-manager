@@ -7,6 +7,9 @@ import {Link} from "react-router-dom";
 
 const Option = Select.Option;
 
+/**
+ * @author Jakub Hruska <jhruska@mail.muni.cz>
+ */
 class HockeyPlayersContainer extends Component {
 
     constructor(props) {
