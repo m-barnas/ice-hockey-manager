@@ -92,7 +92,7 @@ class HockeyPlayersContainer extends Component {
     }
 
     getFreeAgents() {
-        axios.get('/players/getFreeAgents')
+        axios.get('/players/get-free-agents')
             .then(response => {
                 this.setState({
                     players: response.data,
@@ -115,7 +115,7 @@ class HockeyPlayersContainer extends Component {
         } else if (selected === "FREE") {
             this.getFreeAgents();
         } else {
-            axios.get('/players/getByTeam/' + selected)
+            axios.get('/players/get-by-team/' + selected)
                 .then(response =>  {
                     this.setState({
                         players: response.data,
@@ -137,7 +137,7 @@ class HockeyPlayersContainer extends Component {
         if (selected === "ALL") {
             this.getAllPlayers();
         } else {
-            axios.get('/players/getByPost/' + selected)
+            axios.get('/players/get-by-post/' + selected)
                 .then(response =>  {
                     this.setState({
                         players: response.data,

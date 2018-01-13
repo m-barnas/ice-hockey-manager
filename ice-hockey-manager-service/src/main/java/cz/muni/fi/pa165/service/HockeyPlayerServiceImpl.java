@@ -25,6 +25,7 @@ public class HockeyPlayerServiceImpl implements HockeyPlayerService {
 
 	@Override
 	public Long create(HockeyPlayer player) {
+		validate(player);
 		playerDao.create(player);
 		return player.getId();
 	}
@@ -114,5 +115,26 @@ public class HockeyPlayerServiceImpl implements HockeyPlayerService {
 			}
 		}
 		return filteredPlayers;
+	}
+
+	private void validate(HockeyPlayer player) {
+		if (player == null) {
+			throw new IllegalArgumentException("Player is null.");
+		}
+		if (player.getName() == null) {
+			throw new IllegalArgumentException("Player's name is null");
+		}
+		if (player.getPost() == null) {
+			throw new IllegalArgumentException("Player's post is null");
+		}
+		if (player.getAttackSkill() < 1 || player.getAttackSkill() > 99) {
+			throw new IllegalArgumentException("Invalid attack skill");
+		}
+		if (player.getDefenseSkill() < 1 || player.getDefenseSkill() > 99) {
+			throw new IllegalArgumentException("Invalid defense skill");
+		}
+		if (player.getPrice() == null || player.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+			throw new IllegalArgumentException("Invalid price");
+		}
 	}
 }

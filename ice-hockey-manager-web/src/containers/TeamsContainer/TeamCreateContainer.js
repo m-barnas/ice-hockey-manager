@@ -36,11 +36,15 @@ class TeamCreateContainer extends Component {
     }
 
     handleSubmit(e) {
+        console.log("team - handling submitted form");
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log("values: ", values);
             if (!err) {
                 axios.put('/teams/create', values)
                     .then(response => {
+                        console.log("successfully added team");
+                        console.log("response: ", response);
                         this.setState({
                             redirect: true
                         });

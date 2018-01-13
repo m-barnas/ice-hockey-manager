@@ -52,7 +52,7 @@ public class HockeyPlayer {
 	private int defenseSkill;
 
 	@ManyToOne
-	@JoinColumn(name = "teamId", nullable = true)
+	@JoinColumn(name = "teamId")
 	private Team team;
 
 	@NotNull
