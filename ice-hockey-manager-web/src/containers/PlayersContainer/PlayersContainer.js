@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
 import axios from '../../axios';
+
+// actions
+import * as actions from '../../store/actions/index';
+
 import {Table, Select, Button, Row} from 'antd';
 import {transformPositionLabel} from "../../other/Helper";
 import {Link} from "react-router-dom";
@@ -57,11 +61,12 @@ class HockeyPlayersContainer extends Component {
     }, {
         key: 'delete',
         render: (value, row, index) => {
-            return <Button type="primary" onClick={() => this.onRemovePlayer(value.id)}>Delete</Button>
+            return this.props.hasRoleAdmin ? <Button type="danger" onClick={() => this.onRemovePlayer(value.id)}>Delete</Button> : '';
         }
     }];
 
     componentDidMount() {
+        this.props.onSetAuthRedirectPath('/players');
         this.getAllPlayers();
         this.getAllTeams();
     }
@@ -154,8 +159,17 @@ class HockeyPlayersContainer extends Component {
     }
 
     onRemovePlayer(playerId) {
-        axios.delete('/players/' + playerId)
-            .then(this.getAllPlayers);
+        axios({
+            method: 'delete',
+            url: '/players/' + playerId,
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then(
+            this.getAllPlayers
+        ).catch(err => {
+            console.log(err);
+        });
     }
 
     render() {
@@ -186,15 +200,39 @@ class HockeyPlayersContainer extends Component {
                 </Select>
             </div>
         );
+
+        let createBtn = this.props.hasRoleAdmin ? (
+            <Row>
+                <Link to={'/players/create'}>
+                    <Button type="primary">
+                        Create player
+                    </Button>
+                </Link>
+            </Row>) : (
+                <Row/>
+            );
         return (
             <div>
                 <div>{teamSelect}</div>
                 <div>{postSelect}</div>
-                <Row><Link to={'/players/create'}><Button type="primary">Create player</Button></Link></Row>
+                {createBtn}
                 <Table dataSource={this.state.players} columns={this.columns} rowKey={'id'}/>
             </div>
         );
     }
 }
 
-export default HockeyPlayersContainer;
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )(HockeyPlayersContainer);

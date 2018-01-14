@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
-
+import { connect } from 'react-redux';
 import axios from '../../axios';
 import {Link, Redirect} from 'react-router-dom';
+
+// actions
+import * as actions from '../../store/actions/index';
 
 import {Form, Button, DatePicker} from 'antd';
 
@@ -19,6 +22,10 @@ class GamesChangeStartTimeContainer extends Component {
             loaded: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.onSetAuthRedirectPath('/games/edit/' + this.props.match.params.id);
     }
 
     componentWillMount() {
@@ -39,8 +46,14 @@ class GamesChangeStartTimeContainer extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
             console.log("values: ", values);
-                axios.put('/games/' + this.props.match.params.id, values)
-                    .then(response => {
+                axios({
+                    method: 'put',
+                    url: '/games/' + this.props.match.params.id,
+                    headers: {
+                        'Authorization': 'Bearer ' + this.props.token
+                    },
+                    data: values
+                }).then(response => {
                         this.setState({
                             redirect: true
                         });
@@ -58,9 +71,13 @@ class GamesChangeStartTimeContainer extends Component {
     }
 
     render() {
+        if (!this.props.hasRoleAdmin) {
+            return <Redirect to="/auth" />
+        }
         if (this.state.redirect){
            return <Redirect to="/games"/>;
         }
+
         const {getFieldDecorator} = this.props.form;
 
         const formItemLayout = {
@@ -119,6 +136,19 @@ class GamesChangeStartTimeContainer extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
+
 const WrappedChangeGame = Form.create()(GamesChangeStartTimeContainer);
 
-export default WrappedChangeGame;
+export default connect( mapStateToProps, mapDispatchToProps )(WrappedChangeGame);

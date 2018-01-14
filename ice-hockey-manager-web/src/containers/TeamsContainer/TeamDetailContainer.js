@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
-
+import { connect } from 'react-redux';
 import axios from '../../axios';
+
+// actions
+import * as actions from '../../store/actions/index';
+
 import {Row, List, Select, Button} from 'antd';
 import {transformCountryLabel} from '../../other/Helper';
 
@@ -31,6 +35,7 @@ class TeamDetailContainer extends Component {
 
 
     componentDidMount() {
+        this.props.onSetAuthRedirectPath('/teams/' + this.props.match.params.id);
         axios.get('/teams/' + this.props.match.params.id)
             .then(responseTeam => {
                 if (responseTeam.data.humanPlayerId != null) {
@@ -49,7 +54,6 @@ class TeamDetailContainer extends Component {
                         loading: false
                     });
                 }
-
             })
             .catch(error => {
                 console.log(error);
@@ -95,19 +99,33 @@ class TeamDetailContainer extends Component {
 
     onAddPlayer() {
         if (this.state.selectedHockeyPlayerToAdd !== null && this.state.hockeyPlayers.length > 0) {
-            axios.post('/teams/spendMoneyFromBudget', {
-                teamId: this.props.match.params.id,
-                amount: this.state.hockeyPlayers.filter(function (player) {
-                    return player.id === this.state.selectedHockeyPlayerToAdd.key;
-                }.bind(this))[0].price
+            axios({
+                method: 'post',
+                url: '/teams/spendMoneyFromBudget',
+                headers: {
+                    'Authorization': 'Bearer ' + this.props.token
+                },
+                data: {
+                    teamId: this.props.match.params.id,
+                    amount: this.state.hockeyPlayers.filter(function (player) {
+                        return player.id === this.state.selectedHockeyPlayerToAdd.key;
+                    }.bind(this))[0].price
+                }
             }).then(spendMoneyResp => {
                 if(spendMoneyResp.data.errorName){
                     alert(spendMoneyResp.data.errorName);
                     return;
                 }
-                axios.post('/teams/addHockeyPlayer', {
-                    teamId: this.props.match.params.id,
-                    hockeyPlayerId: this.state.selectedHockeyPlayerToAdd.key
+                axios({
+                    method: 'post',
+                    url: '/teams/addHockeyPlayer',
+                    headers: {
+                        'Authorization': 'Bearer ' + this.props.token
+                    },
+                    data: {
+                        teamId: this.props.match.params.id,
+                        hockeyPlayerId: this.state.selectedHockeyPlayerToAdd.key
+                    }
                 }).then(responseAddPlayer => {
                     this.setState({
                         team: responseAddPlayer.data
@@ -122,9 +140,16 @@ class TeamDetailContainer extends Component {
     }
 
     onRemovePlayer(playerId) {
-        axios.post('/teams/removeHockeyPlayer', {
-            teamId: this.props.match.params.id,
-            hockeyPlayerId: playerId
+        axios({
+            method: 'post',
+            url: '/teams/removeHockeyPlayer',
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token
+            },
+            data: {
+                teamId: this.props.match.params.id,
+                hockeyPlayerId: playerId
+            }
         }).then(responseAddPlayer => {
             this.getFreeAgents();
             this.setState({
@@ -134,12 +159,32 @@ class TeamDetailContainer extends Component {
 
     }
 
+    getActions(playerId) {
+        return this.hasPrivileges() ? [<a onClick={() => this.onRemovePlayer(playerId)}>remove</a>] : [];
+    };
+
+    hasPrivileges() {
+        return this.props.isAuthenticated && this.state.isHumanPlayer && this.state.humanPlayer.id === this.props.userId;
+    }
+
     render() {
         let humanPlayer = this.state.isHumanPlayer
             ? <span>{this.state.humanPlayer.username}</span>
             : 'Not added yet';
 
+        let addPlayerRow = this.hasPrivileges() ? (
+            <Row>
+                <Button type="primary" onClick={this.onAddPlayer}>Add player</Button>&nbsp;&nbsp;
 
+                <Select style={{width: 200}} onChange={this.onChangeAddPlayer} value={this.state.selectedHockeyPlayerToAdd} labelInValue={true}>
+                    {this.state.hockeyPlayers.map(function (player, index) {
+                        return <Option value={player.id} key={index}>{player.name} ({player.price})</Option>;
+                    })}
+                </Select>
+            </Row>
+        ) : (
+            <Row/>
+        );
         return (
             <div>
                 <Row><h2>{this.state.team.name}</h2></Row>
@@ -148,27 +193,33 @@ class TeamDetailContainer extends Component {
                 </Row>
                 <Row><h3>Budget: {this.state.team.budget}</h3></Row>
                 <Row><h3>Manager: {humanPlayer}</h3></Row>
-                <Row>
-                    <Button type="primary" onClick={this.onAddPlayer}>Add player</Button>&nbsp;&nbsp;
-
-                    <Select style={{width: 200}} onChange={this.onChangeAddPlayer} value={this.state.selectedHockeyPlayerToAdd} labelInValue={true}>
-                        {this.state.hockeyPlayers.map(function (player, index) {
-                            return <Option value={player.id} key={index}>{player.name} ({player.price})</Option>;
-                        })}
-                    </Select>
-                </Row>
+                {addPlayerRow}
                 <List
                     header={<h2>Hockey players of team</h2>}
                     dataSource={this.state.team.hockeyPlayers}
                     renderItem={player => (
-                        <List.Item actions={[<a onClick={() => this.onRemovePlayer(player.id)}>remove</a>]}>
+                        <List.Item actions={this.getActions(player.id)}>
                             {player.name}
                         </List.Item>)}
                 />
             </div>
         );
     }
-
 }
 
-export default TeamDetailContainer;
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        isAuthenticated: state.auth.token !== null,
+        userId: state.auth.userId,
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )(TeamDetailContainer);

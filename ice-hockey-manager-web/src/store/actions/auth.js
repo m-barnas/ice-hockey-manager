@@ -7,10 +7,12 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (authData) => {
+export const authSuccess = (token, userId, role) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        authData: authData
+        token: token,
+        userId: userId,
+        role: role
     };
 };
 
@@ -21,104 +23,50 @@ export const authFail = (error) => {
     };
 };
 
-// grant_type: 'password',
-//     client_id: 'web-client',
-//     client_secret: '53ac618c-c8d2-44a1-b257-a2bd3816e829',
-//     scope: 'trust',
-//     username: email,
-//     password: password
+export const logout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    };
+};
+
+export const checkAuthTimeout = (expirationTime) => {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(logout());
+        }, expirationTime * 100000);
+    };
+};
+
+export const setAuthRedirectPath = (path) => {
+    return {
+        type: actionTypes.SET_AUTH_REDIRECT_PATH,
+        path: path
+    };
+};
 
 export const auth = (email, password) => {
     return dispatch => {
         dispatch(authStart());
-        const data = {
-            grant_type: 'password',
-            username: email,
-            password: password,
-            client_id: 'web-client',
-            client_secret: '53ac618c-c8d2-44a1-b257-a2bd3816e829'
-        };
-        const headers = {
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/pa165/oauth/token',
             headers: {
-                Authorization: 'Basic ' + btoa('web-client:53ac618c-c8d2-44a1-b257-a2bd3816e829')
+                'Content-type': 'application/x-www-form-urlencoded'
+            },
+            params: {
+                'grant_type': 'password',
+                'client_id': 'web-client',
+                'client_secret': '53ac618c-c8d2-44a1-b257-a2bd3816e829',
+                'scope': 'read write trust',
+                'username': email,
+                'password': password
             }
-        };
-
-        axios({ method: 'POST', url: 'oauth/token', headers: {Authorization: 'Basic ' + btoa('web-client:53ac618c-c8d2-44a1-b257-a2bd3816e829')}, data });
-
-        axios.post('http://localhost:8080/pa165/oauth/token', JSON.stringify(data))
-            .then(response => {
-                console.log('response' + response);
-                dispatch(authSuccess(response.data));
-            })
-            .catch(err => {
-                console.log('errorik' + err);
-                dispatch(authFail(err));
-            })
+        }).then(function (res) {
+            dispatch(authSuccess(res.data.access_token, res.data.id, res.data.role));
+            dispatch(checkAuthTimeout(res.data.expires_in));
+        })
+        .catch(function (err) {
+            dispatch(authFail(err));
+        });
     };
 };
-
-// const data = {
-//     grant_type: USER_GRANT_TYPE,
-//     client_id: CLIENT_ID,
-//     client_secret: CLIENT_SECRET,
-//     scope: SCOPE_INT,
-//     username: DEMO_EMAIL,
-//     password: DEMO_PASSWORD
-// };
-//
-//
-//
-// axios.post(TOKEN_URL, Querystring.stringify(data))
-//     .then(response => {
-//         console.log(response.data);
-//         USER_TOKEN = response.data.access_token;
-//         console.log('userresponse ' + response.data.access_token);
-//     })
-//     .catch((error) => {
-//         console.log('error ' + error);
-//     });
-//
-//
-//
-// const AuthStr = 'Bearer '.concat(USER_TOKEN);
-// axios.get(URL, { headers: { Authorization: AuthStr } })
-//     .then(response => {
-//         // If request is good...
-//         console.log(response.data);
-//     })
-//     .catch((error) => {
-//         console.log('error ' + error);
-//     });
-//////////////////////////////////////////////////////////////
-
-// const data = {
-//     grant_type: USER_GRANT_TYPE,
-//     client_id: CLIENT_ID,
-//     client_secret: CLIENT_SECRET,
-//     scope: SCOPE_INT,
-//     username: DEMO_EMAIL,
-//     password: DEMO_PASSWORD
-// };
-//
-//
-//
-// axios.post(TOKEN_URL, Querystring.stringify(data))
-//     .then(response => {
-//         console.log(response.data);
-//         USER_TOKEN = response.data.access_token;
-//         console.log('userresponse ' + response.data.access_token);
-//     })
-//     .catch((error) => {
-//         console.log('error ' + error);
-//     });
-//
-// const AuthStr = 'Bearer '.concat(USER_TOKEN);
-// axios.get(URL, { headers: { Authorization: AuthStr } })
-//     .then(response => {
-//         // If request is good...
-//         console.log(response.data);
-//     })
-//     .catch((error) => {
-//         console.log('error ' + error);
-//     });

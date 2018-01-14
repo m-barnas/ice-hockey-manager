@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 // css
 import './App.css';
 
+// components
+import Logout from './components/Logout';
+
 // containers
 import ManagersContainer from "./containers/ManagersContainer/ManagersContainer";
+import ManagerEditContainer from "./containers/ManagersContainer/ManagerEditContainer";
 import PlayersContainer from "./containers/PlayersContainer/PlayersContainer";
 import TeamsContainer from "./containers/TeamsContainer/TeamsContainer";
 import HomeContainer from './containers/HomeContainer/HomeContainer';
@@ -23,22 +28,54 @@ import { Layout, Menu, Icon } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 
 class App extends Component {
+
     state = {
-        collapsed: false,
+        current: '1'
     };
-    onCollapse = (collapsed) => {
-        console.log(collapsed);
-        this.setState({ collapsed });
+
+    componentWillMount() {
+        const location = this.props.location.pathname;
+        if (location === '/') {
+            return '1';
+        }
+        if (location.includes('games')) {
+            this.setCurrent('2');
+        }
+        if (location.includes('players')) {
+            this.setCurrent('3');
+        }
+        if (location.includes('teams')) {
+            this.setCurrent('4');
+        }
+        if (location.includes('managers')) {
+            this.setCurrent('5');
+        }
+    }
+
+    setCurrent(current) {
+        this.setState({current: current});
+    }
+
+    handleClick = (e) => {
+        this.setState({
+            current: e.key,
+        });
     };
+
+    isAuthenticated() {
+        return this.props.isAuthenticated ? <Link to="/logout">Logout</Link> : <Link to="/auth">Login</Link>;
+    }
+
     render() {
         return (
             <Layout className="Layout">
                 <Sider
-                    collapsible
-                    collapsed={this.state.collapsed}
-                    onCollapse={this.onCollapse}>
+                    collapsible>
                     <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                    <Menu theme="dark"
+                          onClick={this.handleClick}
+                          selectedKeys={[this.state.current]}
+                          mode="inline">
                         <Menu.Item key="1">
                             <Link to="/">
                                 <Icon type="home" />
@@ -72,7 +109,11 @@ class App extends Component {
                     </Menu>
                 </Sider>
                 <Layout>
-                    <Header className="Header"/>
+                    <Header className="Header">
+                        <div className="auth-panel">
+                            {this.isAuthenticated()}
+                        </div>
+                    </Header>
                     <Content className="Content">
                         <Switch>
                             <Route path="/players/create" exact component={PlayerCreateContainer}/>
@@ -83,8 +124,10 @@ class App extends Component {
                             <Route path="/teams/create" exact component={TeamCreateContainer}/>
                             <Route path="/teams/:id" exact component={TeamDetailContainer}/>
                             <Route path="/teams" exact component={TeamsContainer} />
+                            <Route path="/managers/changepassword" exact component={ManagerEditContainer} />
                             <Route path="/managers" exact component={ManagersContainer} />
                             <Route path="/auth" exact component={AuthContainer} />
+                            <Route path="/logout" exact component={Logout} />
                             <Route path="/" exact component={HomeContainer} />
                             <Route path="/" component={NotFound} />
                         </Switch>
@@ -98,4 +141,11 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = state =>  {
+    return {
+        isAuthenticated: state.auth.token !== null,
+        currentPage: state.menu.currentPage
+    };
+};
+
+export default withRouter(connect( mapStateToProps )(App));

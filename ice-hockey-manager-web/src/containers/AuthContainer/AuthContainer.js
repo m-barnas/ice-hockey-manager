@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 // css
@@ -9,7 +9,7 @@ import './AuthContainer.css';
 import * as actions from '../../store/actions/index';
 
 // antd
-import { Form, Icon, Input, Button, Col, Row } from 'antd';
+import { Form, Icon, Input, Button, Col, Row, Alert } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -20,15 +20,32 @@ class AuthContainer extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 this.props.onAuth(values.email, values.password);
-                console.log('Received values of form: ', values.email, values.password);
             }
         });
     };
 
     render() {
+        let errorMessage = null;
+        if (this.props.error) {
+            errorMessage = (
+                <Alert
+                    message="Invalid credentials!"
+                    description="Please, provide valid email and password."
+                    type="error"
+                    closable
+                />);
+        }
+
+        let authRedirect = null;
+        if (this.props.isAuthenticated) {
+            authRedirect = <Redirect to={this.props.authRedirectPath}/>
+        }
+
         const { getFieldDecorator } = this.props.form;
         return (
             <Row>
+                {authRedirect}
+                {errorMessage}
                 <Col span={8} offset={8}>
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <FormItem>
@@ -49,7 +66,6 @@ class AuthContainer extends Component {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 Log in
                             </Button>
-                            Or <Link to="/register">register now!</Link>
                         </FormItem>
                     </Form>
                 </Col>
@@ -58,10 +74,18 @@ class AuthContainer extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-      onAuth: (email, password) => dispatch(actions.auth(email, password))
-  };
+const mapStateToProps = state =>  {
+    return {
+        error: state.auth.error,
+        isAuthenticated: state.auth.token !== null,
+        authRedirectPath: state.auth.authRedirectPath
+    };
 };
 
-export default connect(null, mapDispatchToProps)(Form.create()(AuthContainer));
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (email, password) => dispatch(actions.auth(email, password))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(AuthContainer));

@@ -26,3 +26,10 @@
     margin: 16px;
     color: #ffffff;
 }
+
+.auth-panel {
+    padding-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+

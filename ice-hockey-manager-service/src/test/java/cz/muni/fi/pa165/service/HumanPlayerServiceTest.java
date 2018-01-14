@@ -168,12 +168,9 @@ public class HumanPlayerServiceTest extends AbstractTestNGSpringContextTests {
         humanPlayerService.register(user, COMMON_PASSWORD);
         when(humanPlayerDao.findById(user.getId())).thenReturn(user);
 
-        // exercise
-        humanPlayerService.changePassword(user.getId(), STRONG_PASSWORD, STRONG_PASSWORD);
-
-        // verify
-        assertThat(humanPlayerService.authenticate(user, COMMON_PASSWORD)).isTrue();
-        assertThat(humanPlayerService.authenticate(user, STRONG_PASSWORD)).isFalse();
+        // exercise + verify
+        assertThatThrownBy(() -> humanPlayerService.changePassword(user.getId(), STRONG_PASSWORD,
+                STRONG_PASSWORD)).isInstanceOf(ManagerAuthenticationException.class);
     }
 
     @Test

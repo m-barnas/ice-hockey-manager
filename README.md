@@ -64,11 +64,11 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 
     `"Authorization: Bearer e1aaa981-9384-4761-b2ae-f21a316794a5"`
 
+    Then change password in postman like:
     ```
-    curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer e1aaa981-9384-4761-b2ae-f21a316794a5" -d '{
-        "name": "Conocybe filaris",
-        "type": "POISONOUS"
-    }' "http://localhost:8080/pa165/rest/teams/create"
+    method: POST 
+    url: http://localhost:8080/pa165/rest/managers/changepassword?id=1&oldPass=test&newPass=pass
+    Headers: Authorization Bearer e1aaa981-9384-4761-b2ae-f21a316794a5
     ```
 
 6. Refresh expired token
@@ -297,8 +297,9 @@ method: GET
 ### Managers
 
 #### Get all managers
-
-URL: `http:/localhost:8080/pa165/rest/managers/all`
+`
+http://localhost:8080/pa165/rest/managers/all
+`
 
 method: GET
 
