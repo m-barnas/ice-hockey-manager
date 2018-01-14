@@ -8,6 +8,9 @@ import {Form, Input, Select, Button, InputNumber} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+/**
+ * @author Jakub Hruska <jhruska@mail.muni.cz>
+ */
 class PlayerCreateContainer extends Component {
 
     constructor(props) {
