@@ -109,6 +109,7 @@ class GameCreateContainer extends Component {
 
         return (
             <div>
+                <h2>Create game</h2>
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
                     {...formItemLayout}

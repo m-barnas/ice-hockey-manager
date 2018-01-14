@@ -75,6 +75,7 @@ class ManagerEditContainer extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Row>
+                <h2>Change password</h2>
                 {errorMessage}
                 <Col span={8} offset={8}>
                     <Form onSubmit={this.handleSubmit} className="login-form">
