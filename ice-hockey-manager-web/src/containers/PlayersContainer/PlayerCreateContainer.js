@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import axios from "../../axios";
 import {transformPositionLabel} from "../../other/Helper";
+
+// actions
+import * as actions from '../../store/actions/index';
 
 import {Form, Input, Select, Button, InputNumber} from 'antd';
 
@@ -23,6 +27,7 @@ class PlayerCreateContainer extends Component {
     }
 
     componentDidMount() {
+        this.props.onSetAuthRedirectPath('/players/create');
         console.log("start of creating a player");
         this.forceUpdate();
     }
@@ -33,8 +38,14 @@ class PlayerCreateContainer extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("values: ", values);
             if (!err) {
-                axios.put('/players/create', values)
-                    .then(response => {
+                axios({
+                    method: 'put',
+                    url: '/players/create',
+                    headers: {
+                        'Authorization': 'Bearer ' + this.props.token
+                    },
+                    data: values
+                }).then(response => {
                         console.log("successfully added player");
                         console.log("response: ", response);
                         this.setState({
@@ -57,6 +68,9 @@ class PlayerCreateContainer extends Component {
     }
 
     render() {
+        if (!this.props.hasRoleAdmin) {
+            return <Redirect to="/auth"/>;
+        }
         if(this.state.redirect){
             console.log("redirecting from players");
             return <Redirect to="/players"/>;
@@ -164,7 +178,19 @@ class PlayerCreateContainer extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
 
 const WrappedCreatePlayer = Form.create()(PlayerCreateContainer);
 
-export default WrappedCreatePlayer;
+export default connect( mapStateToProps, mapDispatchToProps )(WrappedCreatePlayer);

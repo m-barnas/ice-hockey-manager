@@ -7,3 +7,6 @@
 .login-form-button {
     width: 100%;
 }
+.invalid-credentials {
+    max-width: 100%;
+}

@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
-
+import { connect } from 'react-redux';
 import axios from '../../axios';
+
+// actions
+import * as actions from '../../store/actions/index';
+
 import {Table, Select, Row, Button} from 'antd';
 import {Link} from 'react-router-dom';
 
@@ -42,10 +46,10 @@ class TeamsContainer extends Component {
             render: (value, row, index) => {
                 return <Link to={'/teams/' + value.id}>view</Link>;
             }
-
         }];
 
     componentDidMount() {
+        this.props.onSetAuthRedirectPath('/teams');
         this.getAllTeams();
     }
 
@@ -95,14 +99,38 @@ class TeamsContainer extends Component {
             </Select>
         </div>;
 
+        let createBtn = this.props.hasRoleAdmin ? (
+            <Row>
+                <Link to={'/teams/create'}>
+                    <Button type="primary">
+                        Create team
+                    </Button>
+                </Link>
+            </Row>
+        ) : (
+            <Row/>
+        );
         return (
             <div>
                 <Row>{select}</Row>
-                <Row><Link to={'/teams/create'}><Button type="primary">Create team</Button></Link></Row>
+                {createBtn}
                 <Table dataSource={this.state.teams} columns={this.columns} rowKey={'id'}/>
             </div>
         );
     }
 }
 
-export default TeamsContainer;
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )(TeamsContainer);

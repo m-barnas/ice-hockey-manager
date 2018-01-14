@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+// actions
+import * as actions from '../../store/actions/index';
 
 import axios from '../../axios';
 import {Table, Select, Row, Button} from 'antd';
@@ -8,6 +12,7 @@ const Option = Select.Option;
 
 class GamesContainer extends Component {
 
+
     state = {
         games: [],
         teams: [],
@@ -16,6 +21,7 @@ class GamesContainer extends Component {
     };
 
     componentDidMount() {
+        this.props.onSetAuthRedirectPath('/games');
         this.reload(this.state.view);
         axios.get('/teams/all')
             .then(response => {
@@ -42,7 +48,7 @@ class GamesContainer extends Component {
             .catch(error => {
                 console.log(error);
             });
-    }
+    };
 
     columns = [{
         title: 'Start at',
@@ -94,14 +100,14 @@ class GamesContainer extends Component {
                 default:
                     break;
             }
-            return value.played ? '' :
+            return value.played || !this.props.hasRoleAdmin ? '' :
                     <Button type="secondary" onClick={ref}>{label}</Button>
         }
     }, {
         title: '',
         key: 'changeStartTime',
         render: (value, row, index) => {
-            return value.played ? '' :
+            return value.played || !this.props.hasRoleAdmin ? '' :
                     <Link to={'/games/edit/' + value.id}>
                         <Button type="secondary">Edit</Button>
                     </Link>
@@ -110,24 +116,34 @@ class GamesContainer extends Component {
         title: '',
         key: 'delete',
         render: (value, row, index) => {
-            return <Button type="danger" onClick={() => this.deleteHandler(value.id)}>Delete</Button>
+            return this.props.hasRoleAdmin ? <Button type="danger" onClick={() => this.deleteHandler(value.id)}>Delete</Button> : '';
         }
     }];
 
     deleteHandler = (id) => {
-        (axios.delete('/games/' + id))
-            .then(() => {
+        axios({
+            method: 'delete',
+            url: '/games/' + id,
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then(() => {
                 this.reload(this.state.view);
             })
             .catch(error => {
                 console.log(error);
                 return;
             });
-    }
+    };
 
     cancelHandler = (id) => {
-        (axios.put('/games/cancel/' + id))
-            .then(() => {
+        axios({
+            method: 'put',
+            url: '/games/cancel/' + id,
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then(() => {
                 if (this.state.view === 'scheduled') {
                     this.reload(this.state.view);
                 }
@@ -146,11 +162,16 @@ class GamesContainer extends Component {
         const games = [...this.state.games];
         games[gameIndex] = game;
         this.setState({games: games});
-    }
+    };
 
     retrieveHandler = (id) => {
-        (axios.put('/games/retrieve/' + id))
-            .catch(error => {
+        axios({
+            method: 'put',
+            url: '/games/retrieve/' + id,
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).catch(error => {
                 console.log(error);
                 return;
             });
@@ -164,11 +185,16 @@ class GamesContainer extends Component {
         const games = [...this.state.games];
         games[gameIndex] = game;
         this.setState({games: games});
-    }
+    };
 
     playGamesHandler = () => {
-        axios.put('/games/play')
-            .then((response, data) => {
+        axios({
+            method: 'put',
+            url: '/games/play',
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then((response, data) => {
                 if (response.data > 0) {
                     this.reload(this.state.view);
                 }
@@ -176,7 +202,7 @@ class GamesContainer extends Component {
             .catch(error => {
                 console.log(error);
             });
-    }
+    };
 
     handleSelectChange = (selected) => {
         this.setState({
@@ -196,12 +222,12 @@ class GamesContainer extends Component {
                     console.log(error);
                 });
         }
-    }
+    };
 
     changeViewHandler = (newView) => {
         this.setState({view: newView});
         this.reload(newView);
-    }
+    };
 
     getOtherView = (view) => {
         switch(view) {
@@ -212,7 +238,7 @@ class GamesContainer extends Component {
             default:
                 return 'all';
         }
-    }
+    };
 
     getSelect = () => {
         let options = (
@@ -224,7 +250,7 @@ class GamesContainer extends Component {
             </Select>
         );
         return options;
-    }
+    };
 
     render() {
         const { loading, games } = this.state;
@@ -235,6 +261,29 @@ class GamesContainer extends Component {
         let select = <div>Choose games by team  &nbsp; &nbsp;
             {this.getSelect()}
         </div>;
+
+        let createGameBtn = this.props.hasRoleAdmin ? (
+            <Row>
+                <Link to={'/games/create'}>
+                    <Button style={{marginBottom: 1 + 'em'}} type="primary">
+                        Create game
+                    </Button>
+                </Link>
+            </Row>
+        ) : (
+            <Row/>
+        );
+
+        let playGamesBtn = this.props.hasRoleAdmin ? (
+            <Row>
+                <Button type="secondary" onClick={this.playGamesHandler}>
+                    Play games*
+                </Button>
+                <p style={{marginTop: 1 + 'em', fontSize: 12}} >* Get results for all games with state OK and start time in the past.</p>
+            </Row>
+        ) : (
+            <Row/>
+        );
 
         return (
             <div>
@@ -247,16 +296,27 @@ class GamesContainer extends Component {
                     onClick={() => this.changeViewHandler(this.getOtherView(this.state.view))}
                 >Show {this.getOtherView(this.state.view)} games</Button>
 
-                <Row><Link to={'/games/create'}><Button style={{marginBottom: 1 + 'em'}}
-                    type="primary"
-                >Create game</Button></Link></Row>
+                {createGameBtn}
 
                 <Table dataSource={games} columns={this.columns} loading={loading} rowKey={'id'}/>
-                <Button type="secondary" onClick={this.playGamesHandler}>Play games*</Button>
-                <p style={{marginTop: 1 + 'em', fontSize: 12}} >* Get results for all games with state OK and start time in the past.</p>
+
+                {playGamesBtn}
             </div>
         );
     }
 }
 
-export default GamesContainer;
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )(GamesContainer);

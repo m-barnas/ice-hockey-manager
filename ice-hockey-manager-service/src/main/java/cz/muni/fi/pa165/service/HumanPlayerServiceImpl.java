@@ -67,11 +67,11 @@ public class HumanPlayerServiceImpl implements HumanPlayerService {
         }
 
         // verify password
-        if (AuthenticationUtils.verifyPassword(oldUnencryptedPassword, humanPlayer.getPasswordHash())) {
-            humanPlayer.setPasswordHash(AuthenticationUtils.createHash(newUnencryptedPassword));
-            return humanPlayerDao.update(humanPlayer);
+        if (!AuthenticationUtils.verifyPassword(oldUnencryptedPassword, humanPlayer.getPasswordHash())) {
+            throw new ManagerAuthenticationException("Invalid credentials.");
         }
-        return humanPlayer;
+        humanPlayer.setPasswordHash(AuthenticationUtils.createHash(newUnencryptedPassword));
+        return humanPlayerDao.update(humanPlayer);
     }
 
     @Override

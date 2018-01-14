@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
-
+import { connect } from 'react-redux';
 import axios from '../../axios';
 import {Link, Redirect} from 'react-router-dom';
+
+// actions
+import * as actions from '../../store/actions/index';
 
 import {Form, Select, Button, DatePicker} from 'antd';
 
@@ -22,6 +25,7 @@ class GameCreateContainer extends Component {
     }
 
     componentDidMount() {
+        this.props.onSetAuthRedirectPath('/games/create');
         axios.get('/teams/all')
             .then(response => {
                 this.setState({
@@ -38,8 +42,14 @@ class GameCreateContainer extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
             console.log("values: ", values);
-                axios.post('/games/create', values)
-                    .then(response => {
+                axios({
+                    method: 'post',
+                    url: '/games/create',
+                    headers: {
+                        'Authorization': 'Bearer ' + this.props.token
+                    },
+                    data: values
+                }).then(response => {
                         this.setState({
                             redirect: true
                         });
@@ -63,9 +73,12 @@ class GameCreateContainer extends Component {
         } else {
           callback();
         }
-    }
+    };
 
     render() {
+        if (!this.props.hasRoleAdmin) {
+            return <Redirect to="/auth" />
+        }
         if (this.state.redirect){
            return <Redirect to="/games"/>;
         }
@@ -160,6 +173,19 @@ class GameCreateContainer extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
+
 const WrappedCreateGame = Form.create()(GameCreateContainer);
 
-export default WrappedCreateGame;
+export default connect( mapStateToProps, mapDispatchToProps )(WrappedCreateGame);

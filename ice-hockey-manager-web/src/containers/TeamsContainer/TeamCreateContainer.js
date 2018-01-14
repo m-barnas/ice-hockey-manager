@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
-
+import { connect } from 'react-redux';
 import axios from '../../axios';
 import {Redirect} from 'react-router-dom';
+
+// actions
+import * as actions from '../../store/actions/index';
+
 import {transformCountryLabel} from '../../other/Helper';
 
 import {Form, Input, Select, Button, InputNumber} from 'antd';
@@ -24,6 +28,7 @@ class TeamCreateContainer extends Component {
     }
 
     componentDidMount() {
+        this.props.onSetAuthRedirectPath('/teams/create');
         axios.get('/managers/all')
             .then(response => {
                 this.setState({
@@ -41,8 +46,14 @@ class TeamCreateContainer extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("values: ", values);
             if (!err) {
-                axios.put('/teams/create', values)
-                    .then(response => {
+                axios({
+                    method: 'put',
+                    url: '/teams/create',
+                    headers: {
+                        'Authorization': 'Bearer ' + this.props.token
+                    },
+                    data: values
+                }).then(response => {
                         console.log("successfully added team");
                         console.log("response: ", response);
                         this.setState({
@@ -63,6 +74,9 @@ class TeamCreateContainer extends Component {
 
 
     render() {
+        if (!this.props.hasRoleAdmin) {
+            return <Redirect to="/auth"/>;
+        }
         if(this.state.redirect){
            return <Redirect to="/teams"/>;
         }
@@ -170,6 +184,19 @@ class TeamCreateContainer extends Component {
 
 }
 
+const mapStateToProps = state => {
+    return {
+        hasRoleAdmin: state.auth.role === 'ADMIN',
+        token: state.auth.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+    };
+};
+
 const WrappedCreateTeam = Form.create()(TeamCreateContainer);
 
-export default WrappedCreateTeam;
+export default connect( mapStateToProps, mapDispatchToProps )(WrappedCreateTeam);

@@ -1,15 +1,21 @@
 -- create admin with password: test
 INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (1,'admin@icehockeymanager.com','1000:1Iv2U5Y7GKIRZUCA0h4OLotmiVe/d5uM:5BerC98I42mDrt7UAgtjpFKH','ADMIN','admin');
--- create admin with password: userpass
+-- create user with password: userpass
 INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (2,'user@icehockeymanager.com','1000:7oHkZicdye0Sn4pWj+ttQhc0ZmOghWwd:6wBBhr9OvhsQswaP196YgzgF','USER','user');
+-- create lukas with password: userpass
+INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (3,'lukas@icehockeymanager.com','1000:7oHkZicdye0Sn4pWj+ttQhc0ZmOghWwd:6wBBhr9OvhsQswaP196YgzgF','USER','lukas');
+-- create marketka with password: userpass
+INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (4,'marketka@icehockeymanager.com','1000:7oHkZicdye0Sn4pWj+ttQhc0ZmOghWwd:6wBBhr9OvhsQswaP196YgzgF','USER','marketka');
+-- create jakub with password: userpass
+INSERT INTO HUMANPLAYER (ID, EMAIL, PASSWORDHASH, ROLE, USERNAME) VALUES (5,'jakub@icehockeymanager.com','1000:7oHkZicdye0Sn4pWj+ttQhc0ZmOghWwd:6wBBhr9OvhsQswaP196YgzgF','USER','jakub');
 -- create HC Kometa Brno with manager user
 INSERT INTO TEAM (ID, BUDGET, COMPETITIONCOUNTRY, NAME, HUMANPLAYERID) VALUES (1,5000,'CZECH_REPUBLIC','HC Kometa Brno',2);
 -- create HC Vsetín without any manager
-INSERT INTO TEAM (ID, BUDGET, COMPETITIONCOUNTRY, NAME, HUMANPLAYERID) VALUES (4,4000,'CZECH_REPUBLIC','HC Vsetin',null);
+INSERT INTO TEAM (ID, BUDGET, COMPETITIONCOUNTRY, NAME, HUMANPLAYERID) VALUES (4,4000,'CZECH_REPUBLIC','HC Vsetin',3);
 -- create HC Sparta Praha without any manager
-INSERT INTO TEAM (ID, BUDGET, COMPETITIONCOUNTRY, NAME, HUMANPLAYERID) VALUES (2,7000,'CZECH_REPUBLIC','HC Sparta Praha',null);
+INSERT INTO TEAM (ID, BUDGET, COMPETITIONCOUNTRY, NAME, HUMANPLAYERID) VALUES (2,7000,'CZECH_REPUBLIC','HC Sparta Praha',4);
 -- create HC Slovan Bratislava without any manager
-INSERT INTO TEAM (ID, BUDGET, COMPETITIONCOUNTRY, NAME, HUMANPLAYERID) VALUES (3,10000,'SLOVAKIA','HC Slovan Bratislava',null);
+INSERT INTO TEAM (ID, BUDGET, COMPETITIONCOUNTRY, NAME, HUMANPLAYERID) VALUES (3,10000,'SLOVAKIA','HC Slovan Bratislava',5);
 -- create future game Kometa - Sparta
 INSERT INTO GAME (ID, FIRSTTEAMSCORE, GAMESTATE, SECONDTEAMSCORE, STARTTIME, FIRSTTEAM_ID, SECONDTEAM_ID) VALUES (1,null,'OK',null,'2030-01-01 18:00:00',1,2);
 -- create canceled future game Kometa - Vsetín
