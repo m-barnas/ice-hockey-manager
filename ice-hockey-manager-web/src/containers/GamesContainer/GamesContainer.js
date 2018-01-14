@@ -252,7 +252,8 @@ class GamesContainer extends Component {
                 >Create game</Button></Link></Row>
 
                 <Table dataSource={games} columns={this.columns} loading={loading} rowKey={'id'}/>
-                <Button type="secondary" onClick={this.playGamesHandler}>Play games</Button>
+                <Button type="secondary" onClick={this.playGamesHandler}>Play games*</Button>
+                <p style={{marginTop: 1 + 'em', fontSize: 12}} >* Get results for all games with state OK and start time in the past.</p>
             </div>
         );
     }

@@ -16,6 +16,7 @@ import TeamDetailContainer from "./containers/TeamsContainer/TeamDetailContainer
 import AuthContainer from "./containers/AuthContainer/AuthContainer";
 import TeamCreateContainer from "./containers/TeamsContainer/TeamCreateContainer";
 import PlayerCreateContainer from "./containers/PlayersContainer/PlayerCreateContainer";
+import NotFound from "./components/NotFound";
 
 // antd
 import { Layout, Menu, Icon } from 'antd';
@@ -74,17 +75,18 @@ class App extends Component {
                     <Header className="Header"/>
                     <Content className="Content">
                         <Switch>
-                            <Route path="/players/create" component={PlayerCreateContainer}/>
-                            <Route path="/players" component={PlayersContainer} />
+                            <Route path="/players/create" exact component={PlayerCreateContainer}/>
+                            <Route path="/players" exact component={PlayersContainer} />
                             <Route path="/games" exact component={GamesContainer} />
-                            <Route path="/games/create" component={GamesCreateContainer} />
-                            <Route path="/games/edit/:id" component={GamesChangeStartTimeContainer} />
-                            <Route path="/teams/create" component={TeamCreateContainer}/>
-                            <Route path="/teams/:id" component={TeamDetailContainer}/>
-                            <Route path="/teams" component={TeamsContainer} />
-                            <Route path="/managers" component={ManagersContainer} />
-                            <Route path="/auth" component={AuthContainer} />
+                            <Route path="/games/create" exact component={GamesCreateContainer} />
+                            <Route path="/games/edit/:id" exact component={GamesChangeStartTimeContainer} />
+                            <Route path="/teams/create" exact component={TeamCreateContainer}/>
+                            <Route path="/teams/:id" exact component={TeamDetailContainer}/>
+                            <Route path="/teams" exact component={TeamsContainer} />
+                            <Route path="/managers" exact component={ManagersContainer} />
+                            <Route path="/auth" exact component={AuthContainer} />
                             <Route path="/" exact component={HomeContainer} />
+                            <Route path="/" component={NotFound} />
                         </Switch>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
