@@ -99,6 +99,7 @@ class PlayerCreateContainer extends Component {
             },
         };
         return (
+            <div><h2>Create new player</h2>
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
                     {...formItemLayout}
@@ -174,6 +175,7 @@ class PlayerCreateContainer extends Component {
                     <Button type="primary" htmlType="submit">Create</Button>
                 </FormItem>
             </Form>
+            </div>
         );
     }
 }

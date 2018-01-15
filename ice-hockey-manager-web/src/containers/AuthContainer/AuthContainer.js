@@ -44,6 +44,7 @@ class AuthContainer extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Row>
+                <h2>Login</h2>
                 {authRedirect}
                 {errorMessage}
                 <Col span={8} offset={8}>

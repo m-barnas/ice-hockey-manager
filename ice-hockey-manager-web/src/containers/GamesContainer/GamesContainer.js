@@ -287,6 +287,7 @@ class GamesContainer extends Component {
 
         return (
             <div>
+                <h2>Games</h2>
                 {this.state.view === 'all' ?
                 <Row>{select}</Row> : null
                 }

@@ -31,6 +31,8 @@ class ManagersContainer extends Component {
     render() {
         let managers = this.props.managers;
         return (
+            <div>
+                <h2>Managers</h2>
             <List
                 itemLayout="horizontal"
                 loading={this.props.loading}
@@ -46,6 +48,7 @@ class ManagersContainer extends Component {
                     </List.Item>
                 )}
             />
+            </div>
         );
     }
 }

@@ -8,7 +8,7 @@ import * as actions from '../../store/actions/index';
 
 import {transformCountryLabel} from '../../other/Helper';
 
-import {Form, Input, Select, Button, InputNumber} from 'antd';
+import {Form, Input, Select, Button, InputNumber, Alert} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -21,8 +21,8 @@ class TeamCreateContainer extends Component {
         this.state = {
             confirmDirty: false,
             managers: [],
-            redirect: false
-
+            redirect: false,
+            error: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -54,14 +54,14 @@ class TeamCreateContainer extends Component {
                     },
                     data: values
                 }).then(response => {
-                        console.log("successfully added team");
-                        console.log("response: ", response);
-                        this.setState({
-                            redirect: true
+
+                    this.setState({
+                            redirect: true,
+                            error:null
                         });
                     })
                     .catch(error => {
-                        console.log(error);
+                        this.setState({error: error});
                     });
             }
         });
@@ -108,7 +108,22 @@ class TeamCreateContainer extends Component {
         if (this.state.managers[0] !== undefined) {
             initValueManager = this.state.managers[0].id;
         }
+
+        let errorMessage = null;
+        if (this.state.error) {
+            errorMessage = (
+                <Alert
+                    message="Team name already exists!"
+                    description="Team name already exists!."
+                    type="error"
+                    closable
+                />);
+        }
+
         return (
+            <div>
+            <h2>Create new team</h2>
+                {errorMessage}
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
                     {...formItemLayout}
@@ -179,6 +194,7 @@ class TeamCreateContainer extends Component {
                     <Button type="primary" htmlType="submit">Create</Button>
                 </FormItem>
             </Form>
+            </div>
         );
     }
 

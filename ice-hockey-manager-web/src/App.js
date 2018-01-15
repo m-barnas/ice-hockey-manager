@@ -63,7 +63,8 @@ class App extends Component {
     };
 
     isAuthenticated() {
-        return this.props.isAuthenticated ? <Link to="/logout">Logout</Link> : <Link to="/auth">Login</Link>;
+        return this.props.isAuthenticated ? <Link to="/logout"><Icon type="logout"  style={{ fontSize: 25}} /></Link> :
+            <Link to="/auth"><Icon type="login"  style={{ fontSize: 25}} /></Link>;
     }
 
     render() {

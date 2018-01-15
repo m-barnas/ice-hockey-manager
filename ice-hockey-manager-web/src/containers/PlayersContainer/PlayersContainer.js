@@ -213,6 +213,7 @@ class HockeyPlayersContainer extends Component {
             );
         return (
             <div>
+                <h2>Hockey players</h2>
                 <div>{teamSelect}</div>
                 <div>{postSelect}</div>
                 {createBtn}

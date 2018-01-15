@@ -112,6 +112,7 @@ class TeamsContainer extends Component {
         );
         return (
             <div>
+                <h2>Teams</h2>
                 <Row>{select}</Row>
                 {createBtn}
                 <Table dataSource={this.state.teams} columns={this.columns} rowKey={'id'}/>
